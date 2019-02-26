@@ -1,0 +1,113 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	line-height: 1.5px;
+	padding: 0;
+	margin: 0;
+	background-color: #fff;
+}
+.container{
+	width:80%;
+	margin: auto;
+	overflow: hidden;
+}
+
+/*--- login and sign up ---*/
+.login-bg{
+	background-color: #23112D;
+}
+.header-margin{
+	margin-top: 160px;
+	margin-left: 500px;
+}
+.white-h1-label{
+	color: white;
+}
+.login-margin {
+  margin-top: 50px;
+  margin-left: 270px;
+  margin-bottom: 300px;
+}
+.login-div{
+	border-radius: 4px;
+	background-color: #f2f2f2;
+	width:50%;
+	height: 500%;
+	padding:5%;
+}
+.login-label-margin{
+	margin-top: 50px;
+	margin-left: 40px;
+}
+.input-margin{
+	margin: 40px;
+}
+.input-left-margin{
+	margin-left: 40px;
+}
+.login-input{
+	width: 80%;
+	padding: 10px;
+	border-radius: 4px;
+	background-color: white;
+}
+.signup-button{
+  background-color: MediumBlue;
+  border-radius: 4px;
+  color: white;
+  padding: 13px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-left: 200px;
+}
+.compose-close-btn{
+	color: #d3d3d3;
+	float: right;
+	font-size: 30px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+#signUpModal{
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left:0;
+	top:0;
+	height: 100%;
+	width: 100%;
+	overflow: auto; /*for scrolling*/
+	background-color: rgba(0,0,0,0.5); /*background of the modal*/
+}
+.modal{
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.3);
+
+}
+.modal-content{
+	background-color: #f4f4f4;
+	margin: 10% auto;
+	/*padding: 20px;*/
+	padding: 15px;
+	width: 30%;
+	height: 30%;
+	animation-name: modalopen;
+	animation-duration: 1s;
+	box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 7px 8px 0 rgba(0,0,0,2),
+}
+
+.modal-header{
+	background: #23112D;
+	padding: 15px;
+	color:#fff;
+
+}
+/* ------------------------------*/
