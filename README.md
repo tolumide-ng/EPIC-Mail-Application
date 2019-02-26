@@ -1,4 +1,4 @@
-#EPIC Mail
+# EPIC Mail
 EPIC Mail is an application that provides users with the ability to view emails , send and save messages as draft.
 
 ## Getting Started
