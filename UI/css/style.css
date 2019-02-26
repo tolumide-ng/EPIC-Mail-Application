@@ -11,6 +11,12 @@ body{
 	margin: auto;
 	overflow: hidden;
 }
+.hr{ 
+  height: 1px;
+  color: teal;
+  background-color: #6495ED;
+  border: none;
+}
 
 /*--- login and sign up ---*/
 .login-bg{
@@ -62,6 +68,20 @@ body{
   font-size: 15px;
   margin-left: 200px;
 }
+.login-button{
+  background-color: MediumBlue;
+  border-radius: 4px;
+  color: white;
+  padding: 13px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-left: 150px;
+}
+.signup-padding{
+	padding: 10px;
+}
 .compose-close-btn{
 	color: #d3d3d3;
 	float: right;
@@ -111,3 +131,8 @@ body{
 
 }
 /* ------------------------------*/
+@media screen and (max-width: 800px) {
+  body, .topnav, .atopnav, .sidenav {
+    width: 100%; /* The width is 100%, when the viewport is 800px or smaller */
+  }
+}
