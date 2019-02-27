@@ -1,10 +1,10 @@
 /* Idea of modal gotten from w3schools and stack overflow */
 //declare a variable to save time out in milliseconds
-var signupTimeOut = 4000;
+const signupTimeOut = 4000;
 
 /*-------- for sign up modal -----*/
 //get the id of the modal to be displayed
-var signUpModal = document.getElementById('signUpModal');
+let signUpModal = document.getElementById('signUpModal');
 
 //call the function to display the sign up modal
 function openSignUpModal(){
@@ -18,11 +18,11 @@ setTimeout(function(){
 /*-------- for sign up modal -----*/
 
 //declare a variable to save time out in milliseconds
-var resetPasswordTimeOut = 5000;
+let resetPasswordTimeOut = 5000;
 
 /*-------- for reset password modal -----*/
 //get the id of the modal to be displayed
-var resetPwordModal = document.getElementById('resetPasswordModal');
+let resetPwordModal = document.getElementById('resetPasswordModal');
 
 //call the function to display the sign up modal
 function openResetPasswordModal(){
@@ -38,9 +38,9 @@ setTimeout(function(){
 /*-----------------------------------------------------*/
 
 //idea for search table function is gotten from w3schools
-function myFunction() {
+function SearchTable() {
   // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
+  let input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("myTable");
@@ -77,6 +77,7 @@ function openedMail(){
 }
 //end of opened mail modal
 
+//for compose modal
 var composeModal = document.getElementById('composeModal');
 //get elements that opens compose mail modal
 var openComposeModal = document.getElementById('openComposeModal');
@@ -102,10 +103,18 @@ function openModal(){
 /*----------------end of inbox----*/
 
 
+function retractMessage(){
+  shwSendMailPanel.style.display = 'none';
+  composeModal.style.display = 'block';
+}
+let hideTimeOut = 6000;
+
 //get button that shows panel
-var composeModal = document.getElementById('modal');
 var shwSendMailPanel = document.getElementById('show-send-mail-panel');
 function showSendMailPanel(){
    composeModal.style.display = 'none';
   shwSendMailPanel.style.display = 'block';
 }
+setTimeout(function(){
+  shwSendMailPanel.style.visibility = 'hidden';
+  }, hideTimeOut)
