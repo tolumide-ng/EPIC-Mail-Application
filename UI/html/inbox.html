@@ -12,7 +12,8 @@
   <a href="#" class="epic-title">EPIC Mail.</a>
 </div>
 <div class="side-navigation">
-  <a href="#" onclick="openInbox()" class="sidenav-margin-top"><img src="../img/inbox.png"> Inbox</a>
+  <a href="#" id="openComposeModal" class="sidenav-margin-top"><img src="../img/compose.png">Compose Mail</button>
+  <a href="#" onclick="openInbox()" class=""><img src="../img/inbox.png"> Inbox</a>
 </div>
 <div class="top-navigation2" id="inbox">
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Inbox..."<img src="../img/searchicon.png">
@@ -68,6 +69,33 @@
 </div>
 </div>
 
+<div id="composeModal" class="modal">
+  <div class="compose-modal-content">
+    <div class="compose-modal-header">
+      <p class="pcomposemodal">Compose Mail</p>
+      <span class="compose-close-btn">&times;</span>
+    </div>
+    <div>
+      <form>
+        <input type="email" placeholder="To:" class="compose-input" required>
+        <input type="email" placeholder="Cc:" class="compose-input">
+        <input type="email" placeholder="Bcc:" class="compose-input">
+        <textarea class="compose-textarea" rows="14" cols="55"></textarea>
+        <button type="submit" class="compose-button" onclick="showSendMailPanel()">send</button>
+        <input type="file" multiple >
+        <button type="submit" class="compose-button" onclick="showSavedMailPanel()">save</button>
+      </form>
+    </div>
+  </div>
+        
+</div>
+<div class="send-mail-panel" id="show-send-mail-panel">
+        <div class="modal-header1">
+            <span class="compose-close-btn" onclick="hideSendMailPanel()">&times;</span><br><br><br>
+          </div>
+          <p>Email Sent...</p><br><br><br><br>
+          <button class="btn3" onclick="retractMessage()">retract</button>
+       </div>
 
 <footer class="footer">
 </footer>

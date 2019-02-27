@@ -63,7 +63,6 @@ function myFunction() {
 /*inbox div manipulation*/
 //get inbox div
 var inbox = document.getElementById('inbox');
-
 //this calls a function that opens the div with id called inbox
 function openInbox(){
   inbox.style.display = 'block';
@@ -75,6 +74,38 @@ var omail = document.getElementById('opened-mail');
 function openedMail(){
   omail.style.display = 'block';
   inbox.style.display = 'none';
- 
+}
+//end of opened mail modal
+
+var composeModal = document.getElementById('composeModal');
+//get elements that opens compose mail modal
+var openComposeModal = document.getElementById('openComposeModal');
+//get element that closes compose mail modal
+var closeComposeModal = document.getElementsByClassName('compose-close-btn')[0];
+if(typeof(openComposeModal) !='undefined' && openComposeModal !=null)
+{
+openComposeModal.addEventListener('click', openModal);
+}
+//listen for a close click
+if(typeof(closeComposeModal) !='undefined' && closeComposeModal !=null)
+{
+closeComposeModal.addEventListener('click', closeModal);
+}
+
+function closeModal(){
+	composeModal.style.display = 'none';
+}
+
+function openModal(){
+	composeModal.style.display = 'block';
 }
 /*----------------end of inbox----*/
+
+
+//get button that shows panel
+var composeModal = document.getElementById('modal');
+var shwSendMailPanel = document.getElementById('show-send-mail-panel');
+function showSendMailPanel(){
+   composeModal.style.display = 'none';
+  shwSendMailPanel.style.display = 'block';
+}
