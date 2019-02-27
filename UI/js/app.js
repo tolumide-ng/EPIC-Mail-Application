@@ -67,7 +67,14 @@ var inbox = document.getElementById('inbox');
 //this calls a function that opens the div with id called inbox
 function openInbox(){
   inbox.style.display = 'block';
-  /*draft.style.display = 'none';
-  sentMail.style.display = 'none';
-  omail.style.display = 'none';*/
+  omail.style.display = 'none';
+   
 }
+//get opened mail div
+var omail = document.getElementById('opened-mail');
+function openedMail(){
+  omail.style.display = 'block';
+  inbox.style.display = 'none';
+ 
+}
+/*----------------end of inbox----*/
