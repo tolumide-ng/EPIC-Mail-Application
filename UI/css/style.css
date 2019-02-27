@@ -212,6 +212,36 @@ body{
 #inbox{
 	display: block;
 }
+#opened-mail{
+	display: none;
+}
+.opened-mail-heading{
+	padding: 15px;
+	margin-top: 25px;
+}
+.opened-mail-content{
+	margin-left: 30px;
+	height: 50%;
+	font-family: arial;
+}
+.from-color{
+	color: #2F4F4F;
+	margin-top: 30px;
+}
+.from-margin-bottom{
+	margin-bottom: 40px;
+}
+.reply-button{
+	background-color: #ededed;
+	color: #900C3E;
+	margin-top:30px;
+	width: 10%;
+	height: 10%;
+	font-size: 15px;
+}
+.float-right{
+	margin-left: 80%;
+}
 /* -----------------table-----------------*/
 /* idea from w3schools*/
 #myInput {
