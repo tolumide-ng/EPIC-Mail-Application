@@ -36,3 +36,38 @@ setTimeout(function(){
 /*-------- for reset password modal -----*/
 
 /*-----------------------------------------------------*/
+
+//idea for search table function is gotten from w3schools
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+/*inbox div manipulation*/
+//get inbox div
+var inbox = document.getElementById('inbox');
+
+//this calls a function that opens the div with id called inbox
+function openInbox(){
+  inbox.style.display = 'block';
+  /*draft.style.display = 'none';
+  sentMail.style.display = 'none';
+  omail.style.display = 'none';*/
+}
