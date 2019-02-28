@@ -2,7 +2,7 @@
 EPIC Mail is an web based email application that provides users with the ability to view emails , send and save messages as draft.
 
 ## Getting Started
-## Prerequisites
+### Prerequisites
 * Internet connection
 * Internet browser
 * Git
