@@ -8,10 +8,11 @@ EPIC Mail is an web based email application that provides users with the ability
 * Git
 
 ##Functionalities
-* A user can view inbox
-* A user can send an email
-* A user can retract an email
-* A user can save an email
+* A user should be able to view inbox
+* A user should be able to send an email
+* A user should be able to retract an email
+* A user should be able to save an email
+* A user should be able to delete an email
 
 ##Built with
 * HTML
