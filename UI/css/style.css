@@ -64,7 +64,6 @@ div.content {
   padding: 0.00625rem 1rem;
   height: 62.5rem;
 }
-
 @media screen and (max-width: 43.75rem) {
   .sidebar {
     width: 100%;
@@ -81,276 +80,19 @@ div.content {
     float: none;
   }
 }
-
-@media screen and (max-width: 43.75rem) {
-  .email-content {
-    width: auto;
-    height: auto;
-    position: relative;
-  }
-}
-
-@media screen and (max-width: 43.75rem) {
-  .compose-textarea {
-    width: auto;
-    height: auto;
-    position: relative;
-  }
-}
-.email-content{
-background-color:rgba(241,241,241,0.5);
-list-style:none;
-padding:0.625rem;
-width:98%;
-height: 1.56rem;
-display:inline-block;
-border-bottom: 3px solid #f1f1f1;
-
-
-
-}
-.email-heading{
-	font-size: 1.5vw;
-}
-
-.email-sender{
-	margin-left: 3rem; 
-	padding: 1rem;
-	font-size: 1.2vw;
-}
-.email-subject{
-	margin-left: 25rem; 
-	padding: 1rem 1rem 0rem 0rem;
-	font-size: 1.2vw;
-}
-.email-form{
-	position: inline-block;
-}
-li a{
-	font-weight: bold;
-	color: black;
-	text-decoration: none;
-}
-li a:visited{
-	text-decoration: none;
-	font-weight: normal;
-}
-
-
-.hr{ 
-  height: 0.00625rem;
-  color: teal;
-  background-color: #6495ED;
-  border: none;
-}
-
-/*--- login and sign up ---*/
-.login-bg{
-	background-color: #23112D;
-}
-.header-margin{
-	margin-top: 10rem;
-	margin-left: 31.25rem;
-}
-.white-h1-label{
-	color: white;
-}
-.login-margin {
-  margin-top: 50px;
-  margin-left: 270px;
-  margin-bottom: 300px;
-}
-.login-div{
-	border-radius: 4px;
-	background-color: #f2f2f2;
-	width:50%;
-	height: 500%;
-	padding:5%;
-}
-.login-label-margin{
-	margin-top: 3.125rem;
-	margin-left: 2.5rem;
-}
-.input-margin{
-	margin: 2.5rem;
-}
-.input-left-margin{
-	margin-left: 2.5rem;
-}
-.login-input{
-	width: 80%;
-	padding: 0.625rem;
-	border-radius: 0.25rem;
-	background-color: white;
-}
-.signup-button{
-  background-color: MediumBlue;
-  border-radius: 0.25rem;
-  color: white;
-  padding: 0.8125rem 2rem;
-  text-decoration: none;
-  margin: 0.25rem 0.125rem;
-  cursor: pointer;
-  font-size: 0.9375vw;
-  margin-left: 12.5rem;
-}
-.login-button{
-  background-color: MediumBlue;
-  border-radius: 0.25rem;
-  color: white;
-  padding: 0.8125rem 2rem;
-  text-decoration: none;
-  margin: 0.25rem .125rem;
-  cursor: pointer;
-  font-size: 0.9375rem;
-  margin-left: 9.375rem;
-}
-.signup-padding{
-	padding: 0.625rem;
-}
-.compose-close-btn{
-	color: #d3d3d3;
-	float: right;
-	font-size: 1.875vw;
-	margin-right: 0.625rem;
-	cursor: pointer;
-}
-#signUpModal{
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left:0;
-	top:0;
-	height: 100%;
-	width: 100%;
-	overflow: auto; /*for scrolling*/
-	background-color: rgba(0,0,0,0.5); /*background of the modal*/
-}
-#resetPasswordModal{
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left:0;
-	top:0;
-	height: 100%;
-	width: 100%;
-	overflow: auto; /*for scrolling*/
-	background-color: rgba(0,0,0,0.5); /*background of the modal*/
-}
-.modal{
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	overflow: auto;
-	background-color: rgba(0,0,0,0.3);
-
-}
-.modal-content{
-	background-color: #f4f4f4;
-	margin: 10% auto;
-	/*padding: 20px;*/
-	padding: 0.9375rem;
-	width: 30%;
-	height: 30%;
-	animation-name: modalopen;
-	animation-duration: 1s;
-	box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 7px 8px 0 rgba(0,0,0,2)
-}
-
-.modal-header{
-	background: #23112D;
-	padding: 0.935rem;
-	color:#fff;
-
-}
-/* ------------------------------*/
-
-/*-------------------inbox etc--------------------*/
-
 .epic-title{
 	float: left;
 	font-size: 1.8rem;
 }
-#inbox{
-	display: block;
-}
-#opened-mail{
-	display: none;
-}
-.opened-mail-heading{
-	padding: 0.937rem;
-	margin-top: 1.5625rem;
-}
-.opened-mail-content{
-	margin-left: 1.875rem;
-	height: 50%;
-	font-family: arial;
-}
-.from-color{
-	color: #2F4F4F;
-	margin-top: 1.875rem;
-}
-.from-margin-bottom{
-	margin-bottom: 2.5rem;
-}
-.reply-button{
-	background-color: #ededed;
-	color: #900C3E;
-	margin-top:1.875rem;
-	width: 10%;
-	height: 10%;
-	font-size: 0.9375vw;
+.column {
+  float: left;
+  width: 80%;
+  padding: 10px;
+  background-color: #f1f1f1;
 }
 .float-right{
 	float: right;
 }
-#compose-mail{
-	display: none;
-}
-
-/* ------- compose mail modal--------*/
-
-/*-- send mail----*/
-.send-mail-panel{
-	margin-top:290px;
-	margin-left: 255px;
-	color:white!important;
-	background-color:#900C3E!important;
-	width: 30%;
-	height: 10%;
-	display: none;
-	position: absolute;
-	font-size: 20px;
-}
-.retract-button{
-	margin-left: 230px;
-	padding: 10px;
-	width: 90px;
-	text-decoration: none;
-	color: white;
-	font-size: 20px;
-}
-#show-send-mail-panel{
-	display: none;
-}
-#show-saved-mail-panel{
-	display: none;
-}
-
-.inbox-header-width1{
-	width: 30%;
-}
-.inbox-header-width2{
-	width: 50%;
-}
-.inbox-header-min{
-	width: 20%;
-}
-/*------------idea of responsive form from w3schools--------------*/
 /* Style inputs, select elements and textareas */
 input[type=text], select, textarea{
   width: 100%;
@@ -376,11 +118,6 @@ input[type=submit] {
   border-radius: 4px;
   cursor: pointer;
   float: left;
-  margin-top: 10px;
-  margin-left: 20px;
-}
-.txtarea{
-	height:200px;
 }
 
 /* Style the container */
@@ -409,6 +146,9 @@ input[type=submit] {
   content: "";
   display: table;
   clear: both;
+}
+.txtarea{
+	height:200px;
 }
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */

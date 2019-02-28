@@ -7,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-  <header id="myTopnav">
+  <header>
   <a href="login.html">Logout</a>
   <a href="#" class="epic-title">EPIC Mail.</a>
   </header>
@@ -18,38 +18,28 @@
   <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
   <a href="sentmail.html" ><img src="../img/draft.png"> Draft</a>
 </div>
-<div class="content" >
-<form>
-  <div class="row">
-      <div class="col-75">
-        <h1>Compose Mail</h1>
-      </div>
+<div class="content">
+<form action="action_page.php">
     <div class="row">
+      <h1>Compose Mail</h1>
       <div class="col-75">
-        <input type="text" id="fname" name="firstname" placeholder="To:">
+        <input type="text" placeholder="To:" required>
       </div>
     </div>
     <div class="row">
       <div class="col-75">
-        <input type="text" id="lname" name="lastname" placeholder="Cc:">
+        <input type="text" placeholder="Cc:">
       </div>
     </div>
     <div class="row">
       <div class="col-75">
-        <input type="text" id="lname" name="lastname" placeholder="Bcc:">
+        <textarea id="subject" name="subject" placeholder="Compose mail here" class="txtarea"></textarea>
       </div>
     </div>
     <div class="row">
-      <div class="col-75">
-        <textarea id="subject" name="subject" placeholder="Write message here." class="txtarea"></textarea>
-      </div>
-    </div><br><br>
-    <div class="row">
-      <input type="submit" value="Send" onclick="showSendMailPanel()">
-      <input type="submit" value="Save" onclick="showSendMailPanel()">
+      <input type="submit" value="Submit">
     </div>
   </form>
-
 </div>
   
         
