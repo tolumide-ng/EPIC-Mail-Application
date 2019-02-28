@@ -16,7 +16,7 @@
   <a href="composemail.html" ><img src="../img/compose.png">Compose Mail</button>
   <a href="inbox.html" ><img src="../img/inbox.png"> Inbox</a>
   <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
-  <a href="sentmail.html" ><img src="../img/draft.png"> Draft</a>
+  <a href="draft.html" ><img src="../img/draft.png"> Draft</a>
 </div>
 <div class="content">
 <form action="action_page.php">
@@ -37,7 +37,8 @@
       </div>
     </div>
     <div class="row">
-      <input type="submit" value="Submit" id="open-feedback">
+      <input type="submit" value="Send" id="open-feedback" class="margin16-left">
+      <input type="submit" value="Save" id="save-feedback" class="margin16-left">
     </div>
   </form>
 </div>
@@ -52,6 +53,17 @@
     <span class="close">&times;</span>
     </div>
     <p>Email sent</p> <button id="retract" class="retract">retract</button>
+  </div>
+
+</div>
+<div id="saveModal" class="modal">
+
+  <!-- sign up modal -->
+  <div class="modal-content">
+    <div class="modal-header">
+    <span class="close1">&times;</span>
+    </div>
+    <p>Email saved.</p> 
   </div>
 
 </div>
