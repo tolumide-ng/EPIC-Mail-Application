@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EPIC Mail | Inbox</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+  <header>
+  <a href="login.html">Logout</a>
+  <a href="#" class="epic-title">EPIC Mail.</a>
+  </header>
+
+<div class="sidebar">
+  <a href="composemail.html" ><img src="../img/compose.png">Compose Mail</button>
+  <a href="inbox.html" ><img src="../img/inbox.png"> Inbox</a>
+  <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
+  <a href="draft.html" ><img src="../img/draft.png"> Draft</a>
+</div>
+<div class="content" id="inbox">
+<h1>Draft</h1>
+<div class="row">
+  <div class="column" >
+    <h3>Sender</h3>
+    <h3>Subject</h3>
+    <h3></h3>
+  </div>
+</div><br>
+<div class="row">
+  <div class="column" >
+    <p>Owoso Sinmilola</p>
+    <p><a href="openedmail.html">Test Email</p></a>
+    <input type="submit" value="delete" id="open-draft">
+  </div>
+</div><br>
+<div class="row">
+  <div class="column" >
+    <p>Adelanwa Adeniyi</p>
+    <p>Test Email</p>
+    <input type="submit" value="delete" id="open-draft">
+  </div>
+</div>
+</div>    
+</div>
+<div id="draftModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+    <span class="close">&times;</span>
+    </div>
+    <p>Email deleted.</p> 
+  </div>
+
+</div>
+<script type="text/javascript" src="../js/draft.js"></script>
+</body>
+</html>
