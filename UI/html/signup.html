@@ -4,40 +4,37 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>EPIC Mail| Sign Up</title>
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
-
+	<link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
 <body>
-	<div class="login-bg">
 	<div class="container">
-		<h1 class="header-margin white-h1-label">Sign Up</h1>
-		<div class="login-margin login-div">
-		<form method="POST" >
-			<label class="login-label-margin input-margin">First Name</label>
-			<input type="text" class =" login-input input-left-margin input-margin" placeholder="Please Enter Your First Name Here" required>
-			<label class="login-label-margin">Last Name</label>
-			<input type="text" class =" login-input input-left-margin input-margin" placeholder="Please Enter Your Last Name Here" required>
-			<label class="login-label-margin">Email</label>
-			<input type="email" class ="login-input input-left-margin input-margin" placeholder="Please Enter Your Email Here" required>
-			<label class="login-label-margin">Password</label>
-			<input type="password" placeholder="Please Enter Your Preferred Password Here" class ="inputbtm login-input input-left-margin input-margin" pattern=".{5,}"   required title="5 characters minimum">
-			<label class="login-label-margin">Confirm Password</label>
-			<input type="password" placeholder="Please Confirm Your Password Here" class ="inputbtm login-input input-left-margin input-margin" pattern=".{5,}"   required title="5 characters minimum"><br><br><br><br><br><br><hr class="hr">
-			<button type="submit" onclick="openSignUpModal()" class="signup-button">Sign Up</button>
-		</form>
-		<div id="signUpModal" class="modal">
-			<div class="modal-content">
-				<div class="modal-header">
-				</div>
-				<div>
-				<p>Sign Up Successful</p>
-				</div>
-
-			</div>
-		</div>
+		<h1>Sign Up</h1>
+		<div class="login-item">
+			<form action="" method="post" class="form form-login">
+				<div class="form-field">
+          			<label><span class="hidden">Firstname</span></label>
+          			<input type="text" class="form-input" placeholder="Please type your first name here" required>
+        		</div>
+        		<div class="form-field">
+          			<label><span class="hidden">Lastname</span></label>
+          			<input type="text" class="form-input" placeholder="Please type your last name here" required>
+        		</div>
+				<div class="form-field">
+          			<label><span class="hidden">Username</span></label>
+          			<input type="text" class="form-input" placeholder="Username" required>
+        		</div>
+        		<div class="form-field">
+          			<label ><span class="hidden">Password</span></label>
+          			<input type="password" class="form-input" placeholder="Password" required>
+        		</div>
+        		<div class="form-field">
+          			<label ><span class="hidden">Confirm Password</span></label>
+          			<input type="password" class="form-input" placeholder="Confirm Password" required>
+        		</div>
+        		<div class="form-field">
+          <input type="submit" value="Sign Up">
+			</form>
 		</div>
 	</div>
-	</div>
-	<script type="text/javascript" src="../js/app.js"></script>
 </body>
 </html>

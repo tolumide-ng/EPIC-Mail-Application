@@ -4,24 +4,32 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>EPIC Mail| Login</title>
-	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
 <body>
-	<div class="login-bg">
 	<div class="container">
-		<h1 class="header-margin white-h1-label">Sign In</h1>
-		<div class="login-margin login-div">
-		<form method="POST" >
-			<label class="login-label-margin input-margin">Email Address</label>
-			<input type="email" class ="login-input input-left-margin input-margin" placeholder="Please Enter Your Email Address">
-			<label class="login-label-margin input-margin">Password</label>
-			<input type="password" placeholder="Please Enter Your Password" class =" login-input input-left-margin input-margin" ><hr class="hr">
-			<button type="submit" class="login-button">Login</button>
-			<a href="signup.html" class="signup-padding">Sign Up</a>
-			<a href="reset-password.html">Forgot Password?</a>
-		</form>
+		<h1>Login</h1>
+		<div class="login-item">
+			<form action="" method="post" class="form form-login">
+				<div class="form-field">
+          			<label><span class="hidden">Username</span></label>
+          			<input type="text" class="form-input" placeholder="Username" required>
+        		</div>
+        		<div class="form-field">
+          			<label ><span class="hidden">Password</span></label>
+          			<input type="password" class="form-input" placeholder="Password" required>
+
+        		</div>
+        		<div class="form-field">
+        			<input type="submit" name="Login">
+      			</div>
+        		<div class="form-field">
+        			<a href="signup.html">Sign up</a>
+          			<a href="reset-password.html" class="margin-left">Forgot Password?</a>
+      			</div>
+
+			</form>
 		</div>
-	</div>
 	</div>
 </body>
 </html>
