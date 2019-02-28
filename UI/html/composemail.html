@@ -18,12 +18,37 @@
   <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
   <a href="sentmail.html" ><img src="../img/draft.png"> Draft</a>
 </div>
-<div class="content" id="inbox">
-<input type="text" id="myInput" placeholder="Search Inbox..."<img src="../img/searchicon.png">
-<ul>
-  <li class="email-content email-heading"><span class="email-sender">Sender</span><span class="email-subject">Subject</span></li>
-  <li class="email-content "><a href="openedmail.html"><span class="email-sender">test</span></a><a href="#" onclick="openedMail()"><span class="email-subject">test</span></a></li>
-</ul>
+<div class="content" >
+<form>
+  <div class="row">
+      <div class="col-75">
+        <h1>Compose Mail</h1>
+      </div>
+    <div class="row">
+      <div class="col-75">
+        <input type="text" id="fname" name="firstname" placeholder="To:">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-75">
+        <input type="text" id="lname" name="lastname" placeholder="Cc:">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-75">
+        <input type="text" id="lname" name="lastname" placeholder="Bcc:">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-75">
+        <textarea id="subject" name="subject" placeholder="Write message here." class="txtarea"></textarea>
+      </div>
+    </div><br><br>
+    <div class="row">
+      <input type="submit" value="Send" class="float-right" onclick="showSendMailPanel()">
+      <input type="submit" value="Save" class="float-right" onclick="showSendMailPanel()">
+    </div>
+  </form>
 
 </div>
   

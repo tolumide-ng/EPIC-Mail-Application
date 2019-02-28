@@ -1,18 +1,144 @@
 body{
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 15px;
-	line-height: 1.5px;
+	font-size: 1rem;
+	line-height: 0.09375rem;
 	padding: 0;
 	margin: 0;
 	background-color: #fff;
 }
-.container{
-	width:80%;
-	margin: auto;
-	overflow: hidden;
+footer {
+  background-color: #f6f6f6;
+  border-top: #900C3E 3px solid;
 }
+header{
+	background-color: #900C3E;
+	min-height: 3.125rem;
+}
+header a{
+  float: right;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 1.5625rem 1rem;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 12.5rem;
+  background-color: rgba(241,241,241,0.5); /* give grey transparent color. reference stack overflow*/
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+  border-right: #ededed 3px solid;
+}
+
+.sidebar a {
+  display: block;
+  color: #2F4F4F;
+  text-decoration: none;
+  font-family: system-ui;
+  font size: 2rem;
+  padding: 1.5rem;
+}
+
+ 
+.sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.sidebar-margin-top{
+	margin-top: 3.125rem;
+}
+
+div.content {
+  margin-left: 12.5rem;
+  padding: 0.00625rem 1rem;
+  height: 62.5rem;
+}
+
+@media screen and (max-width: 43.75rem) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 25rem) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
+
+@media screen and (max-width: 43.75rem) {
+  .email-content {
+    width: auto;
+    height: auto;
+    position: relative;
+  }
+}
+
+@media screen and (max-width: 43.75rem) {
+  .compose-textarea {
+    width: auto;
+    height: auto;
+    position: relative;
+  }
+}
+.email-content{
+background-color:rgba(241,241,241,0.5);
+list-style:none;
+padding:0.625rem;
+width:98%;
+height: 1.56rem;
+display:inline-block;
+border-bottom: 3px solid #f1f1f1;
+
+
+
+}
+.email-heading{
+	font-size: 1.5vw;
+}
+
+.email-sender{
+	margin-left: 3rem; 
+	padding: 1rem;
+	font-size: 1.2vw;
+}
+.email-subject{
+	margin-left: 25rem; 
+	padding: 1rem 1rem 0rem 0rem;
+	font-size: 1.2vw;
+}
+.email-form{
+	position: inline-block;
+}
+li a{
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+}
+li a:visited{
+	text-decoration: none;
+	font-weight: normal;
+}
+
+
 .hr{ 
-  height: 1px;
+  height: 0.00625rem;
   color: teal;
   background-color: #6495ED;
   border: none;
@@ -23,8 +149,8 @@ body{
 	background-color: #23112D;
 }
 .header-margin{
-	margin-top: 160px;
-	margin-left: 500px;
+	margin-top: 10rem;
+	margin-left: 31.25rem;
 }
 .white-h1-label{
 	color: white;
@@ -42,51 +168,51 @@ body{
 	padding:5%;
 }
 .login-label-margin{
-	margin-top: 50px;
-	margin-left: 40px;
+	margin-top: 3.125rem;
+	margin-left: 2.5rem;
 }
 .input-margin{
-	margin: 40px;
+	margin: 2.5rem;
 }
 .input-left-margin{
-	margin-left: 40px;
+	margin-left: 2.5rem;
 }
 .login-input{
 	width: 80%;
-	padding: 10px;
-	border-radius: 4px;
+	padding: 0.625rem;
+	border-radius: 0.25rem;
 	background-color: white;
 }
 .signup-button{
   background-color: MediumBlue;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   color: white;
-  padding: 13px 32px;
+  padding: 0.8125rem 2rem;
   text-decoration: none;
-  margin: 4px 2px;
+  margin: 0.25rem 0.125rem;
   cursor: pointer;
-  font-size: 15px;
-  margin-left: 200px;
+  font-size: 0.9375vw;
+  margin-left: 12.5rem;
 }
 .login-button{
   background-color: MediumBlue;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   color: white;
-  padding: 13px 32px;
+  padding: 0.8125rem 2rem;
   text-decoration: none;
-  margin: 4px 2px;
+  margin: 0.25rem .125rem;
   cursor: pointer;
-  font-size: 15px;
-  margin-left: 150px;
+  font-size: 0.9375rem;
+  margin-left: 9.375rem;
 }
 .signup-padding{
-	padding: 10px;
+	padding: 0.625rem;
 }
 .compose-close-btn{
 	color: #d3d3d3;
 	float: right;
-	font-size: 30px;
-	margin-right: 10px;
+	font-size: 1.875vw;
+	margin-right: 0.625rem;
 	cursor: pointer;
 }
 #signUpModal{
@@ -127,7 +253,7 @@ body{
 	background-color: #f4f4f4;
 	margin: 10% auto;
 	/*padding: 20px;*/
-	padding: 15px;
+	padding: 0.9375rem;
 	width: 30%;
 	height: 30%;
 	animation-name: modalopen;
@@ -137,80 +263,17 @@ body{
 
 .modal-header{
 	background: #23112D;
-	padding: 15px;
+	padding: 0.935rem;
 	color:#fff;
 
 }
 /* ------------------------------*/
 
 /*-------------------inbox etc--------------------*/
-.top-navigation {
-  background-color: #900C3E;
-  overflow: hidden;
-  width: 99vw;
-  height: 50px;
-  position: absolute;
-}
-.top-navigation a {
-  float: right;
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 25px 16px;
-  text-decoration: none;
-  font-size: 17px;
-}
-.top-navigation2{
-	/*background-color: #f6f6f6;*/
-  	overflow: hidden;
-  	width:1110px;
-  	height: 100%;
-  	margin-left: 253px;
-  	position: absolute; /*to make one div overlay another */
-  	margin-top: 40px;
-}
-.side-navigation{
-	height: 580px;
-	width:250px;
-	position:absolute;
-	z-index: 1;
-	margin-top:50px;
-	left: 0;
-	top:40;
-	background-color: rgba(241,241,241,0.5); /* give grey transparent color. reference stack overflow*/
-	padding-top: 10px;
-	border-right: #ededed 3px solid;
-	
-}
-.side-navigation a{
-	padding: 20px 20px 10px 60px;
-	text-decoration: none;
-	font-size: 20px;
-	color: #2F4F4F;
-	display: block;
-	font-family: system-ui;
-}
-.side-navigation a:hover{
-	color: black;
-	background-color: #DCDCDC;
-}
-.sidenav-margin-top{
-	margin-top: 50px;
-}
-.footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 99vw;
-  height: 15px;
-  background-color: #f6f6f6;
-  color: grey;
-  text-align: center;
-  border-top: #900C3E 3px solid;
-}
+
 .epic-title{
-	margin-right: 80%;
-	font-size: 40px;
+	float: left;
+	font-size: 1.8rem;
 }
 #inbox{
 	display: block;
@@ -219,98 +282,38 @@ body{
 	display: none;
 }
 .opened-mail-heading{
-	padding: 15px;
-	margin-top: 25px;
+	padding: 0.937rem;
+	margin-top: 1.5625rem;
 }
 .opened-mail-content{
-	margin-left: 30px;
+	margin-left: 1.875rem;
 	height: 50%;
 	font-family: arial;
 }
 .from-color{
 	color: #2F4F4F;
-	margin-top: 30px;
+	margin-top: 1.875rem;
 }
 .from-margin-bottom{
-	margin-bottom: 40px;
+	margin-bottom: 2.5rem;
 }
 .reply-button{
 	background-color: #ededed;
 	color: #900C3E;
-	margin-top:30px;
+	margin-top:1.875rem;
 	width: 10%;
 	height: 10%;
-	font-size: 15px;
+	font-size: 0.9375vw;
 }
 .float-right{
-	margin-left: 80%;
+	float: right;
+}
+#compose-mail{
+	display: none;
 }
 
 /* ------- compose mail modal--------*/
-.compose-modal-header{
-	background: #900C3E;
-	padding: 8px;
-	color:#fff;
-	margin:0;
-}
 
-.compose-modal-header a{
-	color: white;
-
-}
-
-.pcomposemodal{
-	font-size: 20px;
-}
-
-.compose-modal-content{
-	background-color: white;
-	margin: 5% auto;
-	width: 45%;
-	height: 80%;
-	box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.2);
-	border-radius: 6px;
-}
-
-.compose-close-btn{
-	color: #d3d3d3;
-	float: right;
-	font-size: 35px;
-	margin-right: 15px;
-	margin-bottom: 20px;
-}
-
-.compose-close-btn:hover, .compose-close-btn:focus{
-	color: black;
-	text-decoration: none;
-	cursor: pointer;
-}
-.compose-input{
-	width: 90%;
-	padding: 10px;
-	border-radius: 4px;
-	margin-left: 15px;
-
-}
-.compose-textarea{
-	margin-left: 15px;
-	border:none;
-	overflow: auto;
-	width: 90%;
-	height: 180%;
-}
-
-.compose-button{
-	background-color: #ededed;
-	color: #900C3E;
-	margin-top:30px;
-	width: 20%;
-	height: 25%;
-	font-size: 17px;
-	margin-left: 15px;
-	border: none;
-	padding: 5px;
-}
 /*-- send mail----*/
 .send-mail-panel{
 	margin-top:290px;
@@ -334,64 +337,10 @@ body{
 #show-send-mail-panel{
 	display: none;
 }
-/* -----------------table-----------------*/
-/* idea from w3schools*/
-#myInput {
-  background-image: url('/img/searchicon.png'); /* Add a search icon to input */
-  background-position: 10px 12px; /* Position the search icon */
-  background-repeat: no-repeat; /* Do not repeat the icon image */
-  width: 20%; 
-  font-size: 16px; /* Increase font-size */
-  padding: 12px 20px 12px 40px; /* Add some padding */
-  border: 1px solid #ddd; /* Add a grey border */
-  margin-bottom: 5px; /* Add some space below the input */
-  margin-top: 10px;
-  margin-left: 70%;
+#show-saved-mail-panel{
+	display: none;
 }
 
-#myTable {
-  border-collapse: collapse; /* Collapse borders */
-  width: 100%; /* Full-width */
-  border: 1px solid #ddd; /* Add a grey border */
-  font-size: 18px; /* Increase font-size */
-}
-#myTable a{
-	text-decoration: none;
-	color: #2F4F4F;
-}
-#myTable th {
-	color: #2F4F4F;
-}
-#myTable th, #myTable td {
-  text-align: left; /* Left-align text */
-  padding: 12px; /* Add padding */
-}
-
-#myTable tr {
-  /* Add a bottom border to all table rows */
-  border-bottom: 1px solid #ddd; 
-}
-
-#myTable tr.header, #myTable tr:hover {
-  /* Add a grey background color to the table header and on hover */
-  background-color: #f1f1f1;
-}
-
-.table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 80%;
-}
-
-.td, .th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-.tr:nth-child(even) {
-  background-color: #dddddd;
-}
 .inbox-header-width1{
 	width: 30%;
 }
@@ -401,41 +350,71 @@ body{
 .inbox-header-min{
 	width: 20%;
 }
-/*--------------------------*/
-/*body, .top-navigation, .top-navigation2, .side-navigation {
-    width: 100%; /* The width is 100%, when the viewport is 500px or smaller */ 
+/*------------idea of responsive form from w3schools--------------*/
+/* Style inputs, select elements and textareas */
+input[type=text], select, textarea{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
 
+/* Style the label to display next to the inputs */
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+/* Style the submit button */
+input[type=submit] {
+  background-color: #900C3E;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: left;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.txtarea{
+	height:200px;
+}
+
+/* Style the container */
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+/* Floating column for labels: 25% width */
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+/* Floating column for inputs: 75% width */
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
   }
-*/
-
-/*-------------------------------------------------*/
-
-@media screen and (max-width: 800px) {
-  
-  .wrapper{
-    	display: grid;
-    	grid-display-columns: 1fr;
-    	grid-template-rows: 1fr 1fr 1fr 1fr;
-    	grid-template-areas: 
-    	"tn"
-    	"sn"
-    	"tn2"
-    	"f";
-    }
-
-    .top-navigation{
-    	grid-area: "tn";
-    }
-    .side-navigation{
-    	grid-area: "sn";
-    } 
-    .top-navigation2{
-    	grid-area: "tn2";
-    }
-    .footer{
-    	grid-area: "f";
-    }
-
-
-
 }
