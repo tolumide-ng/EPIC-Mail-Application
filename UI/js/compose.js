@@ -39,6 +39,3 @@ setTimeout(function(){
 saveFeedback.onclick = function(){
 	save.style.display = "block"
 }
-setTimeout(function(){
-  save.style.visibility = 'hidden';
-  }, timeOut);
