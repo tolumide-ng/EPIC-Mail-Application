@@ -32,10 +32,6 @@ retract.onclick= function(){
 	feedbakModal.style.display = "none";
 }
 
-setTimeout(function(){
-  feedbakModal.style.visibility = 'hidden';
-  }, timeOut);
-
 saveFeedback.onclick = function(){
 	save.style.display = "block"
 }
