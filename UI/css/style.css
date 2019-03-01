@@ -182,6 +182,8 @@ div.content {
   float: right;
   font-size: 1.75rem;
   font-weight: bold;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
 }
 
 .close:hover,
@@ -195,6 +197,8 @@ div.content {
   float: right;
   font-size: 1.75rem;
   font-weight: bold;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
 }
 
 .close1:hover,
@@ -215,7 +219,7 @@ div.content {
 	margin-left: 1rem;
 	margin-top: 1rem; 
 }
-/* Style inputs, select elements and textareas credit: w3schools*/
+/* credit: w3schools*/
 input[type=text],input[type=email], select, textarea{
   width: 100%;
   padding: 12px;
@@ -225,13 +229,11 @@ input[type=text],input[type=email], select, textarea{
   resize: vertical;
 }
 
-/* Style the label to display next to the inputs */
 label {
   padding: 12px 12px 12px 0;
   display: inline-block;
 }
 
-/* Style the submit button */
 input[type=submit] {
   background-color: #900C3E;
   color: white;
@@ -256,14 +258,12 @@ input[type=submit] {
   margin-top: 6px;
 }
 
-/* Floating column for inputs: 75% width */
 .col-75 {
   float: left;
   width: 75%;
   margin-top: 6px;
 }
 
-/* Clear floats after the columns */
 .row:after {
   content: "";
   display: table;

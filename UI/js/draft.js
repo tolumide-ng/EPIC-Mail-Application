@@ -8,8 +8,7 @@ let span = document.getElementsByClassName("close")[0];
 openDraft.onclick= function(){
 	drafModal.style.display = "block";
 }
+span.onclick= function(){
+	drafModal.style.display = "none";
+}
 
-
-setTimeout(function(){
-  drafModal.style.visibility = 'hidden';
-  }, timeOut);
