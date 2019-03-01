@@ -1,3 +1,4 @@
+//credit: all modals is gotten from w3schools
 // Get the modal
 var registerModal = document.getElementById('signupModal');
 
