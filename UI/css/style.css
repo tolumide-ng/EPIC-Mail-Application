@@ -23,7 +23,7 @@ header a{
   text-decoration: none;
   font-size: 1.25rem;
 }
-
+/*credit: w3schools*/
 .sidebar {
   margin: 0;
   padding: 0;
@@ -107,7 +107,7 @@ div.content {
 .float-right{
 	float: right;
 }
-/* The Modal (background) */
+/* The Modal (background) credit: w3schools*/
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
@@ -176,7 +176,7 @@ div.content {
 	margin-left: 1rem;
 	margin-top: 1rem; 
 }
-/* Style inputs, select elements and textareas */
+/* Style inputs, select elements and textareas credit: w3schools*/
 input[type=text],input[type=email], select, textarea{
   width: 100%;
   padding: 12px;
