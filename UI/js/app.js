@@ -1,4 +1,4 @@
-/* Idea of modal gotten from w3schools and stack overflow */
+/* Idea of modal gotten from w3schools and stack overflow.  */
 //declare a variable to save time out in milliseconds
 const signupTimeOut = 4000;
 
