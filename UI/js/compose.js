@@ -1,37 +1,30 @@
-// Get the modal
-let feedbakModal = document.getElementById('feedbackModal');
+/* credit: all modals is gotten from w3schools */
+/* global document */
+const feedbakModal = document.getElementById('feedbackModal');
+const openFeedback = document.getElementById('open-feedback');
 
-// Get the button that opens the modal
-let openFeedback = document.getElementById("open-feedback");
+/* Get the <span> element that closes the modal */
+const span = document.getElementsByClassName('close')[0];
+const span1 = document.getElementsByClassName('close1')[0];
+const retract = document.getElementById('retract');
+const save = document.getElementById('saveModal');
+const saveFeedback = document.getElementById('save-feedback');
 
-// Get the <span> element that closes the modal
-let span = document.getElementsByClassName("close")[0];
-let span1 = document.getElementsByClassName("close1")[0];
+openFeedback.onclick = function showFeedbackModal() {
+  feedbakModal.style.display = 'block';
+};
 
-let retract = document.getElementById("retract");
+span.onclick = function close() {
+  feedbakModal.style.display = 'none';
+};
+span1.onclick = function close1() {
+  save.style.display = 'none';
+};
 
-let save = document.getElementById("saveModal");
-let saveFeedback = document.getElementById("save-feedback");
+retract.onclick = function closeSendModal() {
+  feedbakModal.style.display = 'none';
+};
 
-// When the user clicks on the button, open the modal 
-openFeedback.onclick = function() {
-  feedbakModal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-let timeOut = 4000;
-
-span.onclick = function() {
-  feedbakModal.style.display = "none";
-}
-span1.onclick = function() {
-  save.style.display = "none";
-}
-
-retract.onclick= function(){
-	feedbakModal.style.display = "none";
-}
-
-saveFeedback.onclick = function(){
-	save.style.display = "block"
-}
+saveFeedback.onclick = function showSaveModal() {
+  save.style.display = 'block';
+};
