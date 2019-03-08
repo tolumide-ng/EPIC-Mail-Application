@@ -23,5 +23,15 @@ class Epicmail {
     this.epic.push(newUser);
     return newUser;
   }
+
+  login(data) {
+    const login = {
+      email: data.email,
+      password: data.password,
+    };
+    this.epic.push(login);
+    return login;
+  }
+
 }
 export default new Epicmail();
