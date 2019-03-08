@@ -48,5 +48,9 @@ class Epicmail {
     return newMessage;
   }
 
+  getAllMessagesPerUser(id) {
+    return this.epic.filter(c => c.reciever === parseInt(id));
+  }
+
 }
 export default new Epicmail();

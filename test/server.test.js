@@ -43,7 +43,7 @@ describe('/api/v1/auth/signup', () => {
   });
 
   describe('/api/v1/message/createMessage', () => {
-    it('should send a message', (done) => {
+    it('should create a message', (done) => {
       chai.request(server)
         .post('/api/v1/message/createMessage')
         .send({
@@ -58,6 +58,17 @@ describe('/api/v1/auth/signup', () => {
           expect(res.body.message).to.be.equal('test message');
           expect(res.body.sender).to.be.equal(1);
           expect(res.body.reciever).to.be.equal(1);
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('/api/v1/messages/allMessagesPerUser', () => {
+    it('should view all recieved messages', (done) => {
+      chai.request(server)
+        .get('/api/v1/messages/allMessagesPerUser/1')
+        .end((err, res) => {
           expect(res).to.have.status(200);
           done();
         });

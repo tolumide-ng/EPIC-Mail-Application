@@ -61,6 +61,15 @@ const Model = {
         const message = UserModel.sendMessage(req.body);
         return res.status(200).send(message);
       },
+      getAllMessagesPerUser(req, res) {
+        const message = UserModel.getAllMessagesPerUser(req.params.id);
+        if (!message) {
+          res.status(404).send('the email(s) are no where to be found');
+        }
+        const arrOfMessages = [];
+        Object.values(message).forEach(i => arrOfMessages.push(i));
+        res.status(200).send(Object.values(arrOfMessages));
+      },
 };
 
 export default Model;
