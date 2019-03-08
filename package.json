@@ -12,6 +12,9 @@
     "start-dev": "nodemon ./server/server.js --exec babel-node",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
+  "engines":{
+    "node": "10.15.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mosinmiloluwa01/EPIC-Mail-Application.git"
