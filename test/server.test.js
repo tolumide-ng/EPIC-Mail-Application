@@ -42,10 +42,10 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  describe('/api/v1/message/createMessage', () => {
+  describe('/api/v1/messages/createMessage', () => {
     it('should create a message', (done) => {
       chai.request(server)
-        .post('/api/v1/message/createMessage')
+        .post('/api/v1/messages/createMessage')
         .send({
           email: 't@a.com',
           subject: 'test mail',
@@ -116,6 +116,17 @@ describe('/api/v1/auth/signup', () => {
         .get('/api/v1/users/1')
         .end((err, res) => {
           expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('/api/v1/messages/deleteAMessage', () => {
+    it('should delete a message', (done) => {
+      chai.request(server)
+        .get('/api/v1/messages/deleteAMessage/1')
+        .end((err, res) => {
+          expect(res).to.have.status(404);
           done();
         });
     });

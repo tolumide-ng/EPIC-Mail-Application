@@ -68,6 +68,13 @@ class Epicmail {
     return this.epic.find(c => c.userId === parseInt(id));
   }
 
+  deleteAMessage(id) {
+    const msg = this.getAMessage(id);
+    const index = this.epic.indexOf(msg);
+    this.epic.splice(index, 1);
+    return {};
+  }
+
 
 
 }

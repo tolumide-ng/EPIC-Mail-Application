@@ -14,12 +14,13 @@ app.use(express.json());
 app.get('/', (req, res) => res.status(200).send({ message: 'YAY! Congratulations! Your first endpoint is working' }));
 app.post('/api/v1/auth/signup', Epicmail.createAUser);
 app.post('/api/v1/auth/login', Epicmail.login);
-app.post('/api/v1/message/createMessage', Epicmail.sendMessage);
+app.post('/api/v1/messages/createMessage', Epicmail.sendMessage);
 app.get('/api/v1/messages/allMessagesPerUser/:id', Epicmail.getAllMessagesPerUser);
 app.get('/api/v1/messages/getAMessage/:id', Epicmail.getAMessage);
 app.get('/api/v1/messages/unreadMessagesPerUser/:id', Epicmail.getUnreadMessagesPerUser);
 app.get('/api/v1/messages/getMessagesSentByAUser/:id', Epicmail.getMessagesSentByAUser);
 app.get('/api/v1/users/:id', Epicmail.getOneUser);
+app.delete('/api/v1/messages/deleteAMessage/:id', Epicmail.deleteAMessage);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
