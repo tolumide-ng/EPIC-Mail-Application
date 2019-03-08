@@ -41,3 +41,25 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  describe('/api/v1/message/createMessage', () => {
+    it('should send a message', (done) => {
+      chai.request(server)
+        .post('/api/v1/message/createMessage')
+        .send({
+          email: 't@a.com',
+          subject: 'test mail',
+          message: 'test message',
+          sender: 1,
+          reciever: 1,
+        })
+        .end((err, res) => {
+          expect(res.body.subject).to.be.equal('test mail');
+          expect(res.body.message).to.be.equal('test message');
+          expect(res.body.sender).to.be.equal(1);
+          expect(res.body.reciever).to.be.equal(1);
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
