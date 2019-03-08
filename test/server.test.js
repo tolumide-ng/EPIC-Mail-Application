@@ -26,3 +26,18 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  describe('/api/v1/auth/login', () => {
+    it('should login a user', (done) => {
+      chai.request(server)
+        .post('/api/v1/auth/login')
+        .send({
+          email: 't@a.com',
+          password: 'test',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
