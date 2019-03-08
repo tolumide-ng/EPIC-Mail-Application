@@ -1,0 +1,618 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1rem;
+	line-height: 0.09375rem;
+	padding: 0;
+	margin: 0;
+	background-color: #fff;
+}
+footer {
+  background-color: #f6f6f6;
+  border-top: #900C3E 3px solid;
+}
+header{
+	background-color: #900C3E;
+	min-height: 3.125rem;
+}
+header a{
+  float: right;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 1.5625rem 1rem;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+<<<<<<< HEAD
+a{
+  text-decoration: none;
+}
+p{
+  display: inline-block
+}
+.column p{
+  display: inline-block;
+}
+/*credit: w3schools*/
+=======
+
+>>>>>>> ch-setup-project-dependencies
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 12.5rem;
+  background-color: rgba(241,241,241,0.5); /* give grey transparent color. reference stack overflow*/
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+  border-right: #ededed 3px solid;
+}
+
+.sidebar a {
+  display: block;
+  color: #2F4F4F;
+  text-decoration: none;
+  font-family: system-ui;
+<<<<<<< HEAD
+  font-size: 1rem;
+  margin-left: 0;
+  padding: 1rem;
+  text-align: left;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+=======
+  font size: 2rem;
+  padding: 1.5rem;
+>>>>>>> ch-setup-project-dependencies
+}
+
+ 
+.sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.sidebar-margin-top{
+	margin-top: 3.125rem;
+}
+
+div.content {
+  margin-left: 12.5rem;
+  padding: 0.00625rem 1rem;
+  height: 62.5rem;
+}
+<<<<<<< HEAD
+=======
+
+>>>>>>> ch-setup-project-dependencies
+@media screen and (max-width: 43.75rem) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+<<<<<<< HEAD
+  .sidebar a {float: left; text-align: left;}
+=======
+  .sidebar a {float: left;}
+>>>>>>> ch-setup-project-dependencies
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 25rem) {
+  .sidebar a {
+<<<<<<< HEAD
+    text-align: left;
+    float: none;
+  }
+}
+@media screen and (max-width: 43.75rem) {
+	.column{
+		min-width: 12.5rem;
+	}
+
+}
+@media screen and (max-width: 25rem) {
+	.column{
+		min-width: 15.5rem;
+	}
+
+}
+@media screen and (max-width: 320px) {
+	.column{
+		min-width: 15.5rem;
+	}
+
+}
+@media screen and (max-width: 43.75rem) {
+	.modal-content{
+		min-width: 12.5rem;
+	}
+
+}
+@media screen and (max-width: 25rem) {
+	.modal-content{
+		min-width: 15.5rem;
+	}
+
+}
+.button{
+  width: 1rem;
+}
+.full-col{
+  width: 100%;
+}
+=======
+    text-align: center;
+    float: none;
+  }
+}
+
+@media screen and (max-width: 43.75rem) {
+  .email-content {
+    width: auto;
+    height: auto;
+    position: relative;
+  }
+}
+
+@media screen and (max-width: 43.75rem) {
+  .compose-textarea {
+    width: auto;
+    height: auto;
+    position: relative;
+  }
+}
+.email-content{
+background-color:rgba(241,241,241,0.5);
+list-style:none;
+padding:0.625rem;
+width:98%;
+height: 1.56rem;
+display:inline-block;
+border-bottom: 3px solid #f1f1f1;
+
+
+
+}
+.email-heading{
+	font-size: 1.5vw;
+}
+
+.email-sender{
+	margin-left: 3rem; 
+	padding: 1rem;
+	font-size: 1.2vw;
+}
+.email-subject{
+	margin-left: 25rem; 
+	padding: 1rem 1rem 0rem 0rem;
+	font-size: 1.2vw;
+}
+.email-form{
+	position: inline-block;
+}
+li a{
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
+}
+li a:visited{
+	text-decoration: none;
+	font-weight: normal;
+}
+
+
+.hr{ 
+  height: 0.00625rem;
+  color: teal;
+  background-color: #6495ED;
+  border: none;
+}
+
+/*--- login and sign up ---*/
+.login-bg{
+	background-color: #23112D;
+}
+.header-margin{
+	margin-top: 10rem;
+	margin-left: 31.25rem;
+}
+.white-h1-label{
+	color: white;
+}
+.login-margin {
+  margin-top: 50px;
+  margin-left: 270px;
+  margin-bottom: 300px;
+}
+.login-div{
+	border-radius: 4px;
+	background-color: #f2f2f2;
+	width:50%;
+	height: 500%;
+	padding:5%;
+}
+.login-label-margin{
+	margin-top: 3.125rem;
+	margin-left: 2.5rem;
+}
+.input-margin{
+	margin: 2.5rem;
+}
+.input-left-margin{
+	margin-left: 2.5rem;
+}
+.login-input{
+	width: 80%;
+	padding: 0.625rem;
+	border-radius: 0.25rem;
+	background-color: white;
+}
+.signup-button{
+  background-color: MediumBlue;
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.8125rem 2rem;
+  text-decoration: none;
+  margin: 0.25rem 0.125rem;
+  cursor: pointer;
+  font-size: 0.9375vw;
+  margin-left: 12.5rem;
+}
+.login-button{
+  background-color: MediumBlue;
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.8125rem 2rem;
+  text-decoration: none;
+  margin: 0.25rem .125rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  margin-left: 9.375rem;
+}
+.signup-padding{
+	padding: 0.625rem;
+}
+.compose-close-btn{
+	color: #d3d3d3;
+	float: right;
+	font-size: 1.875vw;
+	margin-right: 0.625rem;
+	cursor: pointer;
+}
+#signUpModal{
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left:0;
+	top:0;
+	height: 100%;
+	width: 100%;
+	overflow: auto; /*for scrolling*/
+	background-color: rgba(0,0,0,0.5); /*background of the modal*/
+}
+#resetPasswordModal{
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left:0;
+	top:0;
+	height: 100%;
+	width: 100%;
+	overflow: auto; /*for scrolling*/
+	background-color: rgba(0,0,0,0.5); /*background of the modal*/
+}
+.modal{
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+	background-color: rgba(0,0,0,0.3);
+
+}
+.modal-content{
+	background-color: #f4f4f4;
+	margin: 10% auto;
+	/*padding: 20px;*/
+	padding: 0.9375rem;
+	width: 30%;
+	height: 30%;
+	animation-name: modalopen;
+	animation-duration: 1s;
+	box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 7px 8px 0 rgba(0,0,0,2)
+}
+
+.modal-header{
+	background: #23112D;
+	padding: 0.935rem;
+	color:#fff;
+
+}
+/* ------------------------------*/
+
+/*-------------------inbox etc--------------------*/
+
+>>>>>>> ch-setup-project-dependencies
+.epic-title{
+	float: left;
+	font-size: 1.8rem;
+}
+<<<<<<< HEAD
+.column {
+  float: left;
+  width: 90%;
+  min-width: 12.25rem;
+  padding: 10px;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: space-between;
+}
+.float-right{
+	float: right;
+}
+/* The Modal (background) credit: w3schools*/
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  border: 0.0625rem solid #888;
+  border-radius: 0.25rem;
+  width: 30%;
+  height: 30% 
+}
+.modal-content p{
+  color: black;
+  padding: 1.25rem;
+}
+.modal-header{
+  background-color: #870C35;
+  height:2rem;
+}
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.close1 {
+  color: #aaa;
+  float: right;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-top: 0.9rem;
+  margin-right: 0.9rem;
+}
+
+.close1:hover,
+.close1:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.retract{
+  background-color: #3A3F44;
+  color: #eee;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+.margin16-left{
+	margin-left: 1rem;
+	margin-top: 1rem; 
+}
+/* credit: w3schools*/
+input[type=text],input[type=email], select, textarea{
+=======
+#inbox{
+	display: block;
+}
+#opened-mail{
+	display: none;
+}
+.opened-mail-heading{
+	padding: 0.937rem;
+	margin-top: 1.5625rem;
+}
+.opened-mail-content{
+	margin-left: 1.875rem;
+	height: 50%;
+	font-family: arial;
+}
+.from-color{
+	color: #2F4F4F;
+	margin-top: 1.875rem;
+}
+.from-margin-bottom{
+	margin-bottom: 2.5rem;
+}
+.reply-button{
+	background-color: #ededed;
+	color: #900C3E;
+	margin-top:1.875rem;
+	width: 10%;
+	height: 10%;
+	font-size: 0.9375vw;
+}
+.float-right{
+	float: right;
+}
+#compose-mail{
+	display: none;
+}
+
+/* ------- compose mail modal--------*/
+
+/*-- send mail----*/
+.send-mail-panel{
+	margin-top:290px;
+	margin-left: 255px;
+	color:white!important;
+	background-color:#900C3E!important;
+	width: 30%;
+	height: 10%;
+	display: none;
+	position: absolute;
+	font-size: 20px;
+}
+.retract-button{
+	margin-left: 230px;
+	padding: 10px;
+	width: 90px;
+	text-decoration: none;
+	color: white;
+	font-size: 20px;
+}
+#show-send-mail-panel{
+	display: none;
+}
+#show-saved-mail-panel{
+	display: none;
+}
+
+.inbox-header-width1{
+	width: 30%;
+}
+.inbox-header-width2{
+	width: 50%;
+}
+.inbox-header-min{
+	width: 20%;
+}
+/*------------idea of responsive form from w3schools--------------*/
+/* Style inputs, select elements and textareas */
+input[type=text], select, textarea{
+>>>>>>> ch-setup-project-dependencies
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+<<<<<<< HEAD
+=======
+/* Style the label to display next to the inputs */
+>>>>>>> ch-setup-project-dependencies
+label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+<<<<<<< HEAD
+=======
+/* Style the submit button */
+>>>>>>> ch-setup-project-dependencies
+input[type=submit] {
+  background-color: #900C3E;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: left;
+<<<<<<< HEAD
+=======
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.txtarea{
+	height:200px;
+>>>>>>> ch-setup-project-dependencies
+}
+
+/* Style the container */
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+/* Floating column for labels: 25% width */
+.col-25 {
+  float: left;
+  width: 25%;
+  margin-top: 6px;
+}
+
+<<<<<<< HEAD
+=======
+/* Floating column for inputs: 75% width */
+>>>>>>> ch-setup-project-dependencies
+.col-75 {
+  float: left;
+  width: 75%;
+  margin-top: 6px;
+}
+
+<<<<<<< HEAD
+=======
+/* Clear floats after the columns */
+>>>>>>> ch-setup-project-dependencies
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+<<<<<<< HEAD
+.txtarea{
+  height:200px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75 {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+@media screen and (max-width: 600px) {
+  input[type=submit] {
+    width: 5rem;
+    margin-top: 0;
+  }
+=======
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+>>>>>>> ch-setup-project-dependencies
+}
