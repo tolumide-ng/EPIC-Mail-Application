@@ -21,3 +21,9 @@ EPIC Mail is an web based email application that provides users with the ability
 
 ## GitHub Pages Link:
 https://mosinmiloluwa01.github.io/EPIC-Mail-Application/UI/html/login.html
+
+## Coveralls badge
+[![Coverage Status](https://coveralls.io/repos/github/mosinmiloluwa01/EPIC-Mail-Application/badge.svg?branch=master)](https://coveralls.io/github/mosinmiloluwa01/EPIC-Mail-Application?branch=master)
+
+## Travis badge
+[![Build Status](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application.svg?branch=master)](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application)
