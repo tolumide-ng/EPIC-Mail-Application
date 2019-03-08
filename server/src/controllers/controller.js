@@ -79,6 +79,7 @@ const Model = {
         Object.values(message).forEach(i => arrOfMessages.push(i));
         res.status(200).send(Object.values(arrOfMessages));
       },
+      /* credit: Orji Ikechukwu (LFA Andela) */
       getAMessage(req, res) {
         const message = UserModel.getAMessage(req.params.id);
         if (!message) {
@@ -87,6 +88,16 @@ const Model = {
         message.status = 'read';
         res.status(200).json(message);
       },
+      getMessagesSentByAUser(req, res) {
+        const message = UserModel.getMessagesSentByAUser(req.params.id);
+        if (!message) {
+          res.status(404).send('the email(s) are no where to be found');
+        }
+        const arrOfSentMessages = [];
+        Object.values(message).forEach(i => arrOfSentMessages.push(i));
+        res.status(200).send(Object.values(arrOfSentMessages));
+      },
+      
 };
 
 export default Model;

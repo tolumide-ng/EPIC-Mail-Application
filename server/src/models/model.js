@@ -60,6 +60,10 @@ class Epicmail {
     return this.epic.filter(c => c.reciever === parseInt(id) && c.status === 'unread');
   }
 
+  getMessagesSentByAUser(id) {
+    return this.epic.filter(c => c.sender === parseInt(id));
+  }
+
 
 
 }
