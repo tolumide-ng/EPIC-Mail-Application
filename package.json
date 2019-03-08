@@ -4,8 +4,9 @@
   "description": "EPIC Mail is an application that provides users with the ability to view emails , send and save messages as draft.",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --require @babel/register test/*.js --exit",
-    "start": "node --exec babel/node server/server1.js",
+    "test": "mocha --require @babel/register test/*.js --exit",
+    "start": "node --exec @babel/node server/server1.js",
+    "start-dev": "nodemon ./server/server1.js --exec babel-node",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "author": "owoso mosinmiloluwa",
@@ -18,6 +19,7 @@
     "@babel/register": "^7.0.0",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
     "codecov": "^3.2.0",
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
