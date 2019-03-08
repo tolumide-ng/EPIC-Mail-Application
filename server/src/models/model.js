@@ -52,5 +52,15 @@ class Epicmail {
     return this.epic.filter(c => c.reciever === parseInt(id));
   }
 
+  getAMessage(id) {
+    return this.epic.find(c => c.messageId === parseInt(id));
+  }
+
+  getUnreadMessagesPerUser(id) {
+    return this.epic.filter(c => c.reciever === parseInt(id) && c.status === 'unread');
+  }
+
+
+
 }
 export default new Epicmail();

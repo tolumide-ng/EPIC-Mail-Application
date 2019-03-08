@@ -74,3 +74,25 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  /*describe('/api/v1/messages/getAMessage', () => {
+    it('should get a message', (done) => {
+      chai.request(server)
+        .get('/api/v1/messages/getAMessage/1')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  }); */
+
+  describe('/api/v1/messages/unreadMessagesPerUser', () => {
+    it('should display all unread messages', (done) => {
+      chai.request(server)
+        .get('/api/v1/messages/unreadMessagesPerUser/1')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });

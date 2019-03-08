@@ -16,6 +16,8 @@ app.post('/api/v1/auth/signup', Epicmail.createAUser);
 app.post('/api/v1/auth/login', Epicmail.login);
 app.post('/api/v1/message/createMessage', Epicmail.sendMessage);
 app.get('/api/v1/messages/allMessagesPerUser/:id', Epicmail.getAllMessagesPerUser);
+app.get('/api/v1/messages/getAMessage/:id', Epicmail.getAMessage);
+app.get('/api/v1/messages/unreadMessagesPerUser/:id', Epicmail.getUnreadMessagesPerUser);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
