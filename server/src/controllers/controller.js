@@ -70,6 +70,23 @@ const Model = {
         Object.values(message).forEach(i => arrOfMessages.push(i));
         res.status(200).send(Object.values(arrOfMessages));
       },
+      getUnreadMessagesPerUser(req, res) {
+        const message = UserModel.getUnreadMessagesPerUser(req.params.id);
+        if (!message) {
+          res.status(404).send('the email(s) are no where to be found');
+        }
+        const arrOfMessages = [];
+        Object.values(message).forEach(i => arrOfMessages.push(i));
+        res.status(200).send(Object.values(arrOfMessages));
+      },
+      getAMessage(req, res) {
+        const message = UserModel.getAMessage(req.params.id);
+        if (!message) {
+          res.status(404).send('the email(s) are no where to be found');
+        }
+        message.status = 'read';
+        res.status(200).json(message);
+      },
 };
 
 export default Model;
