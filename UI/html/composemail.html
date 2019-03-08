@@ -7,7 +7,11 @@
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
+<<<<<<< HEAD
   <header>
+=======
+  <header id="myTopnav">
+>>>>>>> ch-setup-project-dependencies
   <a href="login.html">Logout</a>
   <a href="#" class="epic-title">EPIC Mail.</a>
   </header>
@@ -16,6 +20,7 @@
   <a href="composemail.html" ><img src="../img/compose.png">Compose Mail</button>
   <a href="inbox.html" ><img src="../img/inbox.png"> Inbox</a>
   <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
+<<<<<<< HEAD
   <a href="draft.html" ><img src="../img/draft.png"> Draft</a>
 </div>
 <div class="content">
@@ -24,15 +29,33 @@
       <h1>Compose Mail</h1>
       <div class="col-75">
         <input type="text" placeholder="To:" required>
+=======
+  <a href="sentmail.html" ><img src="../img/draft.png"> Draft</a>
+</div>
+<div class="content" >
+<form>
+  <div class="row">
+      <div class="col-75">
+        <h1>Compose Mail</h1>
+      </div>
+    <div class="row">
+      <div class="col-75">
+        <input type="text" id="fname" name="firstname" placeholder="To:">
+>>>>>>> ch-setup-project-dependencies
       </div>
     </div>
     <div class="row">
       <div class="col-75">
+<<<<<<< HEAD
         <input type="text" placeholder="Cc:">
+=======
+        <input type="text" id="lname" name="lastname" placeholder="Cc:">
+>>>>>>> ch-setup-project-dependencies
       </div>
     </div>
     <div class="row">
       <div class="col-75">
+<<<<<<< HEAD
         <textarea id="subject" name="subject" placeholder="Compose mail here" class="txtarea"></textarea><br><br>
       </div>
     </div>
@@ -41,10 +64,27 @@
       <input type="submit" value="Save" id="save-feedback" class="margin16-left">
     </div>
   </form>
+=======
+        <input type="text" id="lname" name="lastname" placeholder="Bcc:">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-75">
+        <textarea id="subject" name="subject" placeholder="Write message here." class="txtarea"></textarea>
+      </div>
+    </div><br><br>
+    <div class="row">
+      <input type="submit" value="Send" onclick="showSendMailPanel()">
+      <input type="submit" value="Save" onclick="showSendMailPanel()">
+    </div>
+  </form>
+
+>>>>>>> ch-setup-project-dependencies
 </div>
   
         
 </div>
+<<<<<<< HEAD
 <div id="feedbackModal" class="modal">
 
   <!-- sign up modal -->
@@ -68,5 +108,19 @@
 
 </div>
 <script type="text/javascript" src="../js/compose.js"></script>
+=======
+<div class="send-mail-panel" id="show-send-mail-panel">
+    <p>Sending... <a href="#" onclick="retractMessage()" class="retract-button">retract?</a></p>
+ </div>
+<div class="send-mail-panel" id="show-saved-mail-panel">
+        <div class="modal-header1">
+            <span class="compose-close-btn" onclick="hideSavedMailPanel()">&times;</span><br><br><br>
+          </div>
+          <p>Email Saved...</p>
+       </div>
+<footer>
+</footer>
+<script type="text/javascript" src="../js/app.js"></script>
+>>>>>>> ch-setup-project-dependencies
 </body>
 </html>
