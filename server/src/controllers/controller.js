@@ -97,6 +97,13 @@ const Model = {
         Object.values(message).forEach(i => arrOfSentMessages.push(i));
         res.status(200).send(Object.values(arrOfSentMessages));
       },
+      getOneUser(req, res) {
+        const user = UserModel.findOneUser(req.params.id);
+        if (!user) {
+          return res.status(404).send({ message: 'user email not found' });
+        }
+        return res.status(200).send(user);
+      },
       
 };
 
