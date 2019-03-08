@@ -64,6 +64,10 @@ class Epicmail {
     return this.epic.filter(c => c.sender === parseInt(id));
   }
 
+  findOneUser(id) {
+    return this.epic.find(c => c.userId === parseInt(id));
+  }
+
 
 
 }

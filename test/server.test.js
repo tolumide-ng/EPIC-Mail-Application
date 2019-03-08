@@ -109,3 +109,14 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  describe('/api/v1/users', () => {
+    it('should display a particular user email', (done) => {
+      chai.request(server)
+        .get('/api/v1/users/1')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
