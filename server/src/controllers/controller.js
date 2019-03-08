@@ -54,6 +54,13 @@ const Model = {
         }
         return '';
       },
+      sendMessage(req, res) {
+        if (!req.body.subject || !req.body.message || !req.body.sender || !req.body.reciever) {
+          return res.status(400).send({ message: 'All fields are required' });
+        }
+        const message = UserModel.sendMessage(req.body);
+        return res.status(200).send(message);
+      },
 };
 
 export default Model;

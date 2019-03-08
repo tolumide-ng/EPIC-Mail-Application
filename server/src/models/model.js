@@ -33,5 +33,20 @@ class Epicmail {
     return login;
   }
 
+  sendMessage(data) {
+    const newMessage = {
+      messageId: this.epic.length + 1,
+      createdOn: new Date(),
+      email: data.email,
+      subject: data.subject,
+      message: data.message,
+      status: 'unread',
+      sender: data.sender,
+      reciever: data.reciever,
+    };
+    this.epic.push(newMessage);
+    return newMessage;
+  }
+
 }
 export default new Epicmail();
