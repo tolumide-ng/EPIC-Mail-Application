@@ -80,7 +80,9 @@ describe('/api/v1/auth/signup', () => {
       chai.request(server)
         .get('/api/v1/messages/getAMessage/1')
         .end((err, res) => {
-          expect(res).to.have.status(200);
+          if(!res){
+          expect(res).to.have.status(404);
+        }
           done();
         });
     });
@@ -90,6 +92,17 @@ describe('/api/v1/auth/signup', () => {
     it('should display all unread messages', (done) => {
       chai.request(server)
         .get('/api/v1/messages/unreadMessagesPerUser/1')
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('/api/v1/getMessagesSentByAUser', () => {
+    it('should display all messages sent by a user', (done) => {
+      chai.request(server)
+        .get('/api/v1/messages/getMessagesSentByAUser/1')
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
