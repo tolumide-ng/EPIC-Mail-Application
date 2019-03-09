@@ -15,7 +15,7 @@
     "start-dev": "nodemon ./server/server.js --exec babel-node",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
-  "engines":{
+  "engines": {
     "node": "10.15.3"
   },
   "repository": {
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/mosinmiloluwa01/EPIC-Mail-Application#readme",
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",
