@@ -1,13 +1,18 @@
-/* credit: all modals is gotten from w3schools */
-/* global document */
-const cgModal = document.getElementById('createGroupModal');
-const createButton = document.getElementById('create-group-button');
-const span = document.getElementsByClassName('close')[0];
+// Get the modal
+var cgModal = document.getElementById('createGroupModal');
 
-createButton.onclick = function showAdminModal() {
-  cgModal.style.display = 'block';
-};
+// Get the button that opens the modal
+var createButton = document.getElementById("create-group-button");
 
-span.onclick = function hideAdminModal() {
-  cgModal.style.display = 'none';
-};
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+createButton.onclick = function() {
+  cgModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  cgModal.style.display = "none";
+}
