@@ -40,7 +40,8 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "mocha": "^6.0.2",
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "rimraf": "^2.6.3"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
