@@ -8,7 +8,10 @@
   },
   "scripts": {
     "test": "nyc mocha --require @babel/register",
-    "start": "babel-node ./server/server.js",
+    "build": "npm run clean && babel ./server  -d  ./build",
+    "heroku-postbuild": "npm run build",
+    "start": "node ./build/server.js",
+    "clean": "rimraf ./build",
     "start-dev": "nodemon ./server/server.js --exec babel-node",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
