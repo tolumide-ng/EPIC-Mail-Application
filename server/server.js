@@ -4,8 +4,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import Epicmail from './src/controllers/controller';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import swaggerDocument from '../swagger.json';
 
+const router = express.Router();
 const app = express();
 app.use(bodyParser.urlencoded({ // Middleware
   extended: true,
