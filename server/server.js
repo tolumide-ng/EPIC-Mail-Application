@@ -24,7 +24,7 @@ app.delete('/api/v1/messages/deleteAMessage/:id', Epicmail.deleteAMessage);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
-const port = process.env.port || 6000;
+const port = process.env.PORT || 6000;
 app.listen(port, () => console.log(`Listening on ${port}`));
 
 export default app;
