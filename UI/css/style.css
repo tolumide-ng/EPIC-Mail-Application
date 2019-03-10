@@ -164,16 +164,16 @@ div.content {
   background-color: #fefefe;
   margin: 15% auto; 
   border: 0.0625rem solid #888;
-  border-radius: 0.25rem;
+  border-radius: 0.4rem;
   width: 30%;
   height: 30% 
 }
 .modal-content p{
   color: black;
   padding: 1.25rem;
+  font-size: 1.2rem;
 }
 .modal-header{
-  background-color: #870C35;
   height:2rem;
 }
 /* The Close Button */
@@ -182,8 +182,8 @@ div.content {
   float: right;
   font-size: 1.75rem;
   font-weight: bold;
-  margin-top: 0.9rem;
-  margin-right: 0.9rem;
+  margin-top: 1.2rem;
+  margin-right: 1rem;
 }
 
 .close:hover,
@@ -197,8 +197,8 @@ div.content {
   float: right;
   font-size: 1.75rem;
   font-weight: bold;
-  margin-top: 0.9rem;
-  margin-right: 0.9rem;
+  margin-top: 1.2rem;
+  margin-right: 1rem;
 }
 
 .close1:hover,
