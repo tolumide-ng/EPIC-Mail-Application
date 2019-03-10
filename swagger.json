@@ -1,0 +1,343 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "EPIC Mail API documentation",
+    "description": "The developed APIs were used to sign up users, login users, create emails, find emails using different search criterias and delete emails",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:6000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create new user in system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New user is created + token",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "login user to the system",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to login",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New login + token",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/messages/createMessage": {
+      "post": {
+        "tags": [
+          "Message"
+        ],
+        "description": "create a message",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "creates an email message",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "message info",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/allMessagesPerUser{senderId}": {
+      "parameters": [
+        {
+          "name": "senderId",
+          "in": "path",
+          "required": true,
+          "description": "ID of sender that we want to find",
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Get all messages per user",
+        "responses": {
+          "200": {
+            "description": "all messages per user",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/getAMessage{messageId}": {
+      "parameters": [
+        {
+          "name": "messageId",
+          "in": "path",
+          "required": true,
+          "description": "ID of message that we want to find",
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Get a particular message",
+        "responses": {
+          "200": {
+            "description": "Get a particular message",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/unreadMessagesPerUser{recieverId}": {
+      "parameters": [
+        {
+          "name": "recieverId",
+          "in": "path",
+          "required": true,
+          "description": "ID of reciever that we want to find",
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Get all unread messages per user",
+        "responses": {
+          "200": {
+            "description": "Get all unread messages per user",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/getMessagesSentByAUser{senderId}": {
+      "parameters": [
+        {
+          "name": "senderId",
+          "in": "path",
+          "required": true,
+          "description": "ID of sender that we want to find",
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Get all messages sent by a user",
+        "responses": {
+          "200": {
+            "description": "Get all messages sent by a user",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/users{userId}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of sender that we want to find",
+          "type": "number"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Message"
+        ],
+        "summary": "Get a particular user's email",
+        "responses": {
+          "200": {
+            "description": "Get a particular user's email",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/deleteAMessage{messageId}": {
+      "parameters": [
+        {
+          "name": "messageId",
+          "in": "path",
+          "required": true,
+          "description": "ID of sender that we want to find",
+          "type": "number"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a particular message",
+        "tags": [
+          "Message"
+        ],
+        "responses": {
+          "200": {
+            "description": "message is deleted",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": [
+        "email",
+        "userId",
+        "firstName",
+        "lastName",
+        "password"
+      ],
+      "properties": {
+        "userId": {
+          "type": "number",
+          "uniqueItems": true
+        },
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Login": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Message": {
+      "required": [
+        "messageId",
+        "createdOn",
+        "email",
+        "subject",
+        "message",
+        "status",
+        "sender",
+        "reciever"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "subject": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "sender": {
+          "type": "string"
+        },
+        "reciever": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
