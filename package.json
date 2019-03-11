@@ -7,13 +7,13 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc mocha --require @babel/register",
+    "test": "nyc mocha --require @babel/register --exit",
     "build": "npm run clean && babel ./server  -d  ./build",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
     "clean": "rimraf ./build",
     "start-dev": "nodemon ./server/server.js --exec babel-node",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "engines": {
     "node": "10.15.3"
