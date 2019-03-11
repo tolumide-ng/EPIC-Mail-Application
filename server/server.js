@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import Epicmail from './src/controllers/controller';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
+import cors from 'cors';
 
 const router = express.Router();
 const app = express();
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1', router);
+app.use(cors());
 
 app.get('/', (req, res) => res.status(200).send({ message: 'YAY! Congratulations! Your first endpoint is working' }));
 app.post('/api/v1/auth/signup', Epicmail.createAUser);
