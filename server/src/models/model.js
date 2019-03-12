@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 /* eslint-disable radix */
 class Epicmail {
     /**
@@ -5,7 +6,8 @@ class Epicmail {
      * @param {object} data
      */
     constructor() {
-      this.epic = [];
+      this.user = [];
+      this.message = [];
     }
 
       /**
@@ -14,13 +16,13 @@ class Epicmail {
    */
   createUser(data) {
     const newUser = {
-      userId: this.epic.length + 1,
+      userId: this.user.length + 1,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
     };
-    this.epic.push(newUser);
+    this.user.push(newUser);
     return newUser;
   }
 
@@ -29,13 +31,13 @@ class Epicmail {
       email: data.email,
       password: data.password,
     };
-    this.epic.push(login);
+    this.user.push(login);
     return login;
   }
 
   sendMessage(data) {
     const newMessage = {
-      messageId: this.epic.length + 1,
+      messageId: this.message.length + 1,
       createdOn: new Date(),
       email: data.email,
       subject: data.subject,
@@ -44,38 +46,48 @@ class Epicmail {
       sender: data.sender,
       reciever: data.reciever,
     };
-    this.epic.push(newMessage);
+    this.message.push(newMessage);
     return newMessage;
   }
 
   getAllMessagesPerUser(id) {
-    return this.epic.filter(c => c.reciever === parseInt(id));
+    return this.message.filter(c => c.reciever === parseInt(id));
   }
 
   getAMessage(id) {
-    return this.epic.find(c => c.messageId === parseInt(id));
+    return this.message.find(c => c.messageId === parseInt(id));
   }
 
   getUnreadMessagesPerUser(id) {
-    return this.epic.filter(c => c.reciever === parseInt(id) && c.status === 'unread');
+    return this.message.filter(c => c.reciever === parseInt(id) && c.status === 'unread');
   }
 
   getMessagesSentByAUser(id) {
-    return this.epic.filter(c => c.sender === parseInt(id));
+    return this.message.filter(c => c.sender === parseInt(id));
   }
 
   findOneUser(id) {
-    return this.epic.find(c => c.userId === parseInt(id));
+    return this.user.find(c => c.userId === parseInt(id));
+  }
+
+  findOneEmail(email) {
+    return this.user.find(c => c.email === email);
   }
 
   deleteAMessage(id) {
     const msg = this.getAMessage(id);
-    const index = this.epic.indexOf(msg);
-    this.epic.splice(index, 1);
+    const index = this.message.indexOf(msg);
+    this.message.splice(index, 1);
     return {};
   }
 
+  hashPassword(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+  }
 
+  comparePassword(hashPassword, password) {
+    return bcrypt.compareSync(password, hashPassword);
+  }
 
 }
 export default new Epicmail();
