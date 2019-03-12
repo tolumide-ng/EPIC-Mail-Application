@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:6000",
+  "host": "mosinmiloluwa-app.herokuapp.com",
   "basePath": "/api/v1",
   "tags": [
     {
@@ -139,7 +139,7 @@
         }
       }
     },
-    "/messages/getAMessage{messageId}": {
+    "/messages/getAMessage/{messageId}": {
       "parameters": [
         {
           "name": "messageId",
@@ -164,7 +164,7 @@
         }
       }
     },
-    "/messages/unreadMessagesPerUser{recieverId}": {
+    "/messages/unreadMessagesPerUser/{recieverId}": {
       "parameters": [
         {
           "name": "recieverId",
@@ -189,7 +189,7 @@
         }
       }
     },
-    "/messages/getMessagesSentByAUser{senderId}": {
+    "/messages/getMessagesSentByAUser/{senderId}": {
       "parameters": [
         {
           "name": "senderId",
@@ -214,7 +214,7 @@
         }
       }
     },
-    "/messages/users{userId}": {
+    "/messages/users/{userId}": {
       "parameters": [
         {
           "name": "userId",
@@ -239,7 +239,7 @@
         }
       }
     },
-    "/messages/deleteAMessage{messageId}": {
+    "/messages/deleteAMessage/{messageId}": {
       "parameters": [
         {
           "name": "messageId",
