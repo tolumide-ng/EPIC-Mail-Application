@@ -15,7 +15,7 @@ const checkToken = (req, res, next) => {
     //check if the token was created by me using my secret. if there is an error, it says token is invalid, if success, show decoded
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
       if (err) {
-        return res.json({
+        return res.status(400).send({
           status: 'error',
           message: 'Token is not valid',
         });
@@ -25,7 +25,7 @@ const checkToken = (req, res, next) => {
     });
     /* if no token is supplied */
   } else {
-    return res.json({
+    return res.status(400).json({
       status: 'error',
       message: 'Auth token is not supplied',
     });

@@ -11,39 +11,48 @@ const Model = {
         if(!email){
           return res.status(400).send({ message: 'email is required' });
         }
-        else if(!req.body.firstName || req.body.firstName.length < 3){
+        if(email){
+          const user = UserModel.findOneEmail(req.body.email)
+          const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+          const result = validateEmail.test(email);
+          const newVal = email.split('@');
+          const finalCheck = newVal[1];
+          if(!result || finalCheck !=="epic.com"){
+            return res.status(400).send({ message: 'please enter a valid epic email' });
+          }
+          if(user && user.email === req.body.email){
+            return res.status(400).send({ message: 'email already exists' });
+          }
+        }
+        if(!req.body.firstName || req.body.firstName.length < 3){
           return res.status(400).send({ message: 'first name is required and has a minimum of 3 characters' });
         }
-        else if(!req.body.lastName || req.body.lastName.length < 3){
+        if(!req.body.lastName || req.body.lastName.length < 3){
           return res.status(400).send({ message: 'last name is required and has a minimum of 3 characters' });
         }
-        else if(!req.body.password || req.body.password.length < 6){
+        if(!req.body.password || req.body.password.length < 6){
           return res.status(400).send({ message: 'password is required and has a minimum of 6 characters' });
         }
         /*if (!email || !req.body.firstName || !req.body.lastName || !req.body.password) {
           return res.status(400).json({ message: 'All fields are required' });
         }*/
-        else {
           const hashedPassword = UserModel.hashPassword(req.body.password);
           // call req.body, destructure to get password and then save encrypt into password
           const userData = {...req.body, password: hashedPassword};
-          // create a user by passing userData that contains req.body and pwd using token
+          // create a user that will be displayed by passing userData that contains req.body but remove pwd using token
           const user = UserModel.createUser(userData);
           // eslint-disable-next-line prefer-const
           let token = jwt.sign({ email: user.email, id: user.userId },
             process.env.SECRET,
             { expiresIn: '24h' });
-          res.send({
+          res.status(200).send({
             status: 'success',
             data:
            {
              message: `Authentication successful!. Welcome ${req.body.firstName}`,
-             token: token,
-             user
+             token: token
            },
           });
-        }
-        return '';
       },
       login(req, res) {
         //find the particular user using user's email
@@ -62,7 +71,7 @@ const Model = {
           let token = jwt.sign({ email: user.email, id : user.userId },
             process.env.SECRET,
             { expiresIn: '24h' });
-          res.send({
+          res.status(200).send({
             status: 'success',
             data:
             {
@@ -85,11 +94,25 @@ const Model = {
         return res.status(200).send(user);
       },
       sendMessage(req, res) {
-        if (!req.body.subject || !req.body.message || !req.body.sender || !req.body.reciever) {
-          return res.status(400).send({ message: 'All fields are required' });
+        if(!req.body.subject){
+          return res.status(400).send({ message: 'A subject is required' });
         }
-        const message = UserModel.sendMessage(req.body);
+        if(!req.body.message){
+          return res.status(400).send({ message: 'A message is required' });
+        }
+        if(!req.body.email){
+          return res.status(400).send({ message: 'Email is required' });
+        }
+        const reciever = UserModel.findOneEmail(req.body.email);
+        // if there is a reciever
+        if(reciever){
+        const msg = {...req.body , sender:req.decodedMessage.id, reciever:reciever.userId}
+        const message = UserModel.sendMessage(msg);
         return res.status(200).send(message);
+        }
+        else{
+          return res.status(400).send({ message: 'the email does not exist' });
+        }
       },
       getAllMessagesPerUser(req, res) {
         const message = UserModel.getAllMessagesPerUser(req.decodedMessage.id); // pass the decoded and check if it exists

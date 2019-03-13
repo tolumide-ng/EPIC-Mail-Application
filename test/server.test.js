@@ -52,6 +52,19 @@ describe('/api/v1/auth/signup', () => {
   });
 
   describe('/api/v1/auth/login', () => {
+    it('should not accept invalid', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send({
+          email: '',
+          password: '',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          
+          done();
+        });
+    });
     it('should login a user', (done) => {
       chai.request(app)
         .post('/api/v1/auth/login')
