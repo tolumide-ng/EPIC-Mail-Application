@@ -11,7 +11,7 @@ footer {
   border-top: #900C3E 3px solid;
 }
 header{
-	background-color: #900C3E;
+	background-color: #1d9bd1;
 	min-height: 3.125rem;
 }
 header a{
@@ -92,6 +92,36 @@ div.content {
   .sidebar a {
     text-align: left;
     float: none;
+    padding: 0 0 0 0.4rem;
+    font-size: 0.8rem;
+    display: inline-block;
+  }
+}
+@media screen and (max-width: 22.6875rem) {
+  .sidebar a {
+    text-align: left;
+    float: none;
+    padding: 0 0 0 0.2rem;
+    font-size: 0.8rem;
+    display: inline-block;
+  }
+}
+@media screen and (max-width: 25.6875rem) {
+  .sidebar a {
+    text-align: left;
+    float: none;
+    padding: 0 0 0 0.2rem;
+    font-size: 0.8rem;
+    display: inline-block;
+  }
+}
+@media screen and (max-width: 25.875rem) {
+  .sidebar a {
+    text-align: left;
+    float: none;
+    padding: 0 0.07rem 0.1rem 0.29rem;
+    font-size: 1rem;
+    display: inline-block;
   }
 }
 @media screen and (max-width: 43.75rem) {
@@ -136,7 +166,7 @@ div.content {
 }
 .column {
   float: left;
-  width: 90%;
+  width: 98%;
   min-width: 12.25rem;
   padding: 10px;
   background-color: #f1f1f1;
@@ -235,7 +265,7 @@ label {
 }
 
 input[type=submit] {
-  background-color: #900C3E;
+  background-color: #0F52BA;
   color: white;
   padding: 12px 20px;
   border: none;
