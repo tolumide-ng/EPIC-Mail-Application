@@ -25,34 +25,48 @@ describe('/api/v1/auth/signup', () => {
         }) 
         .end((err, res) => {
           expect(res).to.have.status(400);
-          expect(res.body.email).to.be.eql(undefined);
-          expect(res.body.firstName).to.be.eql(undefined);
-          expect(res.body.lastName).to.be.eql(undefined);
-          expect(res.body.email).to.be.eql(undefined);
+          expect(res.body).to.have.property('message')
           done();
         });
     });
 
-    it.only('should sign up a user', (done) => {
+    it('should validate email', (done) => {
       chai.request(app)
         .post('/api/v1/auth/signup')
         .send({
-          email: 't@a.com',
+          email: 't',
           firstName: 'mosinmiloluwa',
           lastName: 'owoso',
-          password: '1234',
+          password: 'password',
         }) 
         .end((err, res) => {
-          expect(res).to.have.status('success');
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('please enter a valid epic email');
+          done();
+        });
+    });
+
+    it('should sign up a user', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/signup')
+        .send({
+          email: 't@epic.com',
+          firstName: 'mosinmiloluwa',
+          lastName: 'owoso',
+          password: '123456',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(200);
           expect(res).to.be.an('object');
-          expect(res.body).to.have.property('token');
+          expect(res.body.data).to.have.property('token');
+          expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
           done();
         });
     });
   });
 
   describe('/api/v1/auth/login', () => {
-    it('should not accept invalid', (done) => {
+    it('should not accept null values', (done) => {
       chai.request(app)
         .post('/api/v1/auth/login')
         .send({
@@ -60,7 +74,8 @@ describe('/api/v1/auth/signup', () => {
           password: '',
         })
         .end((err, res) => {
-          expect(res).to.have.status(404);
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('email and password are required');
           
           done();
         });
@@ -69,42 +84,39 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v1/auth/login')
         .send({
-          email: 't@a.com',
-          password: 'test',
+          email: 't@epic.com',
+          password: '123456',
         })
         .end((err, res) => {
           expect(res).to.have.status(200);
+          expect(res.body.data).to.have.property('token');
           done();
         });
     });
   });
 
-  describe('/api/v1/messages/createMessage', () => {
-    it('should create a message', (done) => {
-      chai.request(app)
-        .post('/api/v1/messages/createMessage')
-        .send({
-          email: 't@a.com',
-          subject: 'test mail',
-          message: 'test message',
-          sender: 1,
-          reciever: 1,
-        })
-        .end((err, res) => {
-          expect(res.body.subject).to.be.equal('test mail');
-          expect(res.body.message).to.be.equal('test message');
-          expect(res.body.sender).to.be.equal(1);
-          expect(res.body.reciever).to.be.equal(1);
-          expect(res).to.have.status(200);
-          done();
-        });
-    });
-  });
+  // describe('/api/v1/createAMessage', () => {
+  //   it('should create a message', (done) => {
+  //     chai.request(app)
+  //       .post('/api/v1/createAMessage')
+  //       .send({
+  //         subject: 'test mail',
+  //         message: 'test message',
+  //         email: 't@epic.com',
+  //       })
+  //       .end((err, res) => {
+  //         expect(res).to.have.status(200);
+  //         expect(res).to.be.an('object');
+  //         done();
+  //       });
+  //   });
+  // });
 
-  describe('/api/v1/messages/allMessagesPerUser', () => {
+  describe('/api/v1/messages', () => {
     it('should view all recieved messages', (done) => {
       chai.request(app)
-        .get('/api/v1/messages/allMessagesPerUser/1')
+        .get('/api/v1/messages')
+        .set({'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRAYWIuY29tIiwiaWQiOjEsImlhdCI6MTU1MjQwMDUzOSwiZXhwIjoxNTUyNDg2OTM5fQ.IuKFJMrq-y2CvRrSoUu5YXOdLU5RkuLRGfAzq3hISvQ','Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();

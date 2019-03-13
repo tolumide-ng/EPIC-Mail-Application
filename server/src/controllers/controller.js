@@ -17,7 +17,7 @@ const Model = {
           const result = validateEmail.test(email);
           const newVal = email.split('@');
           const finalCheck = newVal[1];
-          if(!result || finalCheck !=="epic.com"){
+          if(!result || finalCheck !=="epic.com"){ 
             return res.status(400).send({ message: 'please enter a valid epic email' });
           }
           if(user && user.email === req.body.email){
@@ -57,7 +57,6 @@ const Model = {
       login(req, res) {
         //find the particular user using user's email
         const user = UserModel.findOneEmail(req.body.email);
-        console.log(user);
         if (!req.body.email || !req.body.password) {
           return res.status(400).send({ message: 'email and password are required' });
         }
@@ -106,9 +105,10 @@ const Model = {
         const reciever = UserModel.findOneEmail(req.body.email);
         // if there is a reciever
         if(reciever){
+          console.log(reciever);
         const msg = {...req.body , sender:req.decodedMessage.id, reciever:reciever.userId}
         const message = UserModel.sendMessage(msg);
-        return res.status(200).send(message);
+        return res.status(200).send(message); 
         }
         else{
           return res.status(400).send({ message: 'the email does not exist' });
