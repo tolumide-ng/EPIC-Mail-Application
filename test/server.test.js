@@ -13,7 +13,7 @@ import env from 'dotenv';
 const expect = chai.expect;
 // const should = chai.should();
 chai.use(chaiHttp);
-
+let v1token,v2token;
 describe('/api/v1/auth/signup', () => {
     it('should not accept null values', (done) => {
       chai.request(app)
@@ -141,6 +141,7 @@ describe('/api/v1/auth/signup', () => {
           password: '123456',
         })
         .end((err, res) => {
+          v1token = res.body.data.token;
           expect(res).to.have.status(200);
           expect(res.body.data).to.have.property('token');
           done();
@@ -148,28 +149,60 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  // describe('/api/v1/createAMessage', () => {
-  //   it('should create a message', (done) => {
-  //     chai.request(app)
-  //       .post('/api/v1/createAMessage')
-  //       .send({
-  //         subject: 'test mail',
-  //         message: 'test message',
-  //         email: 't@epic.com',
-  //       })
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(200);
-  //         expect(res).to.be.an('object');
-  //         done();
-  //       });
-  //   });
-  // });
+  describe('version 2 /api/v2/auth/login', () => {
+    it('version 2 should not accept null values', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/login')
+        .send({
+          email: '',
+          password: '',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('email and password are required');
+          
+          done();
+        });
+    });
+    it('version 2 should login a user', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/login')
+        .send({
+          email: 't@epic.com',
+          password: '123456',
+        })
+        .end((err, res) => {
+          v2token = res.body.data.token;
+          expect(res).to.have.status(200);
+          expect(res.body.data).to.have.property('token');
+          done();
+        });
+    });
+  });
+
+  describe('/api/v1/createAMessage', () => {
+    it('should create a message', (done) => {
+      chai.request(app)
+        .post('/api/v1/createAMessage')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 't@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+  });
 
   describe('/api/v1/messages', () => {
     it('should view all recieved messages', (done) => {
       chai.request(app)
         .get('/api/v1/messages')
-        .set({'Authorization':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRAYWIuY29tIiwiaWQiOjEsImlhdCI6MTU1MjQwMDUzOSwiZXhwIjoxNTUyNDg2OTM5fQ.IuKFJMrq-y2CvRrSoUu5YXOdLU5RkuLRGfAzq3hISvQ','Accept':'application/json'})
+        .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();

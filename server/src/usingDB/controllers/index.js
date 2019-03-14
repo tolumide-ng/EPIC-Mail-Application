@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const epicApp = {
     async createUser(req,res){
+      let userData = [];
       // use $1 to refer to the first record in ur search
       const findOneEmail = 'SELECT * FROM users WHERE email=$1';
       const email = req.body.email;
@@ -13,7 +14,8 @@ const epicApp = {
       if(email){
         try {
           const { rows } = await db.query(findOneEmail, [req.body.email]);
-          if(rows[0]) {
+          userData = rows[0];
+          if(userData) {
             return res.status(400).send({'message': 'email already exists'});
           }
         }
@@ -38,8 +40,8 @@ const epicApp = {
       }
       const hashedPassword = UserModel.hashPassword(req.body.password);
       // call req.body, destructure to get password and then save encrypt into password
-      const userData = {...req.body, password: hashedPassword};
-      let token = jwt.sign({ email: findOneEmail.email, id: findOneEmail.id },
+      userData = {...req.body, password: hashedPassword};
+      let token = jwt.sign({ email: userData.email, id: userData.id },
         process.env.SECRET,
         { expiresIn: '24h' });
       res.status(200).send({
@@ -66,6 +68,44 @@ const epicApp = {
           } catch(error) {
             return res.status(400).send(error);
           }
+    },
+    async login(req,res){
+      let userData = [];
+      const findOneEmail = 'SELECT * FROM users WHERE email=$1';
+      if (!req.body.email || !req.body.password) {
+        return res.status(400).send({ message: 'email and password are required' });
+      }
+      try {
+        const { rows } = await db.query(findOneEmail, [req.body.email]);
+        userData = rows[0];
+        if(!userData) {
+          return res.status(400).send({'message': 'email or password is incorrect'});
+        }
+      }
+      finally{
+        if (userData &&  !UserModel.comparePassword(userData.password, req.body.password)) {
+          return res.status(400).send({ message: 'Username or password is incorrect' });
+        }
+        // eslint-disable-next-line prefer-const
+        if(userData){
+        let token = jwt.sign({ email: userData.email, id : userData.id },
+          process.env.SECRET,
+          { expiresIn: '24h' });
+        res.status(200).send({
+          status: 'success',
+          data:
+          {
+            token: token,
+          },
+        });
+        }
+      else {
+        res.status(403).send({
+          success: 'error',
+          message: 'Incorrect username or password'
+        });
+      }
+      }
     }
 }
 export default epicApp;
