@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const epicApp = {
     async createUser(req,res){
+      // u need to do this cos row[0] cant be used outside await db.query
       let userData = [];
       // use $1 to refer to the first record in ur search
       const findOneEmail = 'SELECT * FROM users WHERE email=$1';
@@ -106,6 +107,62 @@ const epicApp = {
         });
       }
       }
+    },
+    async sendMessage(req,res){
+      const email = req.body.email;
+      // u need to do this cos row[0] cant be used outside await db.query
+      let userData = [];
+      // use $1 to refer to the first record in ur search
+      const findOneEmail = 'SELECT * FROM users WHERE email=$1';
+      if(!req.body.subject){
+        return res.status(400).send({ message: 'A subject is required' });
+      }
+      if(!req.body.message){
+        return res.status(400).send({ message: 'A message is required' });
+      }
+      if(!req.body.email){
+        return res.status(400).send({ message: 'Email is required' });
+      }
+      //validate to ensure its a valid mail and its an epic mail
+      const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+      const result = validateEmail.test(email);
+      const newVal = email.split('@');
+      const finalCheck = newVal[1];
+      if(!result || finalCheck !=="epic.com"){ 
+        return res.status(400).send({ message: 'please enter a valid epic email' });
+      }
+      //if it passes valid mail, confirm that the email exist
+      if(req.body.email){
+        try {
+          const { rows } = await db.query(findOneEmail, [email]);
+          userData = rows[0];
+          if(!userData) {
+            return res.status(400).send({'message': 'the email does not exist'});
+          }
+        }
+        //insert new message into db
+        finally{
+          const text = `
+        INSERT INTO messages(created_on,email,subject,message,status,sender,reciever)
+        VALUES($1,$2,$3,$4,$5,$6,$7)
+        returning *`;
+        const values = [
+            new Date(),
+            req.body.email,
+            req.body.subject,
+            req.body.message,
+            'unread',
+            req.decodedMessage.id,
+            userData.id
+        ];
+        try {
+            const { rows } = await db.query(text, values);
+            return res.status(201).send(rows[0]);
+          } catch(error) {
+            return res.status(400).send(error);
+          }
+        }
     }
+}
 }
 export default epicApp;
