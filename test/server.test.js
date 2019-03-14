@@ -103,7 +103,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v2/auth/signup')
         .send({
-          email: 'abula@epic.com',
+          email: 'abua@epic.com',
           firstName: 'mosinmiloluwa',
           lastName: 'owoso',
           password: '123456',
@@ -244,6 +244,20 @@ describe('/api/v1/auth/signup', () => {
           done();
         });
     });
+
+    it('should not create a message without token', (done) => {
+      chai.request(app)
+        .post('/api/v1/messages')
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 't@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
   });
 
   describe('/api/v2/messages', () => {
@@ -295,6 +309,20 @@ describe('/api/v1/auth/signup', () => {
         });
     });
 
+    it('should not create a message without token', (done) => {
+      chai.request(app)
+        .post('/api/v2/messages')
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 't@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
     it('version 2 should create a message', (done) => {
       chai.request(app)
         .post('/api/v2/messages')
@@ -319,10 +347,40 @@ describe('/api/v1/auth/signup', () => {
         .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+    it('should not allow user view messages without token', (done) => {
+      chai.request(app)
+        .get('/api/v1/messages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
           done();
         });
     });
   });
+
+  describe(' version 2 /api/v2/messages', () => {
+    it('version 2 should view all recieved messages', (done) => {
+      chai.request(app)
+        .get('/api/v2/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+    it('version 2 should not allow user view messages without token', (done) => {
+      chai.request(app)
+        .get('/api/v2/messages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+  });  
 
   /*describe('/api/v1/messages/getAMessage', () => {
     it('should get a message', (done) => {
