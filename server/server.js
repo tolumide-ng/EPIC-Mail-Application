@@ -46,6 +46,7 @@ app.delete('/api/v1/deleteAMessage/:id', checkToken, Epicmail.deleteAMessage);
 app.post('/api/v2/auth/signup', epicWithDB.createUser);
 app.post('/api/v2/auth/login', epicWithDB.login);
 app.post('/api/v2/messages', checkToken, epicWithDB.sendMessage);
+app.get('/api/v2/messages',checkToken, epicWithDB.getAllMessagesPerUser);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */

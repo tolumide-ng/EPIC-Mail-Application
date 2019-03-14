@@ -163,6 +163,21 @@ const epicApp = {
           }
         }
     }
-}
+    },
+    async getAllMessagesPerUser(req,res){
+      let output = [];
+      const messages = 'SELECT * FROM messages WHERE reciever=$1';
+      try {
+        const { rows } = await db.query(messages, [req.decodedMessage.id]);
+        output = rows[0];
+        if(!output) {
+          return res.status(400).send({'message': 'you have no messages'});
+        }
+      }
+      finally{
+        return res.status(200).send(output);
+      }
+
+    }
 }
 export default epicApp;
