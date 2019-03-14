@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable no-undef */
+import 'babel-polyfill';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server/server';
@@ -49,6 +50,58 @@ describe('/api/v1/auth/signup', () => {
     it('should sign up a user', (done) => {
       chai.request(app)
         .post('/api/v1/auth/signup')
+        .send({
+          email: 't@epic.com',
+          firstName: 'mosinmiloluwa',
+          lastName: 'owoso',
+          password: '123456',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          expect(res.body.data).to.have.property('token');
+          expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
+          done();
+        });
+    });
+  });
+
+  describe('version 2 /api/v1/auth/signup', () => {
+    it('version 2 should not accept null values', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/signup')
+        .send({
+          email: '',
+          firstName: '',
+          lastName: '',
+          password: '',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.have.property('message')
+          done();
+        });
+    });
+
+    it('version 2 should validate email', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/signup')
+        .send({
+          email: 't',
+          firstName: 'mosinmiloluwa',
+          lastName: 'owoso',
+          password: 'password',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('please enter a valid epic email');
+          done();
+        });
+    });
+
+    it('version 2 should sign up a user', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/signup')
         .send({
           email: 't@epic.com',
           firstName: 'mosinmiloluwa',

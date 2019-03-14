@@ -12,6 +12,10 @@ import {checkToken} from './src/middleware'
 import cors from 'cors';
 // this allows u to use enviromental variables
 import env from 'dotenv';
+// used to recognize async, await and promise
+//import 'babel-polyfill';
+import epicWithDB from './src/usingDB/controllers';
+//to check that the type is db
 
 // initialize .env file for the secret stuff
 env.config();
@@ -37,6 +41,9 @@ app.get('/api/v1/unreadMessages', checkToken, Epicmail.getUnreadMessagesPerUser)
 app.get('/api/v1/sentMessages', checkToken, Epicmail.getMessagesSentByAUser);
 app.get('/api/v1/users/:id', checkToken, Epicmail.getOneUser);
 app.delete('/api/v1/deleteAMessage/:id', checkToken, Epicmail.deleteAMessage);
+
+//version 2... it picks the controller of ./src/usingJSObject/controllers cos it is doing db
+app.post('/api/v2/auth/signup', epicWithDB.createUser);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
