@@ -103,7 +103,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v2/auth/signup')
         .send({
-          email: 'abua@epic.com',
+          email: 'uabb@epic.com',
           firstName: 'mosinmiloluwa',
           lastName: 'owoso',
           password: '123456',
@@ -382,23 +382,61 @@ describe('/api/v1/auth/signup', () => {
     });
   });  
 
-  /*describe('/api/v1/messages/getAMessage', () => {
-    it('should get a message', (done) => {
+  describe('/api/v1/messages/getAMessage', () => {
+    it('should not get a message without token', (done) => {
       chai.request(app)
-        .get('/api/v1/messages/getAMessage/1')
+        .get('/api/v1/messages/1')
         .end((err, res) => {
           if(!res){
-          expect(res).to.have.status(404);
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
         }
           done();
         });
     });
-  }); */
 
-  describe('/api/v1/messages/unreadMessagesPerUser', () => {
+    it('should get a message', (done) => {
+      chai.request(app)
+        .get('/api/v1/messages/1')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          if(!res){
+          expect(res).to.have.status(200);
+        }
+          done();
+        });
+    });
+  }); 
+
+  describe('version 2 /api/v2/messages/getAMessage', () => {
+    it('version 2 should not get a message without token', (done) => {
+      chai.request(app)
+        .get('/api/v2/messages/1')
+        .end((err, res) => {
+          if(!res){
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+          done();
+        });
+    });
+
+    it('version 2 should get a message with token', (done) => {
+      chai.request(app)
+        .get('/api/v2/messages/1')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          if(!res){
+          expect(res).to.have.status(200);
+        }
+          done();
+        });
+    });
+  }); 
+
+  describe('/api/v1/unreadMessages', () => {
     it('should display all unread messages', (done) => {
       chai.request(app)
-        .get('/api/v1/messages/unreadMessagesPerUser/1')
+        .get('/api/v1/unreadMessages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
@@ -406,10 +444,11 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  describe('/api/v1/getMessagesSentByAUser', () => {
+  describe('/api/v1/sentMessages', () => {
     it('should display all messages sent by a user', (done) => {
       chai.request(app)
-        .get('/api/v1/messages/getMessagesSentByAUser/1')
+        .get('/api/v1/sentMessages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
@@ -417,16 +456,16 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  describe('/api/v1/users', () => {
-    it('should display a particular user email', (done) => {
-      chai.request(app)
-        .get('/api/v1/users/1')
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          done();
-        });
-    });
-  });
+  // describe('/api/v1/users', () => {
+  //   it('should display a particular user email', (done) => {
+  //     chai.request(app)
+  //       .get('/api/v1/users/1')
+  //       .end((err, res) => {
+  //         expect(res).to.have.status(200);
+  //         done();
+  //       });
+  //   });
+  // });
 
   describe('/api/v1/messages/deleteAMessage', () => {
     it('should delete a message', (done) => {

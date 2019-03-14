@@ -178,6 +178,25 @@ const epicApp = {
         return res.status(200).send(output);
       }
 
+    },
+    async getAMessage(req,res){
+      let output = [];
+      const messages = 'SELECT * FROM messages WHERE id=$1';
+      const updatestatus = 'UPDATE messages SET status=$1 WHERE id=$2 returning *';
+      try {
+        const { rows } = await db.query(messages, [req.params.id]);
+        output = rows[0];
+        if(!output) {
+          return res.status(400).send({'message': 'email cannot be found'});
+        }
+      }
+      finally{
+        if(output){
+        const values = ['read',req.params.id];
+        const response = await db.query(updatestatus, values);
+        return res.status(200).send(response.rows[0]);
+        }
+      }
     }
 }
 export default epicApp;
