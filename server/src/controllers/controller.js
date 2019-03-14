@@ -105,7 +105,6 @@ const Model = {
         const reciever = UserModel.findOneEmail(req.body.email);
         // if there is a reciever
         if(reciever){
-          console.log(reciever);
         const msg = {...req.body , sender:req.decodedMessage.id, reciever:reciever.userId}
         const message = UserModel.sendMessage(msg);
         return res.status(200).send(message); 

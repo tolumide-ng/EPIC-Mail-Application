@@ -44,6 +44,8 @@ app.delete('/api/v1/deleteAMessage/:id', checkToken, Epicmail.deleteAMessage);
 
 //version 2... it picks the controller of ./src/usingJSObject/controllers cos it is doing db
 app.post('/api/v2/auth/signup', epicWithDB.createUser);
+app.post('/api/v2/auth/login', epicWithDB.login);
+
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
