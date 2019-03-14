@@ -34,7 +34,7 @@ app.use(cors());
 app.get('/', (req, res) => res.status(200).send({ message: 'YAY! Congratulations! Your first endpoint is working' }));
 app.post('/api/v1/auth/signup', Epicmail.createAUser);
 app.post('/api/v1/auth/login', Epicmail.login);
-app.post('/api/v1/createAMessage', checkToken, Epicmail.sendMessage);
+app.post('/api/v1/messages', checkToken, Epicmail.sendMessage);
 app.get('/api/v1/messages',checkToken, Epicmail.getAllMessagesPerUser);
 app.get('/api/v1/messages/:id', checkToken, Epicmail.getAMessage);
 app.get('/api/v1/unreadMessages', checkToken, Epicmail.getUnreadMessagesPerUser);
@@ -42,10 +42,10 @@ app.get('/api/v1/sentMessages', checkToken, Epicmail.getMessagesSentByAUser);
 app.get('/api/v1/users/:id', checkToken, Epicmail.getOneUser);
 app.delete('/api/v1/deleteAMessage/:id', checkToken, Epicmail.deleteAMessage);
 
-//version 2... it picks the controller of ./src/usingJSObject/controllers cos it is doing db
+//version 2... 
 app.post('/api/v2/auth/signup', epicWithDB.createUser);
 app.post('/api/v2/auth/login', epicWithDB.login);
-
+app.post('/api/v2/messages', checkToken, epicWithDB.sendMessage);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */

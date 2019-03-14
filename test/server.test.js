@@ -66,7 +66,7 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  describe('version 2 /api/v1/auth/signup', () => {
+  describe('version 2 /api/v2/auth/signup', () => {
     it('version 2 should not accept null values', (done) => {
       chai.request(app)
         .post('/api/v2/auth/signup')
@@ -103,7 +103,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v2/auth/signup')
         .send({
-          email: 't@epic.com',
+          email: 'abula@epic.com',
           firstName: 'mosinmiloluwa',
           lastName: 'owoso',
           password: '123456',
@@ -180,10 +180,58 @@ describe('/api/v1/auth/signup', () => {
     });
   });
 
-  describe('/api/v1/createAMessage', () => {
+  describe('/api/v1/messages', () => {
+    it('should not accept null message', (done) => {
+      chai.request(app)
+        .post('/api/v1/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .send({
+          subject: 'w',
+          message: '',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('A message is required');
+          done();
+        });
+    });
+
+    it('should not accept null subject', (done) => {
+      chai.request(app)
+        .post('/api/v1/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .send({
+          subject: '',
+          message: 'test message',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('A subject is required');
+          done();
+        });
+    });
+
+    it('should not accept invalid email', (done) => {
+      chai.request(app)
+        .post('/api/v1/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('the email does not exist');
+          done();
+        });
+    });
+
     it('should create a message', (done) => {
       chai.request(app)
-        .post('/api/v1/createAMessage')
+        .post('/api/v1/messages')
         .set({'Authorization':v1token,'Accept':'application/json'})
         .send({
           subject: 'test mail',
@@ -192,6 +240,72 @@ describe('/api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          done();
+        });
+    });
+  });
+
+  describe('/api/v2/messages', () => {
+    it('version 2 should not accept null message', (done) => {
+      chai.request(app)
+        .post('/api/v2/messages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          subject: 'w',
+          message: '',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('A message is required');
+          done();
+        });
+    });
+
+    it('version 2 should not accept null subject', (done) => {
+      chai.request(app)
+        .post('/api/v2/messages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          subject: '',
+          message: 'test message',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('A subject is required');
+          done();
+        });
+    });
+
+    it('version 2 should not accept invalid email', (done) => {
+      chai.request(app)
+        .post('/api/v2/messages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('the email does not exist');
+          done();
+        });
+    });
+
+    it('version 2 should create a message', (done) => {
+      chai.request(app)
+        .post('/api/v2/messages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          subject: 'test mail',
+          message: 'test message',
+          email: 't@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
           expect(res).to.be.an('object');
           done();
         });
