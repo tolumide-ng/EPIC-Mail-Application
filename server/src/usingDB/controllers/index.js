@@ -147,7 +147,7 @@ const epicApp = {
         finally{
           const text = `
         INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_status)
-        VALUES($1,$2,$3,$4,$5,$6,$7)
+        VALUES($1,$2,$3,$4,$5,$6,$7,$8)
         returning *`;
         const values = [
             new Date(),
