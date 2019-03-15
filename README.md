@@ -1,6 +1,11 @@
 # EPIC Mail
 EPIC Mail is an web based email application that provides users with the ability to view emails , send and save messages as draft.
 
+[![Build Status](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application.svg?branch=develop)](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application)
+[![Coverage Status](https://coveralls.io/repos/github/mosinmiloluwa01/EPIC-Mail-Application/badge.svg?branch=develop)](https://coveralls.io/github/mosinmiloluwa01/EPIC-Mail-Application?branch=develop)
+
+
+
 ## Acknowledgements
 * Olaoluwa Aladelusi
 * Orji Ikechukwu
@@ -50,8 +55,4 @@ https://mosinmiloluwa01.github.io/EPIC-Mail-Application/UI/html/login.html
 ## Heroku Link
 https://mosinmiloluwa-app.herokuapp.com/
 
-## Coveralls badge
-[![Coverage Status](https://coveralls.io/repos/github/mosinmiloluwa01/EPIC-Mail-Application/badge.svg?branch=master)](https://coveralls.io/github/mosinmiloluwa01/EPIC-Mail-Application?branch=master)
 
-## Travis badge
-[![Build Status](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application.svg?branch=master)](https://travis-ci.org/mosinmiloluwa01/EPIC-Mail-Application)
