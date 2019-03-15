@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 /* eslint-disable import/no-extraneous-dependencies */
 /* credit: Olawale Aladeusi */
 import express from 'express';
@@ -12,8 +13,7 @@ import {checkToken} from './src/middleware'
 import cors from 'cors';
 // this allows u to use enviromental variables
 import env from 'dotenv';
-// used to recognize async, await and promise
-//import 'babel-polyfill';
+
 import epicWithDB from './src/usingDB/controllers';
 //to check that the type is db
 
