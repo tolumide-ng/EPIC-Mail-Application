@@ -433,10 +433,40 @@ describe('/api/v1/auth/signup', () => {
   }); 
 
   describe('/api/v1/unreadMessages', () => {
+    it('should not display all unread messages', (done) => {
+      chai.request(app)
+        .get('/api/v1/unreadMessages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
     it('should display all unread messages', (done) => {
       chai.request(app)
         .get('/api/v1/unreadMessages')
         .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('version 2 /api/v1/unreadMessages', () => {
+    it('version 2 should not display all unread messages', (done) => {
+      chai.request(app)
+        .get('/api/v2/unreadMessages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('version 2 should display all unread messages', (done) => {
+      chai.request(app)
+        .get('/api/v2/unreadMessages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
