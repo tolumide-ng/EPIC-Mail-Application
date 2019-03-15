@@ -475,10 +475,38 @@ describe('/api/v1/auth/signup', () => {
   });
 
   describe('/api/v1/sentMessages', () => {
+    it('should not display all messages sent by a user without token', (done) => {
+      chai.request(app)
+        .get('/api/v1/sentMessages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
     it('should display all messages sent by a user', (done) => {
       chai.request(app)
         .get('/api/v1/sentMessages')
         .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('version 2 /api/v2/sentMessages', () => {
+    it('version 2 should not display all messages sent by a user without token', (done) => {
+      chai.request(app)
+        .get('/api/v2/sentMessages')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+    it('version 2 should display all messages sent by a user', (done) => {
+      chai.request(app)
+        .get('/api/v2/sentMessages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
