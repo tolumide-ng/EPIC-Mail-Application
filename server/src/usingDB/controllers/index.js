@@ -146,7 +146,7 @@ const epicApp = {
         //insert new message into db
         finally{
           const text = `
-        INSERT INTO messages(created_on,email,subject,message,status,sender,reciever)
+        INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_status)
         VALUES($1,$2,$3,$4,$5,$6,$7)
         returning *`;
         const values = [
@@ -156,7 +156,8 @@ const epicApp = {
             req.body.message,
             'unread',
             req.decodedMessage.id,
-            userData.id
+            userData.id,
+            'false'
         ];
         try {
             const { rows } = await db.query(text, values);
