@@ -139,6 +139,9 @@ const epicApp = {
           if(!userData) {
             return res.status(400).send({'message': 'the email does not exist'});
           }
+          if(userData.email === req.body.email){
+            return res.status(400).send({'message': 'you cannot send messages to yourself'});
+          }
         }
         //insert new message into db
         finally{
@@ -224,6 +227,20 @@ const epicApp = {
       }
       finally{
         return res.status(200).send(output);
+      }
+    },
+    async deleteAMessage(req,res){
+      let output = [];
+      const messages = 'DELETE FROM messages WHERE reciever=$1 and id=$2';
+      try {
+        const { rows } = await db.query(messages, [req.decodedMessage.id, req.params.id]);
+        output = rows[0];
+        if(!output) {
+          return res.status(400).send({'message': 'email does not exist'});
+        }
+      }
+      finally{
+        return res.status(204).send({'message': 'the message has been deleted'});
       }
     },
 
