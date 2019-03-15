@@ -139,7 +139,7 @@ const epicApp = {
           if(!userData) {
             return res.status(400).send({'message': 'the email does not exist'});
           }
-          if(userData.email === req.body.email){
+          if(userData.id === req.decodedMessage.id){
             return res.status(400).send({'message': 'you cannot send messages to yourself'});
           }
         }
