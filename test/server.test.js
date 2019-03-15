@@ -103,7 +103,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v2/auth/signup')
         .send({
-          email: 'uabb@epic.com',
+          email: 'b@epic.com',
           firstName: 'mosinmiloluwa',
           lastName: 'owoso',
           password: '123456',
@@ -525,12 +525,63 @@ describe('/api/v1/auth/signup', () => {
   //   });
   // });
 
-  describe('/api/v1/messages/deleteAMessage', () => {
-    it('should delete a message', (done) => {
+  describe('/api/v1/messages', () => {
+    it('should not delete a message without token', (done) => {
       chai.request(app)
-        .get('/api/v1/messages/deleteAMessage/1')
+        .delete('/api/v1/messages/1')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('should not delete a message without an ID', (done) => {
+      chai.request(app)
+        .delete('/api/v1/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('should delete a message', (done) => {
+      chai.request(app)
+        .delete('/api/v1/messages/1')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('version 2 /api/v2/messages', () => {
+    it('version 2 should not delete a message without token', (done) => {
+      chai.request(app)
+        .delete('/api/v2/messages/11')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it(' version 2 should not delete a message without an ID', (done) => {
+      chai.request(app)
+        .delete('/api/v2/messages')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('version 2 should delete a message', (done) => {
+      chai.request(app)
+        .delete('/api/v2/messages/39')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(204);
           done();
         });
     });

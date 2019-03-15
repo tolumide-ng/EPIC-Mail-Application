@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc mocha --require @babel/register --exit",
+    "test": "nyc mocha --require @babel/register --require babel-polyfill --exit --timeout=10000",
     "build": "npm run clean && babel ./server  -d  ./build",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",

@@ -104,6 +104,9 @@ const Model = {
         }
         const reciever = UserModel.findOneEmail(req.body.email);
         // if there is a reciever
+        if(reciever.email === req.body.email){
+          return res.status(400).send({ message: 'You cannot set a message to yourself' });
+        }
         if(reciever){
         const msg = {...req.body , sender:req.decodedMessage.id, reciever:reciever.userId}
         const message = UserModel.sendMessage(msg);
@@ -161,8 +164,8 @@ const Model = {
         if (!message) {
           res.status(404).send('the email(s) are no where to be found');
         }
-        const msgToBeDeleted = UserModel.deleteAMessage(req.decodedMessage.id);
-        res.status(404).send('the selected message is deleted');
+        const msgToBeDeleted = UserModel.deleteAMessage(req.params.id);
+        res.status(200).send('the selected message is deleted');
       },
       
 };
