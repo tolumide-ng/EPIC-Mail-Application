@@ -7,12 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "nyc mocha --require @babel/register --require babel-polyfill --exit --timeout=10000",
+    "pretest": "npm run create-table-test",
+    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --require babel-polyfill --exit --timeout=10000",
     "build": "npm run clean && babel ./server  -d  ./build -s",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
     "clean": "rimraf ./build",
     "create-table": "node ./db.js --exit",
+    "create-table-test": "cross-env NODE_ENV=test node ./db.js --exit",
     "start-dev": "nodemon ./server/server.js --exec babel-node",
     "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
   },
@@ -37,6 +39,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "coveralls": "^3.0.3",
+    "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
