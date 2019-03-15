@@ -31,7 +31,6 @@ const createTables = () => {
         subject VARCHAR(128) NOT NULL,
         message VARCHAR(250) NOT NULL,
         status VARCHAR(10) NOT NULL,
-        type VARCHAR(10) NOT NULL,
         sender INTEGER REFERENCES users(id),
         reciever INTEGER REFERENCES users(id)
     );
