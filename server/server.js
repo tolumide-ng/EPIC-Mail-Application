@@ -49,6 +49,7 @@ app.post('/api/v2/messages', checkToken, epicWithDB.sendMessage);
 app.get('/api/v2/messages',checkToken, epicWithDB.getAllMessagesPerUser);
 app.get('/api/v2/messages/:id', checkToken, epicWithDB.getAMessage);
 app.get('/api/v2/unreadMessages', checkToken, epicWithDB.getUnreadMessages);
+app.get('/api/v2/sentMessages', checkToken, epicWithDB.getMessagesSentByAUser);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */

@@ -212,5 +212,20 @@ const epicApp = {
         return res.status(200).send(output);
       }
     },
+    async getMessagesSentByAUser(req,res){
+      let output = [];
+      const messages = 'SELECT * FROM messages WHERE sender=$1';
+      try {
+        const { rows } = await db.query(messages, [req.decodedMessage.id]);
+        output = rows[0];
+        if(!output) {
+          return res.status(400).send({'message': 'you have not sent any messages'});
+        }
+      }
+      finally{
+        return res.status(200).send(output);
+      }
+    },
+
 }
 export default epicApp;
