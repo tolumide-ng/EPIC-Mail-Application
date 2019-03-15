@@ -137,7 +137,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v1/auth/login')
         .send({
-          email: 't@epic.com',
+          email: 'b@epic.com',
           password: '123456',
         })
         .end((err, res) => {

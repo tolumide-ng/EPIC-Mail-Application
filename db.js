@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 //to connect to DB
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    connectionString:process.env.NODE_ENV=='test'? process.env.DATABASE_TEST: process.env.DATABASE_URL
   });
   pool.on('connect', () => {
     console.log('connected to epic db');
@@ -32,7 +32,8 @@ const createTables = () => {
         message VARCHAR(250) NOT NULL,
         status VARCHAR(10) NOT NULL,
         sender INTEGER REFERENCES users(id),
-        reciever INTEGER REFERENCES users(id)
+        reciever INTEGER REFERENCES users(id),
+        group_status VARCHAR(10) NOT NULL
     );
     CREATE TABLE groups(
         id SERIAL PRIMARY KEY,
