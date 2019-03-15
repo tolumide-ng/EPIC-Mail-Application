@@ -98,7 +98,7 @@ const epicApp = {
           {
             token: token,
           },
-        });
+        });console.log(token);
         }
       else {
         res.status(403).send({
@@ -173,7 +173,7 @@ const epicApp = {
       const messages = 'SELECT * FROM messages WHERE reciever=$1';
       try {
         const { rows } = await db.query(messages, [req.decodedMessage.id]);
-        output = rows[0];
+        output = rows;
         if(!output) {
           return res.status(400).send({'message': 'you have no messages'});
         }
@@ -207,7 +207,7 @@ const epicApp = {
       const messages = 'SELECT * FROM messages WHERE reciever=$1 AND status=$2';
       try {
         const { rows } = await db.query(messages, [req.decodedMessage.id,'unread']);
-        output = rows[0];
+        output = rows;
         if(!output) {
           return res.status(400).send({'message': 'you have no unread messages'});
         }
@@ -221,7 +221,7 @@ const epicApp = {
       const messages = 'SELECT * FROM messages WHERE sender=$1';
       try {
         const { rows } = await db.query(messages, [req.decodedMessage.id]);
-        output = rows[0];
+        output = rows;
         if(!output) {
           return res.status(400).send({'message': 'you have not sent any messages'});
         }
@@ -232,16 +232,17 @@ const epicApp = {
     },
     async deleteAMessage(req,res){
       let output = [];
-      const messages = 'DELETE FROM messages WHERE reciever=$1 and id=$2';
+      const messages = 'DELETE FROM messages WHERE sender=$1 and id=$2';
       try {
-        const { rows } = await db.query(messages, [req.decodedMessage.id, req.params.id]);
-        output = rows[0];
-        if(!output) {
-          return res.status(400).send({'message': 'email does not exist'});
-        }
+         await db.query(messages, [req.decodedMessage.id, req.params.id]);
+         return res.status(200).send({'message': 'the message has been deleted'});
+        // if(!output) {
+        //   return res.status(400).send({'message': 'email does not exist'});
+        // }
       }
-      finally{
-        return res.status(204).send({'message': 'the message has been deleted'});
+
+      catch(e){
+        return res.status(400).send({'message': 'email does not exist'});
       }
     },
 

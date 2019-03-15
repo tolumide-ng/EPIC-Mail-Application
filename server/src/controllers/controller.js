@@ -93,6 +93,7 @@ const Model = {
         return res.status(200).send(user);
       },
       sendMessage(req, res) {
+        const email = req.body.email;
         if(!req.body.subject){
           return res.status(400).send({ message: 'A subject is required' });
         }
@@ -104,9 +105,17 @@ const Model = {
         }
         const reciever = UserModel.findOneEmail(req.body.email);
         // if there is a reciever
-        if(reciever.email === req.body.email){
-          return res.status(400).send({ message: 'You cannot set a message to yourself' });
-        }
+        // if(reciever.email === email){
+        //   return res.status(400).send({ message: 'You cannot send a message to yourself' });
+        // }
+      //validate to ensure its a valid mail and its an epic mail
+      const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+      const result = validateEmail.test(email);
+      const newVal = email.split('@');
+      const finalCheck = newVal[1];
+      if(!result || finalCheck !=="epic.com"){ 
+        return res.status(400).send({ message: 'please enter a valid epic email' });
+      }
         if(reciever){
         const msg = {...req.body , sender:req.decodedMessage.id, reciever:reciever.userId}
         const message = UserModel.sendMessage(msg);

@@ -116,6 +116,23 @@ describe('/api/v1/auth/signup', () => {
           done();
         });
     });
+    it('version 2 should sign up a user', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/signup')
+        .send({
+          email: 't@epic.com',
+          firstName: 'mosinmiloluwa',
+          lastName: 'owoso',
+          password: '123456',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.an('object');
+          expect(res.body.data).to.have.property('token');
+          expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
+          done();
+        });
+    });
   });
 
   describe('/api/v1/auth/login', () => {
@@ -137,7 +154,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v1/auth/login')
         .send({
-          email: 'b@epic.com',
+          email: 't@epic.com',
           password: '123456',
         })
         .end((err, res) => {
@@ -168,7 +185,7 @@ describe('/api/v1/auth/signup', () => {
       chai.request(app)
         .post('/api/v2/auth/login')
         .send({
-          email: 't@epic.com',
+          email: 'b@epic.com',
           password: '123456',
         })
         .end((err, res) => {
@@ -209,22 +226,6 @@ describe('/api/v1/auth/signup', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.message).to.eql('A subject is required');
-          done();
-        });
-    });
-
-    it('should not accept invalid email', (done) => {
-      chai.request(app)
-        .post('/api/v1/messages')
-        .set({'Authorization':v1token,'Accept':'application/json'})
-        .send({
-          subject: 'test mail',
-          message: 'test message',
-          email: 'a@epic.com',
-        })
-        .end((err, res) => {
-          expect(res).to.have.status(400);
-          expect(res.body.message).to.eql('the email does not exist');
           done();
         });
     });
@@ -581,7 +582,7 @@ describe('/api/v1/auth/signup', () => {
         .delete('/api/v2/messages/39')
         .set({'Authorization':v2token,'Accept':'application/json'})
         .end((err, res) => {
-          expect(res).to.have.status(204);
+          expect(res).to.have.status(200);
           done();
         });
     });
