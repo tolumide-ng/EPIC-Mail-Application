@@ -197,6 +197,20 @@ const epicApp = {
         return res.status(200).send(response.rows[0]);
         }
       }
-    }
+    },
+    async getUnreadMessages(req,res){
+      let output = [];
+      const messages = 'SELECT * FROM messages WHERE reciever=$1 AND status=$2';
+      try {
+        const { rows } = await db.query(messages, [req.decodedMessage.id,'unread']);
+        output = rows[0];
+        if(!output) {
+          return res.status(400).send({'message': 'you have no unread messages'});
+        }
+      }
+      finally{
+        return res.status(200).send(output);
+      }
+    },
 }
 export default epicApp;
