@@ -4,14 +4,16 @@ body{
 	line-height: 0.09375rem;
 	padding: 0;
 	margin: 0;
-	background-color: #fff;
+  background-color: #fff;
+  background-image: url(".././img/login4.jpg");
 }
 footer {
   background-color: #f6f6f6;
-  border-top: #900C3E 3px solid;
+  background-image: url(".././img/login4.jpg");
 }
 header{
-	background-color: #1d9bd1;
+  /* background-image: url(".././img/login4.jpg"); */
+	background-color: rgb(218,165,32,0.5);
 	min-height: 3.125rem;
 }
 header a{
@@ -31,6 +33,17 @@ p{
 }
 .column p{
   display: inline-block;
+}
+.column1 p {
+  display: inline-block;
+  color: white;
+}
+.column1 a {
+  text-decoration: none;
+  color: white;
+}
+h3,h1,h2{
+  color: white;
 }
 /*credit: w3schools*/
 .sidebar {
@@ -74,9 +87,19 @@ p{
 }
 
 div.content {
-  margin-left: 12.5rem;
+  /* margin-left: 12.5rem; */
   padding: 0.00625rem 1rem;
-  height: 62.5rem;
+  height: 28.5rem;
+}
+.content-inner {
+  /* margin-left: 12.5rem; */
+  background:rgba(65, 65, 66, 0.2);
+  padding: 0.00925rem 1rem;
+  height: 28.5rem;
+  margin-top: 10px;
+}
+.content-inner{
+  color: white;
 }
 @media screen and (max-width: 43.75rem) {
   .sidebar {
@@ -170,6 +193,15 @@ div.content {
   min-width: 12.25rem;
   padding: 10px;
   background-color: #f1f1f1;
+  display: flex;
+  justify-content: space-between;
+}
+.column1 {
+  float: left;
+  width: 98%;
+  min-width: 12.25rem;
+  padding: 10px;
+  background-color: rgb(128,128,128,0.3);
   display: flex;
   justify-content: space-between;
 }
@@ -302,6 +334,70 @@ input[type=submit] {
 .txtarea{
   height:200px;
   margin-bottom: 1rem;
+}
+
+.rsidebar {
+  margin-top: 3.3rem;
+  height: 29.5rem;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: black; /* give grey transparent color. reference stack overflow*/
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  /* background-image: url(".././img/login4.jpg"); */
+}
+
+.rsidebar a {
+  color: #f1f1f1;
+  text-decoration: none;
+  font-family: system-ui;
+  font-size: 1.5rem;
+  margin-left: 0;
+  padding: 1rem;
+  text-align: left;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.rsidebar a:hover {
+  color: #f1f1f1;
+}
+
+.rsidebar .rclosebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.ropenbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+.ropenbtn:hover {
+  background-color: #444;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+@media screen and (max-width: 450px) {
+  .rsidebar {padding-top: 15px;}
+  .rsidebar a {font-size: 18px;}
 }
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */

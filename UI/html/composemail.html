@@ -12,13 +12,16 @@
   <a href="#" class="epic-title">EPIC Mail.</a>
   </header>
 
-<div class="sidebar">
+  <div id="responsive-sidebar" class="rsidebar">
+  <a href="javascript:void(0)" class="rclosebtn" onclick="closeNav()">×</a>
   <a href="composemail.html" ><img src="../img/compose.png">Compose</button>
   <a href="inbox.html" ><img src="../img/inbox.png"> Inbox</a>
   <a href="sentmail.html" ><img src="../img/sent.png"> Sent</a>
   <a href="draft.html" ><img src="../img/draft.png"> Draft</a>
 </div>
-<div class="content">
+<div class="content" id="main">
+  <div class="content-inner">
+    <button class="ropenbtn" onclick="openNav()">☰</button>
 <!-- <form> -->
     <div class="row">
       <h1>Compose Mail</h1>
@@ -41,6 +44,7 @@
       <input type="submit" value="Save" id="save-feedback" class="margin16-left">
     </div>
   <!-- </form> -->
+  </div>
 </div>
   
         
