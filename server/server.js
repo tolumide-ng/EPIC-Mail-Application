@@ -37,8 +37,8 @@ app.post('/api/v1/auth/login', Epicmail.login);
 app.post('/api/v1/messages', checkToken, Epicmail.sendMessage);
 app.get('/api/v1/messages',checkToken, Epicmail.getAllMessagesPerUser);
 app.get('/api/v1/messages/:id', checkToken, Epicmail.getAMessage);
-app.get('/api/v1/unreadMessages', checkToken, Epicmail.getUnreadMessagesPerUser);
-app.get('/api/v1/sentMessages', checkToken, Epicmail.getMessagesSentByAUser);
+app.get('/api/v1/messages/unreadMessages', checkToken, Epicmail.getUnreadMessagesPerUser);
+app.get('/api/v1/messages/sentMessages', checkToken, Epicmail.getMessagesSentByAUser);
 app.get('/api/v1/users/:id', checkToken, Epicmail.getOneUser);
 app.delete('/api/v1/messages/:id', checkToken, Epicmail.deleteAMessage);
 
@@ -48,9 +48,10 @@ app.post('/api/v2/auth/login', epicWithDB.login);
 app.post('/api/v2/messages', checkToken, epicWithDB.sendMessage);
 app.get('/api/v2/messages',checkToken, epicWithDB.getAllMessagesPerUser);
 app.get('/api/v2/messages/:id', checkToken, epicWithDB.getAMessage);
-app.get('/api/v2/unreadMessages', checkToken, epicWithDB.getUnreadMessages);
-app.get('/api/v2/sentMessages', checkToken, epicWithDB.getMessagesSentByAUser);
+app.get('/api/v2/messages/unreadMessages', checkToken, epicWithDB.getUnreadMessages);
+app.get('/api/v2/messages/sentMessages', checkToken, epicWithDB.getMessagesSentByAUser);
 app.delete('/api/v2/messages/:id', checkToken, epicWithDB.deleteAMessage);
+app.post('/api/v2/groups', checkToken, epicWithDB.createGroup);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */

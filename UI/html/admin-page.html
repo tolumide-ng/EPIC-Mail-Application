@@ -8,15 +8,18 @@
 </head>
 <body>
   <header>
-  <a href="admin-login.html">Logout</a>
+  <a href="admin-login.html">Logout</a>  
   <a href="#" class="epic-title">EPIC Mail.</a>
   </header>
 
-<div class="sidebar">
+  <div id="responsive-sidebar" class="rsidebar">
+  <a href="javascript:void(0)" class="rclosebtn" onclick="closeNav()">×</a>
   <a href="admin-page.html" ><img src="../img/compose.png">Create Group</button>
-
 </div>
-<div class="content">
+
+<div class="content" id="main">
+<div class="content-inner">
+<button class="ropenbtn" onclick="openNav()">☰</button>
 <form>
     <div class="row">
       <h1>Create Group</h1>
@@ -38,6 +41,7 @@
     <div class="row">
       <input type="submit" value="Create Group" id="create-group-button" class="margin16-left">
     </div>
+  </div>
   </form>
 </div>
 <div id="createGroupModal" class="modal">

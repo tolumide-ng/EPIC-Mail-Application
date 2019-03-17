@@ -7,18 +7,21 @@
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-  <header id="myTopnav">
+  <header>
   <a href="login.html">Logout</a>
   <a href="#" class="epic-title">EPIC Mail.</a>
   </header>
 
-<div class="sidebar">
-  <a href="composemail.html" ><img src="../img/compose.png">Compose Mail</button>
+  <div id="responsive-sidebar" class="rsidebar">
+  <a href="javascript:void(0)" class="rclosebtn" onclick="closeNav()">×</a>
+  <a href="composemail.html" ><img src="../img/compose.png">Compose</button>
   <a href="inbox.html" ><img src="../img/inbox.png"> Inbox</a>
-  <a href="sentmail.html" ><img src="../img/sent.png"> Sent Mails</a>
+  <a href="sentmail.html" ><img src="../img/sent.png"> Sent</a>
   <a href="draft.html" ><img src="../img/draft.png"> Draft</a>
 </div>
-<div class="content">
+<div class="content" id="main">
+<div class="content-inner">
+<button class="ropenbtn" onclick="openNav()">☰</button>
 <h2>Test Email.</h2>
 <div class="row">
       <div class="full-col">
@@ -46,6 +49,7 @@
 </div>
 </div>
 </div>
-<script type="text/javascript" src="../js/app.js"></script>
+</div>
+<script type="text/javascript" src="../js/inbox.js"></script>
 </body>
 </html>
