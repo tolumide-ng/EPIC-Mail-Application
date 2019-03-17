@@ -3,27 +3,27 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>EPIC Mail| Admin-Login</title>
+	<title>EPIC Mail| Admin Login</title>
 	<link rel="stylesheet" type="text/css" href="../css/login.css">
 </head>
 <body>
 	<div class="container">
-		<h1>Admin Login</h1>
+		<h1>Epic Mail Login</h1>
 		<div class="login-item">
-			<form action="" method="post" class="form form-login">
-				<div class="form-field">
-          			<label><span class="hidden">Username</span></label>
-          			<input type="text" class="form-input" placeholder="Username" required>
-        		</div>
-        		<div class="form-field">
-          			<label ><span class="hidden">Password</span></label>
-          			<input type="password" class="form-input" placeholder="Password" required>
-
-        		</div>
-        		<div class="form-field">
-        			<a href="admin-page.html">Login</a>
-      			</div>
-
+			<form action = "admin-page.html" class="form form-login">
+				<!--<div class="form form-login">-->
+					<div class="form-field">
+						<!-- <label><span>Username</span></label> -->
+						<input type="email" class="form-input" placeholder="Please input your email" required>
+					</div>
+					<div class="form-field">
+						<!-- <label ><span class="hidden">Password</span></label> -->
+						<input type="password" class="form-input" placeholder="Password" required>
+					</div>
+					<div class="form-field">
+						<input type="submit" name="submit" value="login">
+					</div>
+				<!--</div>-->
 			</form>
 		</div>
 	</div>

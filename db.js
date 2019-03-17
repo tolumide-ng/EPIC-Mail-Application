@@ -33,11 +33,13 @@ const createTables = () => {
         status VARCHAR(10) NOT NULL,
         sender INTEGER REFERENCES users(id),
         reciever INTEGER REFERENCES users(id),
+        is_deleted VARCHAR(10) NOT NULL,
         group_status VARCHAR(10) NOT NULL
     );
     CREATE TABLE groups(
         id SERIAL PRIMARY KEY,
         group_name VARCHAR(128) NOT NULL,
+        group_email VARCHAR(128) NOT NULL,
         created_by INTEGER NOT NULL REFERENCES users(id)
     );
     CREATE TABLE user_groupings(

@@ -1,3 +1,13 @@
+function openNav() {
+    document.getElementById("responsive-sidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+  
+  function closeNav() {
+    document.getElementById("responsive-sidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+  }
+
 let timeOut = 4000;
 let drafModal = document.getElementById("draftModal");
 

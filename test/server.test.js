@@ -109,7 +109,7 @@ describe('/api/v1/auth/signup', () => {
           password: '123456',
         }) 
         .end((err, res) => {
-          expect(res).to.have.status(200);
+          expect(res).to.have.status(201);
           expect(res).to.be.an('object');
           expect(res.body.data).to.have.property('token');
           expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
@@ -126,7 +126,7 @@ describe('/api/v1/auth/signup', () => {
           password: '123456',
         }) 
         .end((err, res) => {
-          expect(res).to.have.status(200);
+          expect(res).to.have.status(201);
           expect(res).to.be.an('object');
           expect(res.body.data).to.have.property('token');
           expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
@@ -146,6 +146,20 @@ describe('/api/v1/auth/signup', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.message).to.eql('email and password are required');
+          
+          done();
+        });
+    });
+    it('should not allow invalid credentials', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'c@epic.com',
+          password: '1234',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(403);
+          expect(res.body.message).to.eql('Incorrect username or password');
           
           done();
         });
@@ -177,6 +191,20 @@ describe('/api/v1/auth/signup', () => {
         .end((err, res) => {
           expect(res).to.have.status(400);
           expect(res.body.message).to.eql('email and password are required');
+          
+          done();
+        });
+    });
+    it('version 2 should not allow invalid credentials', (done) => {
+      chai.request(app)
+        .post('/api/v2/auth/login')
+        .send({
+          email: 'c@epic.com',
+          password: '1234',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('email or password is incorrect');
           
           done();
         });
@@ -395,13 +423,25 @@ describe('/api/v1/auth/signup', () => {
         });
     });
 
-    it('should get a message', (done) => {
+    it('should get a message with token', (done) => {
       chai.request(app)
         .get('/api/v1/messages/1')
         .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           if(!res){
           expect(res).to.have.status(200);
+        }
+          done();
+        });
+    });
+
+    it('should get a message without an ID', (done) => {
+      chai.request(app)
+        .get('/api/v1/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          if(!res){
+          expect(res).to.have.status(404);
         }
           done();
         });
@@ -431,21 +471,33 @@ describe('/api/v1/auth/signup', () => {
           done();
         });
     });
+
+    it('version 2 should get a message without ID', (done) => {
+      chai.request(app)
+        .get('/api/v2/messages')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          if(!res){
+          expect(res).to.have.status(404);
+        }
+          done();
+        });
+    });
   }); 
 
-  describe('/api/v1/unreadMessages', () => {
-    it('should not display all unread messages', (done) => {
+  describe('/api/v1/messages/unreadMessages', () => {
+    it('should not display all unread messages without token', (done) => {
       chai.request(app)
-        .get('/api/v1/unreadMessages')
+        .get('/api/v1/messages/unreadMessages')
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
         });
     });
 
-    it('should display all unread messages', (done) => {
+    it('should display all unread messages with token', (done) => {
       chai.request(app)
-        .get('/api/v1/unreadMessages')
+        .get('/api/v1/messages/unreadMessages')
         .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
@@ -455,30 +507,30 @@ describe('/api/v1/auth/signup', () => {
   });
 
   describe('version 2 /api/v1/unreadMessages', () => {
-    it('version 2 should not display all unread messages', (done) => {
+    it('version 2 should not display all unread messages without token', (done) => {
       chai.request(app)
-        .get('/api/v2/unreadMessages')
+        .get('/api/v2/messages/unreadMessages')
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
         });
     });
 
-    it('version 2 should display all unread messages', (done) => {
-      chai.request(app)
-        .get('/api/v2/unreadMessages')
-        .set({'Authorization':v2token,'Accept':'application/json'})
-        .end((err, res) => {
-          expect(res).to.have.status(200);
-          done();
-        });
-    });
+    // it('version 2 should display all unread messages with token', (done) => {
+    //   chai.request(app)
+    //     .get('/api/v2/messages/unreadMessages')
+    //     .set({'Authorization':v2token,'Accept':'application/json'})
+    //     .end((err, res) => {
+    //       expect(res).to.have.status(200);
+    //       done();
+    //     });
+    // });
   });
 
-  describe('/api/v1/sentMessages', () => {
+  describe('/api/v1/messages/sentMessages', () => {
     it('should not display all messages sent by a user without token', (done) => {
       chai.request(app)
-        .get('/api/v1/sentMessages')
+        .get('/api/v1/messages/sentMessages')
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
@@ -486,7 +538,7 @@ describe('/api/v1/auth/signup', () => {
     });
     it('should display all messages sent by a user', (done) => {
       chai.request(app)
-        .get('/api/v1/sentMessages')
+        .get('/api/v1/messages/sentMessages')
         .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
@@ -498,33 +550,52 @@ describe('/api/v1/auth/signup', () => {
   describe('version 2 /api/v2/sentMessages', () => {
     it('version 2 should not display all messages sent by a user without token', (done) => {
       chai.request(app)
-        .get('/api/v2/sentMessages')
+        .get('/api/v2/messages/sentMessages')
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
         });
     });
-    it('version 2 should display all messages sent by a user', (done) => {
+    // it('version 2 should display all messages sent by a user', (done) => {
+    //   chai.request(app)
+    //     .get('/api/v2/messages/sentMessages')
+    //     .set({'Authorization':v2token,'Accept':'application/json'})
+    //     .end((err, res) => {
+    //       expect(res).to.have.status(200);
+    //       done();
+    //     });
+    // });
+  });
+
+  describe('/api/v1/users', () => {
+    it('should display a particular user email', (done) => {
       chai.request(app)
-        .get('/api/v2/sentMessages')
-        .set({'Authorization':v2token,'Accept':'application/json'})
+        .get('/api/v1/users/1')
+        .set({'Authorization':v1token,'Accept':'application/json'})
         .end((err, res) => {
           expect(res).to.have.status(200);
           done();
         });
     });
+    it('should return 404 for unexisting email', (done) => {
+      chai.request(app)
+        .get('/api/v1/users/13')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
+    it('should return 404 for no argument', (done) => {
+      chai.request(app)
+        .get('/api/v1/users')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
   });
-
-  // describe('/api/v1/users', () => {
-  //   it('should display a particular user email', (done) => {
-  //     chai.request(app)
-  //       .get('/api/v1/users/1')
-  //       .end((err, res) => {
-  //         expect(res).to.have.status(200);
-  //         done();
-  //       });
-  //   });
-  // });
 
   describe('/api/v1/messages', () => {
     it('should not delete a message without token', (done) => {
@@ -555,12 +626,21 @@ describe('/api/v1/auth/signup', () => {
           done();
         });
     });
+    it('should not delete an unexisting message', (done) => {
+      chai.request(app)
+        .delete('/api/v1/messages/11')
+        .set({'Authorization':v1token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
   });
 
   describe('version 2 /api/v2/messages', () => {
     it('version 2 should not delete a message without token', (done) => {
       chai.request(app)
-        .delete('/api/v2/messages/11')
+        .delete('/api/v2/messages/1')
         .end((err, res) => {
           expect(res).to.have.status(400);
           done();
@@ -577,12 +657,74 @@ describe('/api/v1/auth/signup', () => {
         });
     });
 
-    it('version 2 should delete a message', (done) => {
+    it('version 2 should not delete a message if he doesnt own it', (done) => {
       chai.request(app)
-        .delete('/api/v2/messages/39')
+        .delete('/api/v2/messages/1')
         .set({'Authorization':v2token,'Accept':'application/json'})
         .end((err, res) => {
-          expect(res).to.have.status(200);
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+  });
+
+  describe('/api/v2/groups', () => {
+    it('should not accept null values', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupName: '',
+          groupEmail: '',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.have.property('message')
+          done();
+        });
+    });
+
+    it('should validate email', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupName: 'gggg',
+          groupEmail: 't@e.com',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('please enter a valid epic email');
+          done();
+        });
+    });
+
+    it('should create a group', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupName: 'Test group',
+          groupEmail: 'test@epic.com',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.property('message').eql('Email group created successfully');
+          done();
+        });
+    });
+
+    it('should not create duplicate group', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupName: 'Test group',
+          groupEmail: 'test@epic.com',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(400);
           done();
         });
     });
