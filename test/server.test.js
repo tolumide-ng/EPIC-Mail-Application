@@ -729,3 +729,79 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  describe('/api/v2/groups/users', () => {
+    it('version 2 should not accept null group email or user emails', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupEmail: '',
+          userEmails: '',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('please enter groupEmail and user emails are required');
+          done();
+        });
+    });
+
+    it('version 2 should not accept invalid group email', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupEmail: 't@epic.com',
+          userEmails: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('Group does not exist');
+          done();
+        });
+    });
+
+    it('version 2 should ensure group exists', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupEmail: 't@epic.com',
+          userEmails: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          expect(res.body.message).to.eql('Group does not exist');
+          done();
+        });
+    });
+
+    it('should not create a user group without token', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .send({
+          groupEmail: 't@epic.com',
+          userEmails: 'a@epic.com',
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('version 2 should create a user group', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupEmail: 'test@epic.com',
+          userEmails: ['a@epic.com','a@epic.com'],
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          expect(res).to.be.an('object');
+          expect(res.body.user_emails).to.be.an('array');
+          done();
+        });
+    });
+  });

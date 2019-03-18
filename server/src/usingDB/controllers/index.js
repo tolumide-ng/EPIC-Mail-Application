@@ -275,6 +275,50 @@ const epicApp = {
       message: `Email group created successfully`,
     });
     },
+    async createUserGroup(req,res){
+      let group = [];
+      let userGroup = [];
+      const checkGroup = 'SELECT * FROM groups WHERE group_email=$1';
+      const groupEmail = req.body.groupEmail;
+      if(!req.body.groupEmail || !req.body.userEmails){
+        return res.status(400).send({'message': 'please enter groupEmail and user emails are required'});
+      }
+      //validate to ensure its a valid mail and its an epic mail
+      const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+      const result = validateEmail.test(groupEmail);
+      const newVal = groupEmail.split('@');
+      const finalCheck = newVal[1];
+      if(!result || finalCheck !=="epic.com"){ 
+        return res.status(400).send({ message: 'please enter a valid epic email' });
+      }
+      if(result){
+      const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
+      group = rows[0];
+      if(!group){
+        return res.status(400).send({'message': 'Group does not exist'});
+      }}
+      // const checkUsers = 'SELECT * FROM users where email IN($1)';
+      // const { rows } = await db.query(checkUsers, [req.body.userEmails]);
+      // userGroup = rows;console.log(userGroup);
+      // if(!userGroup){
+      //   return res.status(400).send({'message': 'one of the emails do not exist'});
+      // }
+      // if(userGroup){
+        let result1 = [];
+        const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
+        result1 = rows[0];
+        const text = `INSERT INTO user_groupings(group_id,user_emails) 
+                      VALUES($1,$2) returning *`;
+        const values = [result1.id,req.body.userEmails];  
+        try {
+          const { rows } = await db.query(text, values);
+          return res.status(201).send(rows[0]);
+        } catch(error) {
+          return res.status(400).send(error);
+        }            
+      // }
+    
+    },
 
 }
 export default epicApp;
