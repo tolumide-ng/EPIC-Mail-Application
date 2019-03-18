@@ -31,8 +31,8 @@ const createTables = () => {
         subject VARCHAR(128) NOT NULL,
         message VARCHAR(250) NOT NULL,
         status VARCHAR(10) NOT NULL,
-        sender INTEGER REFERENCES users(id),
-        reciever INTEGER REFERENCES users(id),
+        sender INTEGER REFERENCES users(id) NOT NULL,
+        reciever INTEGER REFERENCES users(id) NOT NULL,
         is_deleted VARCHAR(10) NOT NULL,
         group_status VARCHAR(10) NOT NULL
     );
@@ -40,11 +40,11 @@ const createTables = () => {
         id SERIAL PRIMARY KEY,
         group_name VARCHAR(128) NOT NULL,
         group_email VARCHAR(128) NOT NULL,
-        created_by INTEGER NOT NULL REFERENCES users(id)
+        created_by INTEGER NOT NULL REFERENCES users(id) NOT NULL
     );
     CREATE TABLE user_groupings(
-        group_id INTEGER REFERENCES groups(id),
-        user_emails VARCHAR ARRAY
+        group_id INTEGER REFERENCES groups(id) NOT NULL,
+        user_ids INTEGER NOT NULL REFERENCES users(id)
     );
     `;
     pool.query(sql)

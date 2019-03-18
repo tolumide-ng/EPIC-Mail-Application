@@ -218,10 +218,15 @@ const epicApp = {
       const messages = 'SELECT * FROM messages WHERE sender=$1';
         const { rows } = await db.query(messages, [req.decodedMessage.id]);
         output = rows;
+        try{
         if(!output) {
           return res.status(400).send({'message': 'you have not sent any messages'});
         }
         return res.status(200).send(output);
+      }
+      catch(e){console.log(output);
+        return res.status(400).send({'message': 'something is wrong with your request'});
+      }
     },
     async deleteAMessage(req,res){
       // let output = [];
@@ -278,7 +283,7 @@ const epicApp = {
     async createUserGroup(req,res){
       let group = [];
       let userGroup = [];
-      const checkGroup = 'SELECT * FROM groups WHERE group_email=$1';
+      const checkGroup = 'SELECT * FROM groups WHERE group_email=$1 AND created_by=$2';
       const groupEmail = req.body.groupEmail;
       if(!req.body.groupEmail || !req.body.userEmails){
         return res.status(400).send({'message': 'please enter groupEmail and user emails are required'});
@@ -292,10 +297,10 @@ const epicApp = {
         return res.status(400).send({ message: 'please enter a valid epic email' });
       }
       if(result){
-      const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
+      const { rows } = await db.query(checkGroup, [req.body.groupEmail,req.decodedMessage.id]);
       group = rows[0];
       if(!group){
-        return res.status(400).send({'message': 'Group does not exist'});
+        return res.status(400).send({'message': 'There is an error, it is either group does not exist or you are not allowed to add users to this group'});
       }}
       // const checkUsers = 'SELECT * FROM users where email IN($1)';
       // const { rows } = await db.query(checkUsers, [req.body.userEmails]);
@@ -305,19 +310,68 @@ const epicApp = {
       // }
       // if(userGroup){
         let result1 = [];
-        const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
+        const { rows } = await db.query(checkGroup, [req.body.groupEmail,req.decodedMessage.id]);
         result1 = rows[0];
-        const text = `INSERT INTO user_groupings(group_id,user_emails) 
-                      VALUES($1,$2) returning *`;
-        const values = [result1.id,req.body.userEmails];  
+        const aa = req.body.userEmails;
+        let text = `INSERT INTO user_groupings (group_id, user_ids) VALUES `; 
+        aa.forEach((a, i) => {
+        if(i === aa.length - 1){
+           text += `(${result1.id}, ${a} );`;
+        } else {
+        text += `(${result1.id}, ${a} ),`;
+        }});
+
+        // con
         try {
-          const { rows } = await db.query(text, values);
+          const { rows } = await db.query(text);
           return res.status(201).send(rows[0]);
         } catch(error) {
           return res.status(400).send(error);
         }            
       // }
     
+    },
+    async deleteAGroup(req,res){
+      let groupOutput = [];
+      let deleteUserGroupOutput = [];
+      let deleteGroupOutput = [];
+      const getGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
+      const deleteUserGroup = 'DELETE FROM user_groupings WHERE group_id=$1 returning *';
+      const deleteGroup = 'DELETE FROM groups WHERE id=$1 AND created_by=$2 returning *';
+
+      try {
+        const { rows } = await db.query(getGroup, [req.params.id,req.decodedMessage.id]);
+        groupOutput= rows[0];
+        if(!groupOutput) {console.log(req.decodedMessage.id);
+          return res.status(404).send({'message': 'group does not exist'});
+        }
+      }
+      catch(e){
+        return res.status(400).send({'message': 'there is an error, check your group request'});
+      }
+
+      try {
+        const { rows } = await db.query(deleteUserGroup, [req.params.id]);
+        deleteUserGroupOutput={rows};
+        if(!deleteUserGroupOutput) {
+          return res.status(404).send({'message': 'you cannot delete this user group'});
+        }
+      }
+      catch(e){console.log(deleteUserGroupOutput);
+        return res.status(400).send({'message': 'there is an error, please check youraa request'});
+      }
+
+      try {
+        const { rows } = await db.query(deleteGroup, [req.params.id,req.decodedMessage.id]);
+        deleteGroupOutput=rows[0];
+        if(!deleteGroupOutput) {
+          return res.status(404).send({'message': 'you are not permitted to delete this group'});
+        }
+        return res.status(200).send({'message': 'the group has been deleted'});
+      }
+      catch(e){
+        return res.status(400).send({'message': 'there is an error, please check yourbb request'});
+      }
     },
 
 }
