@@ -756,7 +756,7 @@ describe('/api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
-          expect(res.body.message).to.eql('Group does not exist');
+          expect(res.body.message).to.eql('There is an error, it is either group does not exist or you are not allowed to add users to this group');
           done();
         });
     });
@@ -771,7 +771,7 @@ describe('/api/v1/auth/signup', () => {
         })
         .end((err, res) => {
           expect(res).to.have.status(400);
-          expect(res.body.message).to.eql('Group does not exist');
+          expect(res.body.message).to.eql('There is an error, it is either group does not exist or you are not allowed to add users to this group');
           done();
         });
     });
@@ -795,12 +795,61 @@ describe('/api/v1/auth/signup', () => {
         .set({'Authorization':v2token,'Accept':'application/json'})
         .send({
           groupEmail: 'test@epic.com',
-          userEmails: ['a@epic.com','a@epic.com'],
+          userEmails: [1,2],
         })
         .end((err, res) => {
           expect(res).to.have.status(201);
-          expect(res).to.be.an('object');
-          expect(res.body.user_emails).to.be.an('array');
+          done();
+        });
+    });
+  });
+
+  describe('/api/v2/groups/', () => {
+    it('version 2 should not accept null values', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('version 2 should not accept invalid group id', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/4')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('version 2 should ensure group exists', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/5')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('should not create a user group without token', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/1')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('version 2 should delete a group', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/1')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
           done();
         });
     });
