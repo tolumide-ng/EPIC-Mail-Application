@@ -44,7 +44,7 @@ const createTables = () => {
     );
     CREATE TABLE user_groupings(
         group_id INTEGER REFERENCES groups(id),
-        user_id INTEGER REFERENCES users(id)
+        user_emails VARCHAR ARRAY
     );
     `;
     pool.query(sql)

@@ -52,6 +52,7 @@ app.get('/api/v2/messages/unreadMessages', checkToken, epicWithDB.getUnreadMessa
 app.get('/api/v2/messages/sentMessages', checkToken, epicWithDB.getMessagesSentByAUser);
 app.delete('/api/v2/messages/:id', checkToken, epicWithDB.deleteAMessage);
 app.post('/api/v2/groups', checkToken, epicWithDB.createGroup);
+app.post('/api/v2/groups/users', checkToken, epicWithDB.createUserGroup);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
