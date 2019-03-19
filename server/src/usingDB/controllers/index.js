@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable brace-style */
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
@@ -162,6 +163,7 @@ const epicApp = {
           'unread',
           req.decodedMessage.id,
           userData.id,
+          null,
           'false',
           'false',
         ];
@@ -284,35 +286,20 @@ const epicApp = {
   async createUserGroup(req, res) {
     let group = [];
     const userGroup = [];
-    const checkGroup = 'SELECT * FROM groups WHERE group_email=$1 AND created_by=$2';
+    const checkGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
     const { groupEmail } = req.body;
-    if (!req.body.groupEmail || !req.body.userEmails) {
-      return res.status(400).send({ message: 'please enter groupEmail and user emails are required' });
+    if (!req.body.userEmails) {
+      return res.status(400).send({ message: 'user emails are required' });
     }
-    // validate to ensure its a valid mail and its an epic mail
-    const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-    const result = validateEmail.test(groupEmail);
-    const newVal = groupEmail.split('@');
-    const finalCheck = newVal[1];
-    if (!result || finalCheck !== 'epic.com') {
-      return res.status(400).send({ message: 'please enter a valid epic email' });
-    }
-    if (result) {
-      const { rows } = await db.query(checkGroup, [req.body.groupEmail, req.decodedMessage.id]);
+    if (req.body.userEmails) {
+      const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
       group = rows[0];
       if (!group) {
         return res.status(400).send({ message: 'There is an error, it is either group does not exist or you are not allowed to add users to this group' });
       }
     }
-    // const checkUsers = 'SELECT * FROM users where email IN($1)';
-    // const { rows } = await db.query(checkUsers, [req.body.userEmails]);
-    // userGroup = rows;console.log(userGroup);
-    // if(!userGroup){
-    //   return res.status(400).send({'message': 'one of the emails do not exist'});
-    // }
-    // if(userGroup){
     let result1 = [];
-    const { rows } = await db.query(checkGroup, [req.body.groupEmail, req.decodedMessage.id]);
+    const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
     result1 = rows[0];
     const aa = req.body.userEmails;
     const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, unnest(array[${aa}]))`;
@@ -322,7 +309,6 @@ const epicApp = {
     } catch (error) {
       return res.status(400).send(error);
     }
-    // }
   },
   async deleteAGroup(req, res) {
     let groupOutput = [];
@@ -384,11 +370,12 @@ const epicApp = {
   },
   async sendGroupMessage(req, res) {
     const { email } = req.body;
+    let data = [];
     // u need to do this cos row[0] cant be used outside await db.query
     let userData = [];
     // use $1 to refer to the first record in ur search
     const findOneGroupEmail = `SELECT * FROM groups  
-                              WHERE group_email='testgroup3@epic.com'`;
+                              WHERE id=$1`;
     if (!email) {
       return res.status(400).send({ message: 'A group is required' });
     }
@@ -398,21 +385,10 @@ const epicApp = {
     if (!req.body.message) {
       return res.status(400).send({ message: 'A message is required' });
     }
-
-    // validate to ensure its a valid mail and its an epic mail
-    const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-    const result = validateEmail.test(email);
-    const newVal = email.split('@');
-    const finalCheck = newVal[1];
-    if (!result || finalCheck !== 'epic.com') {
-      return res.status(400).send({ message: 'please enter a valid epic email' });
-    }
-    // if it passes valid mail, confirm that the email exist
-    if (email) {
+    if (email || req.body.subject || req.body.message) {
       try {
-        const { rows } = await db.query(findOneGroupEmail);
+        const { rows } = await db.query(findOneGroupEmail, [req.params.id]);
         userData = rows[0];
-        console.log(rows);
         if (!userData) {
           return res.status(400).send({ message: 'the group email does not exist' });
         }
@@ -437,7 +413,15 @@ const epicApp = {
         ];
         try {
           const { rows } = await db.query(text, values);
-          return res.status(201).send(rows[0]);
+          data = rows;
+          // eslint-disable-next-line object-curly-newline
+          const { created_on, email, subject, message, status } = data;
+          return res.status(201).send({
+            status: 200,
+            data: [{
+              data,
+            }],
+          });
         } catch (error) {
           return res.status(400).send(error);
         }

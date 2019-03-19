@@ -53,10 +53,10 @@ app.get('/api/v2/messages/sent', checkToken, epicWithDB.getMessagesSentByAUser);
 app.get('/api/v2/messages/:id', checkToken, epicWithDB.getAMessage);
 app.delete('/api/v2/messages/:id', checkToken, epicWithDB.deleteAMessage);
 app.post('/api/v2/groups', checkToken, epicWithDB.createGroup);
-app.post('/api/v2/groups/users', checkToken, epicWithDB.createUserGroup);
+app.post('/api/v2/groups/:id/users', checkToken, epicWithDB.createUserGroup);
 app.delete('/api/v2/groups/:id', checkToken, epicWithDB.deleteAGroup);
-app.delete('/api/v2/groups/user/:group/:user', checkToken, epicWithDB.deleteUserInGroup);
-app.post('/api/v2/messages/group', checkToken, epicWithDB.sendGroupMessage);
+app.delete('/api/v2/groups/:group/user/:user', checkToken, epicWithDB.deleteUserInGroup);
+app.post('/api/v2/groups/:id/messages', checkToken, epicWithDB.sendGroupMessage);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
