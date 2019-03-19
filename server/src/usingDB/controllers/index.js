@@ -373,6 +373,25 @@ const epicApp = {
         return res.status(400).send({'message': 'there is an error, please check yourbb request'});
       }
     },
+    async deleteUserInGroup(req,res){
+      let user = []; let deleteUserOutput=[];
+      const userQuery = `SELECT * FROM user_groupings u 
+                         INNER JOIN groups g ON u.group_id = g.id
+                         WHERE g.created_by=$1 AND u.group_id=$2 AND u.user_ids=$3`;
+      const deleteUser= `DELETE FROM user_groupings WHERE group_id=$1 AND user_ids=$2`;                   
+      let {rows} = await db.query(userQuery,[req.decodedMessage.id,req.params.group,req.params.user]);
+      user = rows[0];
+      if(!user){
+        res.status(404).send({'message': 'user does not exist'});
+      }
+      try{console.log(user);console.log(user.group_id,user.user_ids);
+        let {rows} = await db.query(deleteUser,[user.group_id,user.user_ids]);
+        deleteUserOutput = rows[0];
+        return res.status(200).send({'message': 'user has been deleted successfully'})
+      }catch(e){
+        return res.status(400).send(e);
+      }
+    }
 
 }
 export default epicApp;

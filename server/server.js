@@ -54,6 +54,7 @@ app.delete('/api/v2/messages/:id', checkToken, epicWithDB.deleteAMessage);
 app.post('/api/v2/groups', checkToken, epicWithDB.createGroup);
 app.post('/api/v2/groups/users', checkToken, epicWithDB.createUserGroup);
 app.delete('/api/v2/groups/:id', checkToken, epicWithDB.deleteAGroup);
+app.delete('/api/v2/groups/user/:group/:user', checkToken, epicWithDB.deleteUserInGroup);
 
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */

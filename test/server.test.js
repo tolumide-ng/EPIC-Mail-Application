@@ -715,6 +715,22 @@ describe('/api/v1/auth/signup', () => {
         });
     });
 
+    it('should create a group', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupName: 'Test group1',
+          groupEmail: 'test1@epic.com',
+        }) 
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          expect(res).to.be.an('object');
+          expect(res.body).to.have.property('message').eql('Email group created successfully');
+          done();
+        });
+    });
+
     it('should not create duplicate group', (done) => {
       chai.request(app)
         .post('/api/v2/groups')
@@ -802,6 +818,62 @@ describe('/api/v1/auth/signup', () => {
           done();
         });
     });
+
+    it('version 2 should create a user group', (done) => {
+      chai.request(app)
+        .post('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .send({
+          groupEmail: 'test1@epic.com',
+          userEmails: [1,2],
+        })
+        .end((err, res) => {
+          expect(res).to.have.status(201);
+          done();
+        });
+    });
+
+  });
+
+  describe('/api/v2/groups/users', () => {
+    it('version 2 should not accept null values', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/users')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('version 2 should not accept invalid group id and user id', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groupsuser/4/6')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          done();
+        });
+    });
+
+    it('should not create a user group without token', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/user/1/1')
+        .end((err, res) => {
+          expect(res).to.have.status(400);
+          done();
+        });
+    });
+
+    it('version 2 should delete a user in a group', (done) => {
+      chai.request(app)
+        .delete('/api/v2/groups/user/1/1')
+        .set({'Authorization':v2token,'Accept':'application/json'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          done();
+        });
+    });
   });
 
   describe('/api/v2/groups/', () => {
@@ -854,3 +926,5 @@ describe('/api/v1/auth/signup', () => {
         });
     });
   });
+
+  
