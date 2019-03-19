@@ -1,18 +1,22 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable space-infix-ops */
+/* eslint-disable no-console */
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
-//this sets env variables
+// this sets env variables
 dotenv.config();
-//to connect to DB
+// to connect to DB
 const pool = new Pool({
-    connectionString:process.env.NODE_ENV=='test'? process.env.DATABASE_TEST: process.env.DATABASE_URL
-  });
-  pool.on('connect', () => {
-    console.log('connected to epic db');
-  });  
+  connectionString: process.env.NODE_ENV == 'test' ? process.env.DATABASE_TEST: process.env.DATABASE_URL,
+});
+pool.on('connect', () => {
+  console.log('connected to epic db');
+});
 
-//create all tables
+// create all tables
+// eslint-disable-next-line no-unused-vars
 const createTables = () => {
-    const sql = `
+  const sql = `
     DROP TABLE IF EXISTS user_groupings;
     DROP TABLE IF EXISTS  groups CASCADE;
     DROP TABLE IF EXISTS messages;
@@ -24,6 +28,12 @@ const createTables = () => {
         last_name varchar(128) NOT NULL,
         password varchar(250) NOT NULL
     );
+    CREATE TABLE groups(
+        id SERIAL PRIMARY KEY,
+        group_name VARCHAR(128) NOT NULL,
+        group_email VARCHAR(128) NOT NULL,
+        created_by INTEGER NOT NULL REFERENCES users(id) NOT NULL
+    );
     CREATE TABLE messages(
         id SERIAL PRIMARY KEY,
         created_on TIMESTAMP,
@@ -32,30 +42,27 @@ const createTables = () => {
         message VARCHAR(250) NOT NULL,
         status VARCHAR(10) NOT NULL,
         sender INTEGER REFERENCES users(id) NOT NULL,
-        reciever INTEGER REFERENCES users(id) NOT NULL,
+        reciever INTEGER REFERENCES users(id) NULL,
+        group_reciever INTEGER REFERENCES groups(id),
         is_deleted VARCHAR(10) NOT NULL,
         group_status VARCHAR(10) NOT NULL
     );
-    CREATE TABLE groups(
-        id SERIAL PRIMARY KEY,
-        group_name VARCHAR(128) NOT NULL,
-        group_email VARCHAR(128) NOT NULL,
-        created_by INTEGER NOT NULL REFERENCES users(id) NOT NULL
-    );
+
     CREATE TABLE user_groupings(
         group_id INTEGER REFERENCES groups(id) NOT NULL,
         user_ids INTEGER NOT NULL REFERENCES users(id)
     );
     `;
-    pool.query(sql)
+  pool.query(sql)
     .then(() => {
-        console.log('table created');
-        pool.end();
+      console.log('table created');
+      pool.end();
     })
     .catch((err) => {
-        console.log('table not created',err);
-        pool.end();
+      console.log('table not created', err);
+      pool.end();
     });
-}
+};
+
 return createTables();
 // require('make-runnable');
