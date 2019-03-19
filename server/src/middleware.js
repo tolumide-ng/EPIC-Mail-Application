@@ -21,7 +21,7 @@ const checkToken = (req, res, next) => {
         });
       }
       req.decodedMessage = decoded;
-      next();
+      return next();
     });
     /* if no token is supplied */
   } else {
