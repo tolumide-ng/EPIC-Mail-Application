@@ -4,7 +4,6 @@ import { checkToken } from '../../../middleware';
 
 const message = express.Router();
 
-
 message.post('/', checkToken, MessageController.sendMessage);
 message.get('/unread', checkToken, MessageController.getUnreadMessages);
 message.get('/', checkToken, MessageController.getAllMessagesPerUser);
