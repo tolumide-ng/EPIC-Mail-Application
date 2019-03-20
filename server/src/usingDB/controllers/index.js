@@ -22,20 +22,17 @@ const epicApp = {
       return res.status(400).send({ message: 'email is required' });
     }
     if (email) {
-      try {
-        const { rows } = await db.query(findOneEmail, [req.body.email]);
-        userData = rows[0];
-        if (userData) {
-          return res.status(400).send({ message: 'email already exists' });
-        }
-      } finally {
-        const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-        const result = validateEmail.test(email);
-        const newVal = email.split('@');
-        const finalCheck = newVal[1];
-        if (!result || finalCheck !== 'epic.com') {
-          return res.status(400).send({ message: 'please enter a valid epic email' });
-        }
+      const { rows } = await db.query(findOneEmail, [req.body.email]);
+      userData = rows[0];
+      if (userData) {
+        return res.status(400).send({ message: 'email already exists' });
+      }
+      const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+      const result = validateEmail.test(email);
+      const newVal = email.split('@');
+      const finalCheck = newVal[1];
+      if (!result || finalCheck !== 'epic.com') {
+        return res.status(400).send({ message: 'please enter a valid epic email' });
       }
     }
     if (!req.body.firstName || req.body.firstName.length < 3) {
@@ -84,35 +81,32 @@ const epicApp = {
     if (!req.body.email || !req.body.password) {
       return res.status(400).send({ message: 'email and password are required' });
     }
-    try {
-      const { rows } = await db.query(findOneEmail, [req.body.email]);
-      userData = rows[0];
-      if (!userData) {
-        return res.status(400).send({ message: 'email or password is incorrect' });
-      }
-    } finally {
-      if (userData && !UserModel.comparePassword(userData.password, req.body.password)) {
-        return res.status(400).send({ message: 'Username or password is incorrect' });
-      }
-      // eslint-disable-next-line prefer-const
-      if (userData) {
-        const token = jwt.sign({ email: userData.email, id: userData.id },
-          process.env.SECRET,
-          { expiresIn: '24h' });
-        return res.status(200).send({
-          status: 'success',
-          data:
+    const { rows } = await db.query(findOneEmail, [req.body.email]);
+    userData = rows[0];
+    if (!userData) {
+      return res.status(400).send({ message: 'email or password is incorrect' });
+    }
+    if (userData && !UserModel.comparePassword(userData.password, req.body.password)) {
+      return res.status(400).send({ message: 'Username or password is incorrect' });
+    }
+    // eslint-disable-next-line prefer-const
+    if (userData) {
+      const token = jwt.sign({ email: userData.email, id: userData.id },
+        process.env.SECRET,
+        { expiresIn: '24h' });
+      return res.status(200).send({
+        status: 'success',
+        data:
           {
             token,
           },
-        });
-      }
-
-      res.status(403).send({
-        success: 'error',
-        message: 'Incorrect username or password',
       });
     }
+
+    res.status(403).send({
+      success: 'error',
+      message: 'Incorrect username or password',
+    });
   },
   async sendMessage(req, res) {
     const { email } = req.body;

@@ -1,15 +1,15 @@
 import express from 'express';
-import epicWithDB from '../../controllers';
+import MessageController from '../../controllers/MessageController';
 import { checkToken } from '../../../middleware';
 
 const message = express.Router();
 
 
-message.post('/', checkToken, epicWithDB.sendMessage);
-message.get('/unread', checkToken, epicWithDB.getUnreadMessages);
-message.get('/', checkToken, epicWithDB.getAllMessagesPerUser);
-message.get('/sent', checkToken, epicWithDB.getMessagesSentByAUser);
-message.get('/:id', checkToken, epicWithDB.getAMessage);
-message.delete('/:id', checkToken, epicWithDB.deleteAMessage);
+message.post('/', checkToken, MessageController.sendMessage);
+message.get('/unread', checkToken, MessageController.getUnreadMessages);
+message.get('/', checkToken, MessageController.getAllMessagesPerUser);
+message.get('/sent', checkToken, MessageController.getMessagesSentByAUser);
+message.get('/:id', checkToken, MessageController.getAMessage);
+message.delete('/:id', checkToken, MessageController.deleteAMessage);
 
 export default message;
