@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable radix */
 /* eslint-disable brace-style */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable consistent-return */
@@ -33,19 +35,17 @@ class MessageController {
       return res.status(400).send({ message: 'please enter a valid epic email' });
     }
     // if it passes valid mail, confirm that the email exist
-    if (req.body.email) {
-      try {
+    try {
+      if (req.body.email) {
         const { rows } = await db.query(findOneEmail, [email]);
         userData = rows[0];
         if (!userData) {
-          return res.status(400).send({ message: 'the email does not exist' });
+          return res.status(404).send({ message: 'the email does not exist' });
         }
         if (userData.id === req.decodedMessage.id) {
           return res.status(400).send({ message: 'you cannot send messages to yourself' });
         }
-      }
-      // insert new message into db
-      finally {
+        // insert new message into db
         const text = `
             INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,group_status)
             VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
@@ -62,13 +62,14 @@ class MessageController {
           'false',
           'false',
         ];
-        try {
-          const { rows } = await db.query(text, values);
-          return res.status(201).send(rows[0]);
-        } catch (error) {
-          return res.status(400).send(error);
-        }
+        const { rows: output } = await db.query(text, values);
+        return res.status(201).send({
+          status: 'success',
+          data: output[0],
+        });
       }
+    } catch (error) {
+      return res.status(500).send({ message: 'something is wrong with your request'});
     }
   }
 
@@ -79,41 +80,59 @@ class MessageController {
       const { rows } = await db.query(messages, [req.decodedMessage.id, 'false']);
       output = rows;
       if (!output) {
-        return res.status(400).send({ message: 'you have no messages' });
+        return res.status(404).send({ message: 'you have no messages' });
       }
-    } finally {
-      return res.status(200).send(output);
+      return res.status(200).send({
+        status: 'success',
+        data: rows,
+      });
+    }
+    catch (e) {
+      return res.status(500).send({ message: 'something is wrong with your request' });
     }
   }
 
   static async getAMessage(req, res) {
     let output = [];
+    const validNumber = req.params.id;
+    const paramValue = /^\+?(0|[1-9]\d*)$/;
+    const result = paramValue.test(validNumber);
+    if (!result) {
+      return res.status(400).send('you did not enter a valid id');
+    }
     const messages = 'SELECT * FROM messages WHERE id=$1 AND reciever=$2 AND is_deleted=$3';
     const updatestatus = 'UPDATE messages SET status=$1 WHERE id=$2 returning *';
     try {
       const { rows } = await db.query(messages, [req.params.id, req.decodedMessage.id, 'false']);
       output = rows[0];
       if (!output) {
-        return res.status(400).send({ message: 'email cannot be found' });
+        return res.status(404).send({ message: 'message cannot be found' });
       }
-    } finally {
       if (output) {
         const values = ['read', req.params.id];
         const response = await db.query(updatestatus, values);
-        return res.status(200).send(response.rows[0]);
+        return res.status(200).send({
+          status: 'success',
+          data: output,
+        });
       }
+    }
+    catch (e) {
+      return res.status(500).send({ message: 'something is wrong with your request' });
     }
   }
 
   static async getUnreadMessages(req, res) {
-    let output = [];
+    // let output = [];
     const messages = 'SELECT * FROM messages WHERE reciever=$1 AND status=$2 AND is_deleted=$3';
     const { rows } = await db.query(messages, [req.decodedMessage.id, 'unread', 'false']);
-    output = rows;
-    if (!output) {
-      return res.status(400).send({ message: 'you have no unread messages' });
+    if (!rows[0]) {
+      return res.status(404).send({ message: 'you have no unread messages' });
     }
-    return res.status(200).send(output);
+    return res.status(200).send({
+      status: 'success',
+      data: rows,
+    });
   }
 
   static async getMessagesSentByAUser(req, res) {
@@ -122,30 +141,61 @@ class MessageController {
     const { rows } = await db.query(messages, [req.decodedMessage.id]);
     output = rows;
     try {
-      if (!output) {
-        return res.status(400).send({ message: 'you have not sent any messages' });
+      if (output.length <= 0) {
+        return res.status(404).send({ message: 'you have not sent any messages' });
       }
-      return res.status(200).send(output);
+      return res.status(200).send({
+        status: 'success',
+        data: output,
+      });
     } catch (e) {
-      return res.status(400).send({ message: 'something is wrong with your request' });
+      return res.status(500).send({ message: 'something is wrong with your request' });
     }
   }
 
   static async deleteAMessage(req, res) {
-    // let output = [];
+    const validNumber = req.params.id;
+    const paramValue = /^\+?(0|[1-9]\d*)$/;
+    const result = paramValue.test(validNumber);
+    if (!result) {
+      return res.status(400).send('you have not inputed a valid ID');
+    }
     const messages = 'UPDATE messages SET is_deleted=$1 WHERE reciever=$2 AND id=$3 returning *';
 
     try {
       const { rows } = await db.query(messages, ['true', req.decodedMessage.id, req.params.id]);
       if (!rows[0]) {
-        return res.status(404).send({ message: 'you cannot delete this message' });
+        return res.status(403).send({ message: 'you cannot delete this message' });
       }
       return res.status(200).send({ message: 'the message has been deleted' });
-      // if(!output) {
-      //   return res.status(400).send({'message': 'email does not exist'});
-      // }
     } catch (e) {
-      return res.status(400).send({ message: 'email does not exist' });
+      return res.status(500).send({ message: 'something is wrong with your request' });
+    }
+  }
+
+  static async retractEmail(req, res) {
+    let messageOutput = [];
+    const validNumber = req.params.id;
+    const paramValue = /^\+?(0|[1-9]\d*)$/;
+    const result = paramValue.test(validNumber);
+    if (!result) {
+      return res.status(400).send('you have not entered a valid id');
+    }
+    const getMessage = 'SELECT * FROM messages WHERE id=$1';
+    const { rows } = await db.query(getMessage, [validNumber]);
+    messageOutput = rows[0];
+    if (!messageOutput) {
+      return res.status(404).send({ message: 'message doesnt exist' });
+    }
+    if (messageOutput.status === 'read') {
+      const deleteMessage = `UPDATE messages SET is_deleted = ${'true'} WHERE sender=$1 and id=$2`;
+      const { rows } = db.query(deleteMessage, [req.decodedMessage.id, validNumber]);
+      return res.status(200).send({ message: 'message retracted' });
+    }
+    if (messageOutput.status === 'unread') {
+      const deleteMessage = 'DELETE FROM messages WHERE sender=$1 AND id=$2';
+      const { rows } = db.query(deleteMessage, [req.decodedMessage.id, validNumber]);
+      return res.status(200).send({ message: 'message retracted' });
     }
   }
 }

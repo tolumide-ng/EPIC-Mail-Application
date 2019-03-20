@@ -4,18 +4,16 @@
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable no-undef */
-import 'babel-polyfill';
+// import 'babel-polyfill';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import bcrypt from 'bcrypt';
-import env from 'dotenv';
 import app from '../server/server';
 
 // eslint-disable-next-line prefer-destructuring
 const expect = chai.expect;
 // const should = chai.should();
 chai.use(chaiHttp);
-let v1token; let v2token;
+let v1token; let v2token; let v3token;
 describe('/api/v1/auth/signup', () => {
   it('should not accept null values', (done) => {
     chai.request(app)
@@ -225,6 +223,20 @@ describe('version 2 /api/v2/auth/login', () => {
         done();
       });
   });
+  it('version 2 should login a user', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/login')
+      .send({
+        email: 't@epic.com',
+        password: '123456',
+      })
+      .end((err, res) => {
+        v3token = res.body.data.token;
+        expect(res).to.have.status(200);
+        expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
 });
 
 describe('/api/v1/messages', () => {
@@ -334,7 +346,7 @@ describe('/api/v2/messages', () => {
         email: 'a@epic.com',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(404);
         expect(res.body.message).to.eql('the email does not exist');
         done();
       });
@@ -366,6 +378,27 @@ describe('/api/v2/messages', () => {
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res).to.be.an('object');
+        done();
+      });
+  });
+});
+
+describe('version 2 /api/v2/unread', () => {
+  it('version 2 should not display all unread messages without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages/unread')
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+
+  it('version 2 should display all unread messages with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages/unread')
+      .set({ Authorization: v3token })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
         done();
       });
   });
@@ -450,6 +483,27 @@ describe('/api/v1/messages/getAMessage', () => {
   });
 });
 
+describe('/api/v1/messages/unread', () => {
+  it('should not display all unread messages without token', (done) => {
+    chai.request(app)
+      .get('/api/v1/messages/unread')
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+
+  it('should display all unread messages with token', (done) => {
+    chai.request(app)
+      .get('/api/v1/messages/unread')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
 describe('version 2 /api/v2/messages/getAMessage', () => {
   it('version 2 should not get a message without token', (done) => {
     chai.request(app)
@@ -482,48 +536,6 @@ describe('version 2 /api/v2/messages/getAMessage', () => {
         if (!res) {
           expect(res).to.have.status(404);
         }
-        done();
-      });
-  });
-});
-
-describe('/api/v1/messages/unread', () => {
-  it('should not display all unread messages without token', (done) => {
-    chai.request(app)
-      .get('/api/v1/messages/unread')
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-  it('should display all unread messages with token', (done) => {
-    chai.request(app)
-      .get('/api/v1/messages/unread')
-      .set({ Authorization: v1token, Accept: 'application/json' })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
-        done();
-      });
-  });
-});
-
-describe('version 2 /api/v1/unread', () => {
-  it('version 2 should not display all unread messages without token', (done) => {
-    chai.request(app)
-      .get('/api/v2/messages/unread')
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
-
-  it('version 2 should display all unread messages with token', (done) => {
-    chai.request(app)
-      .get('/api/v2/messages/unread')
-      .set({ 'Authorization':v2token, 'Accept':'application/json' })
-      .end((err, res) => {
-        expect(res).to.have.status(200);
         done();
       });
   });
@@ -639,36 +651,36 @@ describe('/api/v1/messages', () => {
   });
 });
 
-describe('version 2 /api/v2/messages', () => {
-  it('version 2 should not delete a message without token', (done) => {
-    chai.request(app)
-      .delete('/api/v2/messages/1')
-      .end((err, res) => {
-        expect(res).to.have.status(400);
-        done();
-      });
-  });
+// describe('version 2 /api/v2/messages', () => {
+//   it('version 2 should not delete a message without token', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages/1')
+//       .end((err, res) => {
+//         expect(res).to.have.status(400);
+//         done();
+//       });
+//   });
 
-  it(' version 2 should not delete a message without an ID', (done) => {
-    chai.request(app)
-      .delete('/api/v2/messages')
-      .set({ Authorization: v2token, Accept: 'application/json' })
-      .end((err, res) => {
-        expect(res).to.have.status(404);
-        done();
-      });
-  });
+//   it(' version 2 should not delete a message without an ID', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages')
+//       .set({ Authorization: v2token, Accept: 'application/json' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(404);
+//         done();
+//       });
+//   });
 
-  it('version 2 should not delete a message if he doesnt own it', (done) => {
-    chai.request(app)
-      .delete('/api/v2/messages/1')
-      .set({ Authorization: v2token, Accept: 'application/json' })
-      .end((err, res) => {
-        expect(res).to.have.status(404);
-        done();
-      });
-  });
-});
+//   it('version 2 should not delete a message if he doesnt own it', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages/1')
+//       .set({ Authorization: v2token, Accept: 'application/json' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(403);
+//         done();
+//       });
+//   });
+// });
 
 describe('/api/v2/groups', () => {
   it('should not accept null values', (done) => {
@@ -938,18 +950,17 @@ describe('/api/v2/group/1/messages should send messages to groups', () => {
       });
   });
 
-  it('version 2 should not accept invalid email', (done) => {
+  it('version 2 should not accept invalid ID', (done) => {
     chai.request(app)
-      .post('/api/v2/groups/1/messages')
+      .post('/api/v2/groups/11/messages')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
         subject: 'test mail',
         message: 'test message',
-        email: 'abaa@epic.com',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body.message).to.eql('the group email does not exist');
+        expect(res).to.have.status(404);
+        expect(res.body.message).to.eql('the group does not exist');
         done();
       });
   });
@@ -1004,3 +1015,43 @@ describe('version 2 /api/v2/groups', () => {
       });
   });
 });
+
+// describe('/api/v1/messages should retract a message', () => {
+//   it('should not delete a message without token', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages/1/retract')
+//       .end((err, res) => {
+//         expect(res).to.have.status(400);
+//         done();
+//       });
+//   });
+
+//   it('should not retract a message without an ID', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages/a/retract')
+//       .set({ Authorization: v2token, Accept: 'application/json' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(400);
+//         done();
+//       });
+//   });
+
+//   it('should retract a message', (done) => {
+//     chai.request(app)
+//       .delete('/api/v2/messages/1/retract')
+//       .set({ Authorization: v2token, Accept: 'application/json' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(200);
+//         done();
+//       });
+//   });
+//   it('should not delete an unexisting message', (done) => {
+//     chai.request(app)
+//       .delete('/api/v1/messages/11/retract')
+//       .set({ Authorization: v1token, Accept: 'application/json' })
+//       .end((err, res) => {
+//         expect(res).to.have.status(404);
+//         done();
+//       });
+//   });
+// });

@@ -14,6 +14,9 @@ class UserController {
     // use $1 to refer to the first record in ur search
     const findOneEmail = 'SELECT * FROM users WHERE email=$1';
     const { email } = req.body;
+    const lnameInput = req.body.lastName.replace(/\s/g, ''); console.log(req.body.lastName, lnameInput);
+    const pwdInput = req.body.password.trim();
+    const fnameInput = req.body.firstName.trim();
     if (!email) {
       return res.status(400).send({ message: 'email is required' });
     }
@@ -31,14 +34,14 @@ class UserController {
         return res.status(400).send({ message: 'please enter a valid epic email' });
       }
     }
-    if (!req.body.firstName || req.body.firstName.length < 3) {
-      return res.status(400).send({ message: 'first name is required and has a minimum of 3 characters' });
+    if (!fnameInput || fnameInput.length < 3) {
+      return res.status(400).send({ message: 'Please enter a valid input.first name is required and has a minimum of 3 characters' });
     }
-    if (!req.body.lastName || req.body.lastName.length < 3) {
-      return res.status(400).send({ message: 'last name is required and has a minimum of 3 characters' });
+    if (!lnameInput || lnameInput.length < 3) {
+      return res.status(400).send({ message: 'Please enter a valid input.last name is required and has a minimum of 3 characters' });
     }
-    if (!req.body.password || req.body.password.length < 6) {
-      return res.status(400).send({ message: 'password is required and has a minimum of 6 characters' });
+    if (!pwdInput || pwdInput.length < 6) {
+      return res.status(400).send({ message: 'Please enter a valid input.password is required and has a minimum of 6 characters' });
     }
     const hashedPassword = UserModel.hashPassword(req.body.password);
     // call req.body, destructure to get password and then save encrypt into password
@@ -49,8 +52,8 @@ class UserController {
           returning *`;
     const values = [
       req.body.email,
-      req.body.firstName,
-      req.body.lastName,
+      fnameInput,
+      lnameInput,
       userData.password,
     ];
     try {
@@ -68,7 +71,7 @@ class UserController {
       });
       // return res.status(201).send(rows[0]);
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(500).send('something went wrong with your request');
     }
   }
 
