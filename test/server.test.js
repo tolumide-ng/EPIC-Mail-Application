@@ -984,3 +984,23 @@ describe('/api/v2/group/1/messages should send messages to groups', () => {
       });
   });
 });
+
+describe('version 2 /api/v2/groups', () => {
+  it('version 2 should not display all groups without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups')
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
+  it('version 2 should display all groups created by user', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups')
+      .set({ 'Authorization':v2token, 'Accept':'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
