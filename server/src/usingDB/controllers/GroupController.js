@@ -129,10 +129,10 @@ class GroupController {
 
   static async deleteUserInGroup(req, res) {
     const validNumber1 = req.params.group;
-    const validNumber2 = req.params.user
+    const validNumber2 = req.params.user;
     const paramValue = /^\+?(0|[1-9]\d*)$/;
     const result = paramValue.test(validNumber1);
-    const result1 = paramValue.test(validNumber2)
+    const result1 = paramValue.test(validNumber2);
     if (!result || !result1) {
       return res.status(400).send('you have not inputed a valid ID');
     }
@@ -166,12 +166,8 @@ class GroupController {
     // let data = [];
     // u need to do this cos row[0] cant be used outside await db.query
     let userData = [];
-    // use $1 to refer to the first record in ur search
     const findOneGroupEmail = `SELECT * FROM groups  
                                   WHERE id=$1`;
-    // if (!email) {
-    //   return res.status(400).send({ message: 'A group is required' });
-    // }
     if (!req.body.subject) {
       return res.status(400).send({ message: 'A subject is required' });
     }

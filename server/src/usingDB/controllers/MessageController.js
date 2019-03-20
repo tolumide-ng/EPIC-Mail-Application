@@ -43,7 +43,7 @@ class MessageController {
           return res.status(404).send({ message: 'the email does not exist' });
         }
         if (userData.id === req.decodedMessage.id) {
-          return res.status(400).send({ message: 'you cannot send messages to yourself' });
+          return res.status(403).send({ message: 'you cannot send messages to yourself' });
         }
         // insert new message into db
         const text = `
@@ -69,7 +69,7 @@ class MessageController {
         });
       }
     } catch (error) {
-      return res.status(500).send({ message: 'something is wrong with your request'});
+      return res.status(500).send({ message: 'something is wrong with your request' });
     }
   }
 

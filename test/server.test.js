@@ -1016,42 +1016,42 @@ describe('version 2 /api/v2/groups', () => {
   });
 });
 
-// describe('/api/v1/messages should retract a message', () => {
-//   it('should not delete a message without token', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages/1/retract')
-//       .end((err, res) => {
-//         expect(res).to.have.status(400);
-//         done();
-//       });
-//   });
+describe('/api/v1/messages should retract a message', () => {
+  it('should not delete a message without token', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/1/retract')
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
 
-//   it('should not retract a message without an ID', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages/a/retract')
-//       .set({ Authorization: v2token, Accept: 'application/json' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(400);
-//         done();
-//       });
-//   });
+  it('should not retract a message without an ID', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/a/retract')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
 
-//   it('should retract a message', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages/1/retract')
-//       .set({ Authorization: v2token, Accept: 'application/json' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(200);
-//         done();
-//       });
-//   });
-//   it('should not delete an unexisting message', (done) => {
-//     chai.request(app)
-//       .delete('/api/v1/messages/11/retract')
-//       .set({ Authorization: v1token, Accept: 'application/json' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(404);
-//         done();
-//       });
-//   });
-// });
+  it('should retract a message', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/1/retract')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+  it('should not delete an unexisting message', (done) => {
+    chai.request(app)
+      .delete('/api/v1/messages/11/retract')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+});
