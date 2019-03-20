@@ -1,10 +1,9 @@
 import express from 'express';
-import epicWithDB from '../../controllers';
+import UserController from '../../controllers/userController';
 
 const user = express.Router();
 
-
-user.post('/signup', epicWithDB.createUser);
-user.post('/login', epicWithDB.login);
+user.post('/signup', UserController.createUser);
+user.post('/login', UserController.login);
 
 export default user;
