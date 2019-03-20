@@ -651,36 +651,36 @@ describe('/api/v1/messages', () => {
   });
 });
 
-// describe('version 2 /api/v2/messages', () => {
-//   it('version 2 should not delete a message without token', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages/1')
-//       .end((err, res) => {
-//         expect(res).to.have.status(400);
-//         done();
-//       });
-//   });
+describe('version 2 /api/v2/messages', () => {
+  it('version 2 should not delete a message without token', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/1')
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        done();
+      });
+  });
 
-//   it(' version 2 should not delete a message without an ID', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages')
-//       .set({ Authorization: v2token, Accept: 'application/json' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(404);
-//         done();
-//       });
-//   });
+  it(' version 2 should not delete a message without an ID', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
 
-//   it('version 2 should not delete a message if he doesnt own it', (done) => {
-//     chai.request(app)
-//       .delete('/api/v2/messages/1')
-//       .set({ Authorization: v2token, Accept: 'application/json' })
-//       .end((err, res) => {
-//         expect(res).to.have.status(403);
-//         done();
-//       });
-//   });
-// });
+  it('version 2 should not delete a message if he doesnt own it', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/1')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        done();
+      });
+  });
+});
 
 describe('/api/v2/groups', () => {
   it('should not accept null values', (done) => {
