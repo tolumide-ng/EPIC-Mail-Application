@@ -195,6 +195,27 @@ class GroupController {
       }
     }
   }
+
+  static async getAllGroups(req, res) {
+    const group = 'SELECT * FROM groups where created_by=$1';
+    let output = [];
+    try {
+      const { rows } = await db.query(group, [req.decodedMessage.id]);
+      output = rows;
+      if (!output) {
+        res.status(400).send({ message: 'you have not created any groups' });
+      }
+      res.status(200).send({
+        status: 200,
+        data: [{
+          output,
+        }],
+      });
+    }
+    catch (e) {
+      return res.status(400).send(e);
+    }
+  }
 }
 
 export default GroupController;

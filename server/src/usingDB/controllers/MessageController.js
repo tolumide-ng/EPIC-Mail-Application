@@ -127,7 +127,6 @@ class MessageController {
       }
       return res.status(200).send(output);
     } catch (e) {
-      console.log(e);
       return res.status(400).send({ message: 'something is wrong with your request' });
     }
   }
