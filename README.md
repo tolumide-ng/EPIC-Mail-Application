@@ -35,17 +35,6 @@ EPIC Mail is an web based email application that provides users with the ability
 * body-parser
 * Postman (for testing API routes)
 
-## API Routes
-* http://localhost:6000/api/v1/auth/signup
-* http://localhost:6000/api/v1/auth/login
-* http://localhost:6000/api/v1/users/:id
-* http://localhost:6000/api/v1/messages/createMessage
-* http://localhost:6000/api/v1/messages/allMessagesPerUser/:id
-* http://localhost:6000/api/v1/messages/getAMessage/:id
-* http://localhost:6000/api/v1/messages/unreadMessagesPerUser/:id
-* http://localhost:6000/api/v1/messages/getMessagesSentByAUser/:id
-* http://localhost:6000/api/v1/messages/deleteAMessage/:id
-
 ## API Documentation
 http://localhost:6000/api-docs
 
