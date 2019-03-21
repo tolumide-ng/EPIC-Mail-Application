@@ -31,20 +31,28 @@ class GroupController {
       const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
       group = rows[0];
       if (group) {
-        return res.status(400).send({ message: 'Group email already exists' });
+        return res.status(409).send({ message: 'Group email already exists' });
       }
     }
-    const text = 'INSERT INTO groups(group_name,group_email,created_by)VALUES($1,$2,$3)';
-    const values = [
-      req.body.groupName,
-      req.body.groupEmail,
-      req.decodedMessage.id,
-    ];
-    const { rows } = await db.query(text, values);
-    return res.status(201).send({
-      status: 'success',
-      message: 'Email group created successfully',
-    });
+    try {
+      const text = 'INSERT INTO groups(group_name,group_email,is_deleted,created_by)VALUES($1,$2,$3,$4)';
+      const values = [
+        req.body.groupName,
+        req.body.groupEmail,
+        'false',
+        req.decodedMessage.id,
+      ];
+      const { rows } = await db.query(text, values);
+      return res.status(201).send({
+        status: 'success',
+        message: 'Email group created successfully',
+      });
+    } catch (e) {
+      return res.status(201).send({
+        status: 'failure',
+        message: 'Something is wrong with your request',
+      });
+    }
   }
 
   static async createUserGroup(req, res) {
@@ -55,29 +63,37 @@ class GroupController {
       return res.status(400).send('you have not inputed a valid ID');
     }
     let group = [];
-    const userGroup = [];
+    let userGroup = [];
     const checkGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
+    const checkUser = 'SELECT * FROM users WHERE id=$1';
     const { groupEmail } = req.body;
-    if (!req.body.userEmails) {
-      return res.status(400).send({ message: 'user emails are required' });
+    if (!req.body.userEmails || typeof req.body.userEmails !== 'number') {
+      return res.status(400).send({ message: 'user email is required and please put in a valid number' });
     }
     if (req.body.userEmails) {
       const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
+      const { rows: output } = await db.query(checkUser, [req.body.userEmails]);
       group = rows[0];
+      userGroup = output[0];
       if (!group) {
-        return res.status(400).send({ message: 'There is an error, it is either group does not exist or you are not allowed to add users to this group' });
+        return res.status(404).send({ message: 'Please input the correct group' });
+      }
+      if (!userGroup) {
+        return res.status(404).send({ message: 'Please input the correct user' });
       }
     }
     let result1 = [];
     const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
     result1 = rows[0];
-    const aa = req.body.userEmails;
-    const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, unnest(array[${aa}]))`;
+    const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, ${req.body.userEmails})`;
     try {
       const { rows } = await db.query(text);
-      return res.status(201).send(rows[0]);
+      return res.status(201).send({
+        status: 'success',
+        message: 'user successfully added',
+      });
     } catch (error) {
-      return res.status(500).send(error);
+      return res.status(500).send({ message: 'something is wrong with your request' });
     }
   }
 
@@ -93,7 +109,7 @@ class GroupController {
     let deleteGroupOutput = [];
     const getGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
     const deleteUserGroup = 'DELETE FROM user_groupings WHERE group_id=$1 returning *';
-    const deleteGroup = 'DELETE FROM groups WHERE id=$1 AND created_by=$2 returning *';
+    const deleteGroup = 'UPDATE groups SET is_deleted=$3 WHERE id=$1 AND created_by=$2 returning *';
 
     try {
       const { rows } = await db.query(getGroup, [req.params.id, req.decodedMessage.id]);
@@ -112,18 +128,18 @@ class GroupController {
         return res.status(404).send({ message: 'you cannot delete this user group either because you do not own it or it doesnt exist' });
       }
     } catch (e) {
-      return res.status(400).send({ message: 'there is an error, please check your request' });
+      return res.status(500).send({ message: 'there is an error, please check your request' });
     }
 
     try {
-      const { rows } = await db.query(deleteGroup, [req.params.id, req.decodedMessage.id]);
+      const { rows } = await db.query(deleteGroup, [req.params.id, req.decodedMessage.id, 'true']);
       deleteGroupOutput = rows[0];
       if (!deleteGroupOutput) {
         return res.status(404).send({ message: 'you are not permitted to delete this group' });
       }
       return res.status(200).send({ message: 'the group has been deleted' });
     } catch (e) {
-      return res.status(500).send({ message: 'there is an error, please check your request' });
+      return res.status(500).send({ message: 'there is an error, please check your request', error: e });
     }
   }
 
@@ -151,7 +167,7 @@ class GroupController {
       deleteUserOutput = rows[0];
       return res.status(200).send({ message: 'user has been deleted successfully' });
     } catch (e) {
-      return res.status(500).send(e);
+      return res.status(500).send({ message: 'there is something wrong with your request' });
     }
   }
 
@@ -162,9 +178,6 @@ class GroupController {
     if (!result) {
       return res.status(400).send('you have not inputed a valid ID');
     }
-    // const { email } = req.body;
-    // let data = [];
-    // u need to do this cos row[0] cant be used outside await db.query
     let userData = [];
     const findOneGroupEmail = `SELECT * FROM groups  
                                   WHERE id=$1`;
@@ -183,8 +196,8 @@ class GroupController {
         }
         // insert new message into db
         const text = `
-            INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,group_status)
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+            INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
             returning *`;
         const values = [
           new Date(),
@@ -195,6 +208,7 @@ class GroupController {
           req.decodedMessage.id,
           null,
           userData.id,
+          'false',
           'false',
           'true',
         ];
@@ -211,10 +225,10 @@ class GroupController {
   }
 
   static async getAllGroups(req, res) {
-    const group = 'SELECT * FROM groups where created_by=$1';
+    const group = 'SELECT * FROM groups WHERE created_by=$1 AND is_deleted=$2';
     let output = [];
     try {
-      const { rows } = await db.query(group, [req.decodedMessage.id]);
+      const { rows } = await db.query(group, [req.decodedMessage.id, 'false']);
       output = rows;
       if (!output) {
         res.status(404).send({ message: 'you have not created any groups' });

@@ -47,8 +47,8 @@ class MessageController {
         }
         // insert new message into db
         const text = `
-            INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,group_status)
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+            INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
             returning *`;
         const values = [
           new Date(),
@@ -61,6 +61,7 @@ class MessageController {
           null,
           'false',
           'false',
+          'false',
         ];
         const { rows: output } = await db.query(text, values);
         return res.status(201).send({
@@ -69,13 +70,17 @@ class MessageController {
         });
       }
     } catch (error) {
-      return res.status(500).send({ message: 'something is wrong with your request' });
+      return res.status(500).send(error);
     }
   }
 
   static async getAllMessagesPerUser(req, res) {
     let output = [];
-    const messages = 'SELECT * FROM messages WHERE reciever=$1 AND is_deleted=$2';
+    const messages = `select distinct * from messages m left join user_groupings u
+                      on m.group_reciever = u.group_id
+                      where m.reciever = $1 and is_deleted=$2 or m.group_reciever = (
+                      select distinct s.group_id from user_groupings s inner join messages e
+                      on s.group_id = e.group_reciever where s.user_ids = $1)`;
     try {
       const { rows } = await db.query(messages, [req.decodedMessage.id, 'false']);
       output = rows;
@@ -122,6 +127,33 @@ class MessageController {
     }
   }
 
+  static async getASentMessage(req, res) {
+    let output = [];
+    const validNumber = req.params.id;
+    const paramValue = /^\+?(0|[1-9]\d*)$/;
+    const result = paramValue.test(validNumber);
+    if (!result) {
+      return res.status(400).send('you did not enter a valid id');
+    }
+    const messages = 'SELECT * FROM messages WHERE id=$1 AND sender=$2 AND sender_is_deleted=$3';
+    try {
+      const { rows } = await db.query(messages, [req.params.id, req.decodedMessage.id, 'false']);
+      output = rows[0];
+      if (!output) {
+        return res.status(404).send({ message: 'message cannot be found' });
+      }
+      if (output) {
+        return res.status(200).send({
+          status: 'success',
+          data: output,
+        });
+      }
+    }
+    catch (e) {
+      return res.status(500).send({ message: 'something is wrong with your request' });
+    }
+  }
+
   static async getUnreadMessages(req, res) {
     // let output = [];
     const messages = 'SELECT * FROM messages WHERE reciever=$1 AND status=$2 AND is_deleted=$3';
@@ -137,16 +169,17 @@ class MessageController {
 
   static async getMessagesSentByAUser(req, res) {
     let output = [];
-    const messages = 'SELECT * FROM messages WHERE sender=$1';
-    const { rows } = await db.query(messages, [req.decodedMessage.id]);
+    const messages = 'SELECT * FROM messages WHERE sender=$1 AND sender_is_deleted=$2';
+    const { rows } = await db.query(messages, [req.decodedMessage.id, 'false']);
     output = rows;
+    const { status, ...newOutput } = output;
     try {
       if (output.length <= 0) {
         return res.status(404).send({ message: 'you have not sent any messages' });
       }
       return res.status(200).send({
         status: 'success',
-        data: output,
+        data: newOutput,
       });
     } catch (e) {
       return res.status(500).send({ message: 'something is wrong with your request' });
@@ -188,7 +221,7 @@ class MessageController {
       return res.status(404).send({ message: 'message doesnt exist' });
     }
     if (messageOutput.status === 'read') {
-      const deleteMessage = `UPDATE messages SET is_deleted = ${'true'} WHERE sender=$1 and id=$2`;
+      const deleteMessage = `UPDATE messages SET is_deleted = ${'true'},sender_is_deleted = ${'true'} WHERE sender=$1 AND id=$2`;
       const { rows } = db.query(deleteMessage, [req.decodedMessage.id, validNumber]);
       return res.status(200).send({ message: 'message retracted' });
     }
