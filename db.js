@@ -32,6 +32,7 @@ const createTables = () => {
         id SERIAL PRIMARY KEY,
         group_name VARCHAR(128) NOT NULL,
         group_email VARCHAR(128) NOT NULL,
+        is_deleted VARCHAR(10) NOT NULL,
         created_by INTEGER NOT NULL REFERENCES users(id) NOT NULL
     );
     CREATE TABLE messages(
@@ -45,6 +46,7 @@ const createTables = () => {
         reciever INTEGER REFERENCES users(id) NULL,
         group_reciever INTEGER REFERENCES groups(id),
         is_deleted VARCHAR(10) NOT NULL,
+        sender_is_deleted VARCHAR(10) NOT NULL,
         group_status VARCHAR(10) NOT NULL
     );
 

@@ -587,7 +587,7 @@ describe('/api/v1/users', () => {
       .get('/api/v1/users/1')
       .set({ Authorization: v1token, Accept: 'application/json' })
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(404);
         done();
       });
   });
@@ -596,7 +596,7 @@ describe('/api/v1/users', () => {
       .get('/api/v1/users/13')
       .set({ Authorization: v1token, Accept: 'application/json' })
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(404);
         done();
       });
   });
@@ -739,7 +739,7 @@ describe('/api/v2/groups', () => {
         groupEmail: 'test@epic.com',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(409);
         done();
       });
   });
@@ -781,7 +781,7 @@ describe('/api/v2/groups/users should create a user group', () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body.message).to.eql('There is an error, it is either group does not exist or you are not allowed to add users to this group');
+        expect(res.body.message).to.eql('user email is required and please put in a valid number');
         done();
       });
   });
@@ -803,10 +803,22 @@ describe('/api/v2/groups/users should create a user group', () => {
       .post('/api/v2/groups/1/users')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        userEmails: [1, 2],
+        userEmails:1,
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
+        done();
+      });
+  });
+  it('version 2 should not create a user group with an invalid ID', (done) => {
+    chai.request(app)
+      .post('/api/v2/groups/1/users')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        userEmails:'a',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
         done();
       });
   });
@@ -816,7 +828,7 @@ describe('/api/v2/groups/users should create a user group', () => {
       .post('/api/v2/groups/1/users')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        userEmails: [1, 2],
+        userEmails:1,
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -839,6 +851,16 @@ describe('/api/v2/groups/users should delete a user from the group', () => {
   it('version 2 should not accept invalid group id and user id', (done) => {
     chai.request(app)
       .delete('/api/v2/groupsuser/4/6')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('version 2 should not accept invalid user id', (done) => {
+    chai.request(app)
+      .delete('/api/v2/groups/1/user/6')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .end((err, res) => {
         expect(res).to.have.status(404);
@@ -1051,6 +1073,65 @@ describe('/api/v1/messages should retract a message', () => {
       .set({ Authorization: v1token, Accept: 'application/json' })
       .end((err, res) => {
         expect(res).to.have.status(404);
+        done();
+      });
+  });
+});
+
+describe('unknown routes', () => {
+  it('should not delete a message without token', (done) => {
+    chai.request(app)
+      .delete('/api/v2/messages/1/retractssss')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+});
+
+describe('/api/v2/messages/getASMessage', () => {
+  it('should not get a sent message without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages/1')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not get a sent message with wrong token', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages/1')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+  it('should get a message with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages/1')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should get a message without an ID', (done) => {
+    chai.request(app)
+      .get('/api/v2/messages')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(404);
+        }
         done();
       });
   });
