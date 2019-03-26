@@ -17,24 +17,6 @@ class MessageController {
     let userData = [];
     // use $1 to refer to the first record in ur search
     const findOneEmail = 'SELECT * FROM users WHERE email=$1';
-    if (!req.body.subject) {
-      return res.status(400).send({ message: 'A subject is required' });
-    }
-    if (!req.body.message) {
-      return res.status(400).send({ message: 'A message is required' });
-    }
-    if (!req.body.email) {
-      return res.status(400).send({ message: 'Email is required' });
-    }
-    // validate to ensure its a valid mail and its an epic mail
-    const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-    const result = validateEmail.test(email);
-    const newVal = email.split('@');
-    const finalCheck = newVal[1];
-    if (!result || finalCheck !== 'epic.com') {
-      return res.status(400).send({ message: 'please enter a valid epic email' });
-    }
-    // if it passes valid mail, confirm that the email exist
     try {
       if (req.body.email) {
         const { rows } = await db.query(findOneEmail, [email]);
