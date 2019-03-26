@@ -1,10 +1,11 @@
 import express from 'express';
 import MessageController from '../../controllers/MessageController';
 import { checkToken } from '../../../middleware';
+import ValidateUser from '../../validations/ValidateMessage';
 
 const message = express.Router();
 
-message.post('/', checkToken, MessageController.sendMessage);
+message.post('/', checkToken, ValidateUser.messageInput, MessageController.sendMessage);
 message.get('/unread', checkToken, MessageController.getUnreadMessages);
 message.get('/', checkToken, MessageController.getAllMessagesPerUser);
 message.get('/sent', checkToken, MessageController.getMessagesSentByAUser);

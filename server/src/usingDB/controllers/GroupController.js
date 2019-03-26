@@ -239,7 +239,7 @@ class GroupController {
       });
     }
     catch (e) {
-      return res.status(400).send(e);
+      return res.status(400).send('something went wrong with your request');
     }
   }
 }
