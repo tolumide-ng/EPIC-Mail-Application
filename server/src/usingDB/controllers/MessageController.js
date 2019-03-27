@@ -58,9 +58,12 @@ class MessageController {
 
   static async getAllMessagesPerUser(req, res) {
     let output = [];
-    const messages = `select distinct * from messages m left join user_groupings u
-                      on m.group_reciever = u.group_id
-                      where m.reciever = $1 and is_deleted=$2 or m.group_reciever = (
+    const messages = `select distinct m.id, s.email, m.subject, m.message, g.group_name, s.first_name, s.last_name 
+                      from messages m 
+                      left join user_groupings u on m.group_reciever = u.group_id
+                      left join users s on m.sender = s.id
+                      left join groups g on m.group_reciever = g.id
+                      where m.reciever = $1 and m.is_deleted=$2 or m.group_reciever = (
                       select distinct s.group_id from user_groupings s inner join messages e
                       on s.group_id = e.group_reciever where s.user_ids = $1)`;
     try {
@@ -75,7 +78,7 @@ class MessageController {
       });
     }
     catch (e) {
-      return res.status(500).send({ message: 'something is wrong with your request' });
+      return res.status(500).send({ message: 'something is wrong with your request', e });
     }
   }
 
