@@ -200,7 +200,7 @@ describe('version 2 /api/v2/auth/login', () => {
         password: '1234',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
+        expect(res).to.have.status(404);
         expect(res.body.message).to.eql('email or password is incorrect');
 
         done();

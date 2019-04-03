@@ -19,7 +19,10 @@ class UserController {
       const { rows } = await db.query(findOneEmail, [req.body.email.toLowerCase()]);
       userData = rows[0];
       if (userData) {
-        return res.status(409).send({ message: 'email already exists' });
+        return res.status(409).send({
+          status: 409,
+          message: 'email already exists',
+        });
       }
     }
     const hashedPassword = UserModel.hashPassword(password);
@@ -41,7 +44,7 @@ class UserController {
         process.env.SECRET,
         { expiresIn: '24h' });
       return res.status(201).send({
-        status: 'success',
+        status: 201,
         data:
            {
              message: `Authentication successful!. Welcome ${firstName}`,
@@ -60,10 +63,16 @@ class UserController {
     const { rows } = await db.query(findOneEmail, [req.body.email]);
     userData = rows[0];
     if (!userData) {
-      return res.status(400).send({ message: 'email or password is incorrect' });
+      return res.status(404).send({
+        status: 404,
+        message: 'email or password is incorrect',
+      });
     }
     if (userData && !UserModel.comparePassword(userData.password, req.body.password)) {
-      return res.status(400).send({ message: 'Username or password is incorrect' });
+      return res.status(400).send({
+        status: 400,
+        message: 'Username or password is incorrect',
+      });
     }
     // eslint-disable-next-line prefer-const
     if (userData) {
@@ -71,7 +80,7 @@ class UserController {
         process.env.SECRET,
         { expiresIn: '24h' });
       return res.status(200).send({
-        status: 'success',
+        status: 200,
         data:
               {
                 token,
@@ -79,9 +88,9 @@ class UserController {
       });
     }
 
-    res.status(403).send({
-      success: 'error',
-      message: 'Incorrect username or password',
+    res.status(500).send({
+      success: 500,
+      message: 'something is wrong with your request',
     });
   }
 }

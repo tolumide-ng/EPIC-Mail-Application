@@ -34,7 +34,7 @@ class ValidateUser {
     }
 
     return response.status(400).json({
-      status: 'fail',
+      status: 400,
       data: {
         errors: validation.errors.all(),
       },
