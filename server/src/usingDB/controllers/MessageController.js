@@ -164,18 +164,15 @@ class MessageController {
   }
 
   static async getMessagesSentByAUser(req, res) {
-    let output = [];
     const messages = 'SELECT * FROM messages WHERE sender=$1 AND sender_is_deleted=$2';
     const { rows } = await db.query(messages, [req.decodedMessage.id, 'false']);
-    output = rows;
-    const { status, ...newOutput } = output;
     try {
-      if (output.length <= 0) {
+      if (rows.length <= 0) {
         return res.status(404).send({ message: 'you have not sent any messages' });
       }
       return res.status(200).send({
         status: 'success',
-        data: newOutput,
+        data: rows,
       });
     } catch (e) {
       return res.status(500).send({ message: 'something is wrong with your request' });
