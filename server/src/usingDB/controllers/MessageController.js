@@ -22,10 +22,16 @@ class MessageController {
         const { rows } = await db.query(findOneEmail, [email]);
         userData = rows[0];
         if (!userData) {
-          return res.status(404).send({ message: 'the email does not exist' });
+          return res.status(404).send({
+            status: 404,
+            message: 'the email does not exist',
+          });
         }
         if (userData.id === req.decodedMessage.id) {
-          return res.status(403).send({ message: 'you cannot send messages to yourself' });
+          return res.status(403).send({
+            status: 403,
+            message: 'you cannot send messages to yourself',
+          });
         }
         // insert new message into db
         const text = `
@@ -90,7 +96,12 @@ class MessageController {
     if (!result) {
       return res.status(400).send('you did not enter a valid id');
     }
-    const messages = 'SELECT * FROM messages WHERE id=$1 AND reciever=$2 AND is_deleted=$3';
+    const messages = `select distinct m.created_on, m.id, s.email, m.subject, m.message, g.group_name, s.first_name, s.last_name 
+                      from messages m 
+                      left join user_groupings u on m.group_reciever = u.group_id
+                      left join users s on m.sender = s.id
+                      left join groups g on m.group_reciever = g.id
+                      where m.id = $1 and m.reciever=$2 and m.is_deleted = $3`;
     const updatestatus = 'UPDATE messages SET status=$1 WHERE id=$2 returning *';
     try {
       const { rows } = await db.query(messages, [req.params.id, req.decodedMessage.id, 'false']);
