@@ -196,8 +196,8 @@ class GroupController {
         }
         // insert new message into db
         const text = `
-            INSERT INTO messages(created_on,email,subject,message,status,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+            INSERT INTO messages(created_on,email,subject,message,status,message_type,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
             returning *`;
         const values = [
           new Date(),
@@ -205,6 +205,7 @@ class GroupController {
           req.body.subject,
           req.body.message,
           'unread',
+          req.body.type,
           req.decodedMessage.id,
           null,
           userData.id,
