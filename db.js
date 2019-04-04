@@ -40,7 +40,7 @@ const createTables = () => {
         created_on TIMESTAMP,
         email VARCHAR(128) NOT NULL,
         subject VARCHAR(128) NOT NULL,
-        message VARCHAR(250) NOT NULL,
+        message TEXT NOT NULL,
         status VARCHAR(10) NOT NULL,
         sender INTEGER REFERENCES users(id) NOT NULL,
         reciever INTEGER REFERENCES users(id) NULL,

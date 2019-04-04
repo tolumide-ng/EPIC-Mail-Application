@@ -53,7 +53,7 @@ class MessageController {
         ];
         const { rows: output } = await db.query(text, values);
         return res.status(201).send({
-          status: 'success',
+          status: 201,
           data: output[0],
         });
       }
@@ -164,7 +164,12 @@ class MessageController {
   }
 
   static async getMessagesSentByAUser(req, res) {
-    const messages = 'SELECT * FROM messages WHERE sender=$1 AND sender_is_deleted=$2';
+    const messages = `select distinct m.created_on, m.id, s.email, m.subject, m.message, g.group_name, s.first_name, s.last_name 
+                      from messages m 
+                      left join user_groupings u on m.group_reciever = u.group_id
+                      left join users s on m.sender = s.id
+                      left join groups g on m.group_reciever = g.id
+                      where m.sender=$1 and m.is_deleted = $2`;
     const { rows } = await db.query(messages, [req.decodedMessage.id, 'false']);
     try {
       if (rows.length <= 0) {
