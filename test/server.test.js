@@ -369,6 +369,7 @@ describe('/api/v2/messages', () => {
         subject: 'test mail',
         message: 'test message',
         email: 't@epic.com',
+        type: 'sent',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -1004,6 +1005,7 @@ describe('/api/v2/group/1/messages should send messages to groups', () => {
         subject: 'test mail',
         message: 'test message',
         email: 'test1@epic.com',
+        type: 'sent',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
