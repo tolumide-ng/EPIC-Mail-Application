@@ -15,41 +15,33 @@ class GroupController {
   static async createGroup(req, res) {
     let group = [];
     const checkGroup = 'SELECT * FROM groups WHERE group_email=$1';
-    const { groupEmail } = req.body;
-    if (!req.body.groupName || !req.body.groupEmail) {
-      return res.status(400).send({ message: 'please enter groupName or groupEmail' });
-    }
-    // validate to ensure its a valid mail and its an epic mail
-    const validateEmail = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
-    const result = validateEmail.test(groupEmail);
-    const newVal = groupEmail.split('@');
-    const finalCheck = newVal[1];
-    if (!result || finalCheck !== 'epic.com') {
-      return res.status(400).send({ message: 'please enter a valid epic email' });
-    }
-    if (req.body.groupName || req.body.groupEmail) {
-      const { rows } = await db.query(checkGroup, [req.body.groupEmail]);
+    const { groupemail, groupname } = req.body;
+    if (groupname || groupemail) {
+      const { rows } = await db.query(checkGroup, [groupemail]);
       group = rows[0];
       if (group) {
-        return res.status(409).send({ message: 'Group email already exists' });
+        return res.status(409).send({
+          status: 409,
+          message: 'Group email already exists',
+        });
       }
     }
     try {
       const text = 'INSERT INTO groups(group_name,group_email,is_deleted,created_by)VALUES($1,$2,$3,$4)';
       const values = [
-        req.body.groupName,
-        req.body.groupEmail,
+        req.body.groupname,
+        req.body.groupemail,
         'false',
         req.decodedMessage.id,
       ];
       const { rows } = await db.query(text, values);
       return res.status(201).send({
-        status: 'success',
+        status: 201,
         message: 'Email group created successfully',
       });
     } catch (e) {
-      return res.status(201).send({
-        status: 'failure',
+      return res.status(500).send({
+        status: 500,
         message: 'Something is wrong with your request',
       });
     }
@@ -65,35 +57,33 @@ class GroupController {
     let group = [];
     let userGroup = [];
     const checkGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
-    const checkUser = 'SELECT * FROM users WHERE id=$1';
+    const checkUser = 'SELECT * FROM users WHERE email=$1';
     const { groupEmail } = req.body;
-    if (!req.body.userEmails || typeof req.body.userEmails !== 'number') {
-      return res.status(400).send({ message: 'user email is required and please put in a valid number' });
-    }
     if (req.body.userEmails) {
-      const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
+      const { rows: output1 } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
       const { rows: output } = await db.query(checkUser, [req.body.userEmails]);
-      group = rows[0];
+      group = output1[0]; console.log(group);
       userGroup = output[0];
+      const userId = userGroup.id;
       if (!group) {
         return res.status(404).send({ message: 'Please input the correct group' });
       }
       if (!userGroup) {
         return res.status(404).send({ message: 'Please input the correct user' });
       }
-    }
-    let result1 = [];
-    const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
-    result1 = rows[0];
-    const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, ${req.body.userEmails})`;
-    try {
-      const { rows } = await db.query(text);
-      return res.status(201).send({
-        status: 'success',
-        message: 'user successfully added',
-      });
-    } catch (error) {
-      return res.status(500).send({ message: 'something is wrong with your request' });
+      let result1 = [];
+      const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
+      result1 = rows[0];
+      const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, ${userId})`;
+      try {
+        const { rows } = await db.query(text);
+        return res.status(201).send({
+          status: 'success',
+          message: 'user successfully added',
+        });
+      } catch (error) {
+        return res.status(500).send({ message: 'something is wrong with your request' });
+      }
     }
   }
 
