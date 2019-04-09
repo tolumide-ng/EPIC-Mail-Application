@@ -684,12 +684,11 @@ describe('/api/v2/groups', () => {
       .post('/api/v2/groups')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        groupName: '',
-        groupEmail: '',
+        groupname: '',
+        groupemail: '',
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body).to.have.property('message');
         done();
       });
   });
@@ -699,8 +698,8 @@ describe('/api/v2/groups', () => {
       .post('/api/v2/groups')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        groupName: 'Test group',
-        groupEmail: 'test@epic.com',
+        groupname: 'Test group',
+        groupemail: 'test@epic.com',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -715,8 +714,8 @@ describe('/api/v2/groups', () => {
       .post('/api/v2/groups')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        groupName: 'Test group1',
-        groupEmail: 'test1@epic.com',
+        groupname: 'Test group1',
+        groupemail: 'test1@epic.com',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -731,8 +730,8 @@ describe('/api/v2/groups', () => {
       .post('/api/v2/groups')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        groupName: 'Test group',
-        groupEmail: 'test@epic.com',
+        groupname: 'Test group',
+        groupemail: 'test@epic.com',
       })
       .end((err, res) => {
         expect(res).to.have.status(409);
@@ -773,11 +772,11 @@ describe('/api/v2/groups/users should create a user group', () => {
       .post('/api/v2/groups/8/users')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        userEmails: [1],
+        userEmails: 't@epic.com',
       })
       .end((err, res) => {
-        expect(res).to.have.status(400);
-        expect(res.body.message).to.eql('user email is required and please put in a valid number');
+        expect(res).to.have.status(404);
+        expect(res.body.message).to.eql('Please input the correct group');
         done();
       });
   });
@@ -799,7 +798,7 @@ describe('/api/v2/groups/users should create a user group', () => {
       .post('/api/v2/groups/1/users')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        userEmails:1,
+        userEmails:'t@epic.com',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -824,7 +823,7 @@ describe('/api/v2/groups/users should create a user group', () => {
       .post('/api/v2/groups/1/users')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
-        userEmails:1,
+        userEmails:'t@epic.com',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -878,7 +877,7 @@ describe('/api/v2/groups/users should delete a user from the group', () => {
       .delete('/api/v2/groups/1/user/1')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .end((err, res) => {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(404);
         done();
       });
   });
@@ -947,7 +946,6 @@ describe('/api/v2/group/1/messages should send messages to groups', () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body.message).to.eql('A message is required');
         done();
       });
   });
@@ -963,22 +961,20 @@ describe('/api/v2/group/1/messages should send messages to groups', () => {
       })
       .end((err, res) => {
         expect(res).to.have.status(400);
-        expect(res.body.message).to.eql('A subject is required');
         done();
       });
   });
 
   it('version 2 should not accept invalid ID', (done) => {
     chai.request(app)
-      .post('/api/v2/groups/11/messages')
+      .post('/api/v2/groups/1/messages')
       .set({ Authorization: v2token, Accept: 'application/json' })
       .send({
         subject: 'test mail',
         message: 'test message',
       })
       .end((err, res) => {
-        expect(res).to.have.status(404);
-        expect(res.body.message).to.eql('the group does not exist');
+        expect(res).to.have.status(400);
         done();
       });
   });
