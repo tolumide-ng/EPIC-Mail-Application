@@ -16,7 +16,7 @@ class GroupController {
     let group = [];
     const checkGroup = 'SELECT * FROM groups WHERE group_email=$1';
     const { groupemail, groupname } = req.body;
-    if (groupname || groupemail) {
+    if (groupname) {
       const { rows } = await db.query(checkGroup, [groupemail]);
       group = rows[0];
       if (group) {
@@ -58,19 +58,22 @@ class GroupController {
     let userGroup = [];
     const checkGroup = 'SELECT * FROM groups WHERE id=$1 AND created_by=$2';
     const checkUser = 'SELECT * FROM users WHERE email=$1';
-    const { groupEmail } = req.body;
     if (req.body.userEmails) {
       const { rows: output1 } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
       const { rows: output } = await db.query(checkUser, [req.body.userEmails]);
-      group = output1[0]; console.log(group);
+      group = output1[0];
       userGroup = output[0];
-      const userId = userGroup.id;
+      
       if (!group) {
         return res.status(404).send({ message: 'Please input the correct group' });
       }
-      if (!userGroup) {
-        return res.status(404).send({ message: 'Please input the correct user' });
+      if (!userGroup || userGroup.email !== req.body.userEmails) {
+        return res.status(404).send({
+          status: 404,
+          message: 'Please input an existing user',
+        });
       }
+      const userId = userGroup.id;
       let result1 = [];
       const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
       result1 = rows[0];
@@ -78,7 +81,7 @@ class GroupController {
       try {
         const { rows } = await db.query(text);
         return res.status(201).send({
-          status: 'success',
+          status: 201,
           message: 'user successfully added',
         });
       } catch (error) {
@@ -142,7 +145,7 @@ class GroupController {
     if (!result || !result1) {
       return res.status(400).send('you have not inputed a valid ID');
     }
-    let user = []; let deleteUserOutput = [];
+    let user = [];
     const userQuery = `SELECT * FROM user_groupings u 
                              INNER JOIN groups g ON u.group_id = g.id
                              WHERE g.created_by=$1 AND u.group_id=$2 AND u.user_ids=$3`;
@@ -150,11 +153,10 @@ class GroupController {
     const { rows } = await db.query(userQuery, [req.decodedMessage.id, req.params.group, req.params.user]);
     user = rows[0];
     if (!user) {
-      res.status(404).send({ message: 'user does not exist' });
+      return res.status(404).send({ message: 'user does not exist' });
     }
     try {
       const { rows } = await db.query(deleteUser, [user.group_id, user.user_ids]);
-      deleteUserOutput = rows[0];
       return res.status(200).send({ message: 'user has been deleted successfully' });
     } catch (e) {
       return res.status(500).send({ message: 'there is something wrong with your request' });
@@ -171,18 +173,16 @@ class GroupController {
     let userData = [];
     const findOneGroupEmail = `SELECT * FROM groups  
                                   WHERE id=$1`;
-    if (!req.body.subject) {
-      return res.status(400).send({ message: 'A subject is required' });
-    }
-    if (!req.body.message) {
-      return res.status(400).send({ message: 'A message is required' });
-    }
-    if (req.body.subject || req.body.message) {
+
+    if (req.body.subject) {
       try {
         const { rows } = await db.query(findOneGroupEmail, [req.params.id]);
         userData = rows[0];
         if (!userData) {
-          return res.status(404).send({ message: 'the group does not exist' });
+          return res.status(404).send({
+            status: 400,
+            message: 'the group does not exist',
+          });
         }
         // insert new message into db
         const text = `
@@ -222,9 +222,117 @@ class GroupController {
       const { rows } = await db.query(group, [req.decodedMessage.id, 'false']);
       output = rows;
       if (!output) {
-        res.status(404).send({ message: 'you have not created any groups' });
+        return res.status(404).send({ message: 'you have not created any groups' });
       }
-      res.status(200).send({
+      return res.status(200).send({
+        status: 200,
+        data: output,
+      });
+    }
+    catch (e) {
+      return res.status(400).send('something went wrong with your request');
+    }
+  }
+
+  static async getAGroup(req, res) {
+    const group = 'SELECT * FROM groups WHERE id=$1 AND is_deleted=$2';
+    let output = [];
+    try {
+      const { rows } = await db.query(group, [req.params.id, 'false']);
+      output = rows;
+      if (!output) {
+        return res.status(404).send({ message: 'you have not created any groups' });
+      }
+      return res.status(200).send({
+        status: 200,
+        data: output,
+      });
+    }
+    catch (e) {
+      return res.status(400).send('something went wrong with your request');
+    }
+  }
+
+  static async getAllUserGroups(req, res) {
+    const group = `SELECT distinct g.id, g.group_email, u.email, ug.user_ids FROM groups g 
+                   INNER JOIN user_groupings ug ON g.id = ug.group_id
+                   INNER JOIN users u ON u.id = ug.user_ids
+                   WHERE created_by=$1 AND is_deleted=$2 AND g.id=$3`;
+    let output = [];
+    try {
+      const { rows } = await db.query(group, [req.decodedMessage.id, 'false', req.params.id]);
+      output = rows;
+      if (!output) {
+        return res.status(404).send({ message: 'no users are in this group' });
+      }
+      return res.status(200).send({
+        status: 200,
+        data: output,
+      });
+    }
+    catch (e) {
+      return res.status(400).send('something went wrong with your request');
+    }
+  }
+
+  static async getAllGroupMessages(req, res) {
+    let output = [];
+    const messages = `select distinct m.id, s.email, m.subject, m.message, s.first_name, s.last_name 
+                      from messages m 
+                      left join users s on m.sender = s.id
+                      where m.group_reciever in (select group_id from user_groupings where user_ids = $1) 
+                      and m.is_deleted=$2 and m.message_type=$3`;
+    try {
+      const { rows } = await db.query(messages, [req.decodedMessage.id, 'false', 'sent']);
+      output = rows;
+      if (!output) {
+        return res.status(404).send({ message: 'you have no messages' });
+      }
+      return res.status(200).send({
+        status: 'success',
+        data: rows,
+      });
+    }
+    catch (e) {
+      return res.status(500).send({ message: 'something is wrong with your request', e });
+    }
+  }
+
+  static async getAGroupMessages(req, res) {
+    let output = [];
+    const messages = `select distinct m.id, s.email, m.subject, m.message, s.first_name, s.last_name 
+                      from messages m 
+                      left join users s on m.sender = s.id
+                      where m.group_reciever = $1 and m.is_deleted=$2 and m.message_type=$3 and m.id=$4`;
+    try {
+      const { rows } = await db.query(messages, [req.params.id, 'false', 'sent', req.params.messageId]);
+      output = rows;
+      if (!output) {
+        return res.status(404).send({ message: 'you have no messages' });
+      }
+      return res.status(200).send({
+        status: 'success',
+        data: rows,
+      });
+    }
+    catch (e) {
+      return res.status(500).send({ message: 'something is wrong with your request', e });
+    }
+  }
+
+  static async getMemberGroups(req, res) {
+    const group = `SELECT distinct g.id, g.group_name, g.group_email, u.email FROM groups g 
+                   INNER JOIN user_groupings ug ON g.id = ug.group_id
+                   INNER JOIN users u ON u.id = ug.user_ids
+                   WHERE ug.user_ids=$1 AND is_deleted=$2`;
+    let output = [];
+    try {
+      const { rows } = await db.query(group, [req.decodedMessage.id, 'false']);
+      output = rows;
+      if (!output) {
+        return res.status(404).send({ message: 'no users are in this group' });
+      }
+      return res.status(200).send({
         status: 200,
         data: output,
       });

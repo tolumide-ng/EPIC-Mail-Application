@@ -1080,10 +1080,9 @@ describe('unknown routes', () => {
         done();
       });
   });
-
 });
 
-describe('/api/v2/messages/getASMessage', () => {
+describe('/api/v2/messages/getAMessage', () => {
   it('should not get a sent message without token', (done) => {
     chai.request(app)
       .get('/api/v2/messages/1')
@@ -1124,6 +1123,279 @@ describe('/api/v2/messages/getASMessage', () => {
       .end((err, res) => {
         if (!res) {
           expect(res).to.have.status(404);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/groups/users', () => {
+  it('should not add a user to a group without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/users')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not add a user to a group if he/she did not create the group', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/users')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+  it('should view users in a group when provided with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/users')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should return 404 if no user with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/users')
+      .set({ Authorization: v3token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(404);
+        }
+        done();
+      });
+  });
+
+  it('should get add a user to the wrong route', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/userss')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/groups/:id/users', () => {
+  it('should not any user in any group without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/users')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not view users to a group if he/she did not create the group', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/users')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+
+  it('should not view all users in a group with wrong parameter', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/a/users')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should view all users in a group with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/users')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should get all users in a group using the wrong route', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/userss')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/groups/:id/messages', () => {
+  it('should not view group messages without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not view users to a group if he/she doesnt belong to that group', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+
+  it('should not view all group messages without wrong parameter', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/a/messages')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should view all group messages with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should get all group messages using the wrong route', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/userss')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/groups/:id/messages/:messageId', () => {
+  it('should not view group messages without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages/1')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not view a group message if he/she doesnt belong to that group', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages/1')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+  it('should view a group message with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1/messages/1')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/groups/:id', () => {
+  it('should not get a group without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not view a group if he/she did not create the group', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1')
+      .set({ Authorization: v1token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+  it('should view a group when provided with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/1')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+
+  it('should return 404 if no group with token', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/4')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(404);
+        }
+        done();
+      });
+  });
+
+  it('should get add a user to the wrong route', (done) => {
+    chai.request(app)
+      .get('/api/v2/groups/a')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
         }
         done();
       });

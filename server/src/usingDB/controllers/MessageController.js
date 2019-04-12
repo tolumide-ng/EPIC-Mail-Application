@@ -65,14 +65,10 @@ class MessageController {
 
   static async getAllMessagesPerUser(req, res) {
     let output = [];
-    const messages = `select distinct m.id, s.email, m.subject, m.message, g.group_name, s.first_name, s.last_name 
+    const messages = `select distinct m.id, s.email, m.subject, m.message, s.first_name, s.last_name 
                       from messages m 
-                      left join user_groupings u on m.group_reciever = u.group_id
                       left join users s on m.sender = s.id
-                      left join groups g on m.group_reciever = g.id
-                      where m.reciever = $1 and m.is_deleted=$2 and m.message_type=$3 or m.group_reciever = (
-                      select distinct s.group_id from user_groupings s inner join messages e
-                      on s.group_id = e.group_reciever where s.user_ids = $1)`;
+                      where m.reciever = $1 and m.is_deleted=$2 and m.message_type=$3`;
     try {
       const { rows } = await db.query(messages, [req.decodedMessage.id, 'false', 'sent']);
       output = rows;
@@ -102,7 +98,7 @@ class MessageController {
                       left join user_groupings u on m.group_reciever = u.group_id
                       left join users s on m.sender = s.id
                       left join groups g on m.group_reciever = g.id
-                      where m.id = $1 and m.reciever=$2 and m.is_deleted = $3 and m.message_type=$4`;
+                      where m.id = $1 or m.reciever=$2 and m.is_deleted = $3 and m.message_type=$4`;
     const updatestatus = 'UPDATE messages SET status=$1 WHERE id=$2 returning *';
     try {
       const { rows } = await db.query(messages, [req.params.id, req.decodedMessage.id, 'false', 'sent']);
@@ -232,14 +228,12 @@ class MessageController {
   }
 
   static async getDraftMessages(req, res) {
-    let output = [];
     const messages = `SELECT id, email, subject, message 
                       FROM messages m 
                       WHERE sender=$1 AND is_deleted=$2 AND message_type=$3`;
     try {
       const { rows } = await db.query(messages, [req.decodedMessage.id, 'false', 'draft']);
-      output = rows;
-      if (!output) {
+      if (!rows) {
         return res.status(404).send({ message: 'you have no messages' });
       }
       return res.status(200).send({
