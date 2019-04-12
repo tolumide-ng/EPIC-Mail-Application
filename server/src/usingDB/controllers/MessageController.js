@@ -266,16 +266,16 @@ class MessageController {
   }
 
   static async updateADraftMessage(req, res) {
-    const message = 'select * from messages where email=$1 and message_type=$2';
+    const message = 'select * from messages where id=$1 and message_type=$2';
     const messages = `UPDATE messages 
-                      SET email=$1, subject=$2, message=$3
-                      WHERE id=$4 AND sender=$5 AND is_deleted=$6 AND message_type=$7`;
+                      SET email=$1, subject=$2, message=$3, message_type=$7
+                      WHERE id=$4 AND sender=$5 AND is_deleted=$6`;
     try {
-      const { rows: output } = await db.query(message, [req.body.email, 'draft']);
-      const { rows: output1 } = await db.query(messages, [req.body.email, req.body.subject, req.body.message, req.params.id, req.decodedMessage.id, 'false', 'draft']);
+      const { rows: output } = await db.query(message, [req.params.id, 'draft']);
       if (!output[0]) {
         return res.status(404).send({ message: 'you have no messages' });
       }
+      const { rows: output1 } = await db.query(messages, [req.body.email, req.body.subject, req.body.message, req.params.id, req.decodedMessage.id, 'false', req.body.type]);
       return res.status(200).send({
         status: 200,
         message: 'record has been updated',
