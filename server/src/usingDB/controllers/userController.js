@@ -88,7 +88,7 @@ class UserController {
       });
     }
 
-    res.status(500).send({
+    return res.status(500).send({
       success: 500,
       message: 'something is wrong with your request',
     });
