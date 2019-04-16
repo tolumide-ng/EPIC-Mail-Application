@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unsafe-finally */
@@ -6,6 +7,8 @@
 import jwt from 'jsonwebtoken';
 import db from '../db';
 import UserModel from '../../models/model';
+import { uploader, cloudinaryConfig } from '../../../config/cloudinaryConfig';
+import { dataUri } from '../../middleware/multer';
 
 class UserController {
   static async createUser(req, res) {
@@ -92,6 +95,26 @@ class UserController {
       success: 500,
       message: 'something is wrong with your request',
     });
+  }
+
+  static imageUpload(req, res) {
+    if (req.file) {
+      const file = dataUri(req).content;
+      return uploader.upload(file).then((result) => {
+        const image = result.url;
+        return res.status(200).json({
+          messge: 'Your image has been uploded successfully to cloudinary',
+          data: {
+            image,
+          },
+        });
+      }).catch(err => res.status(400).json({
+        messge: 'someting went wrong while processing your request',
+        data: {
+          err,
+        },
+      }));
+    }
   }
 }
 
