@@ -15,7 +15,6 @@ const pool = new Pool({
   // eslint-disable-next-line space-infix-ops
   connectionString:process.env.NODE_ENV=='test'? process.env.DATABASE_TEST: process.env.DATABASE_URL
 });
-
 export default {
   /**
    * DB Query

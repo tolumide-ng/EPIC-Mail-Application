@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unsafe-finally */
@@ -6,6 +7,8 @@
 import jwt from 'jsonwebtoken';
 import db from '../db';
 import UserModel from '../../models/model';
+import { uploader, cloudinaryConfig } from '../../../config/cloudinaryConfig';
+import { dataUri } from '../../middleware/multer';
 
 class UserController {
   static async createUser(req, res) {
@@ -91,6 +94,30 @@ class UserController {
     return res.status(500).send({
       success: 500,
       message: 'something is wrong with your request',
+    });
+  }
+
+  static async imageUpload(req, res) {
+    const findOneUser = 'SELECT * FROM users where id=$1';
+    const profilepic = 'UPDATE users SET profile_pic=$1 where id=$2 RETURNING *';
+    const { rows: output } = await db.query(findOneUser, [req.decodedMessage.id]);
+    if (!output) {
+      return res.status(404).send({
+        status: 404,
+        message: 'user does not exist',
+      });
+    }
+    const { rows } = await db.query(profilepic, [req.body.image, req.decodedMessage.id]);
+    console.log(rows);
+    if (!rows[0]) {
+      return res.status(404).send({
+        status: 404,
+        message: 'url not updated',
+      });
+    }
+    return res.status(200).send({
+      status: 200,
+      message: 'profile picture added successfully',
     });
   }
 }
