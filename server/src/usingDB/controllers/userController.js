@@ -97,24 +97,28 @@ class UserController {
     });
   }
 
-  static imageUpload(req, res) {
-    if (req.file) {
-      const file = dataUri(req).content;
-      return uploader.upload(file).then((result) => {
-        const image = result.url;
-        return res.status(200).json({
-          messge: 'Your image has been uploded successfully to cloudinary',
-          data: {
-            image,
-          },
-        });
-      }).catch(err => res.status(400).json({
-        messge: 'someting went wrong while processing your request',
-        data: {
-          err,
-        },
-      }));
+  static async imageUpload(req, res) {
+    const findOneUser = 'SELECT * FROM users where id=$1';
+    const profilepic = 'UPDATE users SET profile_pic=$1 where id=$2 RETURNING *';
+    const { rows: output } = await db.query(findOneUser, [req.decodedMessage.id]);
+    if (!output) {
+      return res.status(404).send({
+        status: 404,
+        message: 'user does not exist',
+      });
     }
+    const { rows } = await db.query(profilepic, [req.body.image, req.decodedMessage.id]);
+    console.log(rows);
+    if (!rows[0]) {
+      return res.status(404).send({
+        status: 404,
+        message: 'url not updated',
+      });
+    }
+    return res.status(200).send({
+      status: 200,
+      message: 'profile picture added successfully',
+    });
   }
 }
 
