@@ -27,7 +27,7 @@ const createTables = () => {
         first_name varchar(128) NOT NULL,
         last_name varchar(128) NOT NULL,
         password varchar(250) NOT NULL,
-        profile_epic text
+        profile_pic text
     );
     CREATE TABLE groups(
         id SERIAL PRIMARY KEY,

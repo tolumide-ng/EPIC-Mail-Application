@@ -43,7 +43,7 @@ class UserController {
     ];
     try {
       const { rows } = await db.query(text, values);
-      const token = jwt.sign({ email: userData.email, id: userData.id },
+      const token = jwt.sign({ email: rows[0].email, id: rows[0].id },
         process.env.SECRET,
         { expiresIn: '24h' });
       return res.status(201).send({
