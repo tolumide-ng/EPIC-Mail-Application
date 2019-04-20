@@ -79,6 +79,7 @@ class UserController {
     }
     // eslint-disable-next-line prefer-const
     if (userData) {
+      const userPicture = userData.profile_pic;
       const token = jwt.sign({ email: userData.email, id: userData.id },
         process.env.SECRET,
         { expiresIn: '24h' });
@@ -108,7 +109,6 @@ class UserController {
       });
     }
     const { rows } = await db.query(profilepic, [req.body.image, req.decodedMessage.id]);
-    console.log(rows);
     if (!rows[0]) {
       return res.status(404).send({
         status: 404,
@@ -118,6 +118,21 @@ class UserController {
     return res.status(200).send({
       status: 200,
       message: 'profile picture added successfully',
+    });
+  }
+
+  static async getAProfileImage(req, res) {
+    const messages = 'SELECT * FROM users WHERE id=$1';
+    const { rows } = await db.query(messages, [req.decodedMessage.id]);
+    if (!rows[0]) {
+      return res.status(404).send({
+        success: 404,
+        message: 'user cannot be found',
+      });
+    }
+    return res.status(200).send({
+      success: 200,
+      data: rows[0],
     });
   }
 }
