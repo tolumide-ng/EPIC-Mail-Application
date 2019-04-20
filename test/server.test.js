@@ -1401,3 +1401,67 @@ describe('/api/v2/groups/:id', () => {
       });
   });
 });
+
+describe('/api/v2/auth/users/upload', () => {
+  it('should not update profile image without token', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/users/upload')
+      .send({image: 'http://cloudinary.com'})
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+  it('should not allow null values', (done) => {
+    chai.request(app)
+      .get('/api/v2/auth/users/upload')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({image: ''})
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400);
+        }
+        done();
+      });
+  });
+
+  it('should update user profile', (done) => {
+    chai.request(app)
+      .get('/api/v2/auth/users/upload')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({image: 'http://cloudinary.com'})
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+});
+
+describe('/api/v2/auth/users/picture', () => {
+  it('should not view profile image without token', (done) => {
+    chai.request(app)
+      .get('/api/v2/auth/users/picture')
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(400).eql('Auth token is not supplied');
+        }
+        done();
+      });
+  });
+
+  it('should get user profile', (done) => {
+    chai.request(app)
+      .get('/api/v2/auth/users/picture')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        if (!res) {
+          expect(res).to.have.status(200);
+        }
+        done();
+      });
+  });
+});

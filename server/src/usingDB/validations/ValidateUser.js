@@ -78,6 +78,32 @@ class ValidateUser {
       },
     });
   }
+
+  static imageInput(request, response, next) {
+    // eslint-disable-next-line object-curly-newline
+    const { image } = request.body;
+
+    const data = {
+      image,
+    };
+
+    const rules = {
+      image: 'required',
+    };
+
+    const validation = new Validator(data, rules);
+
+    if (validation.passes()) {
+      return next();
+    }
+
+    return response.status(400).json({
+      status: 400,
+      data: {
+        errors: validation.errors.all(),
+      },
+    });
+  }
 }
 
 export default ValidateUser;
