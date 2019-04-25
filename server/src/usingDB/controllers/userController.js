@@ -135,6 +135,28 @@ class UserController {
       data: rows[0],
     });
   }
+
+  static async updateProfile(req, res) {
+    let result;
+    try {
+      const { firstName, lastName } = req.body;
+      const firstNameUpdate = 'UPDATE users SET first_name = $1 WHERE id = $2 RETURNING first_name, last_name';
+      const lastNameUpdate = 'UPDATE users SET last_name = $1 WHERE id = $2 RETURNING first_name, last_name';
+      if (firstName) result = await db.query(firstNameUpdate, [firstName, req.decodedMessage.id]);
+
+      if (lastName) result = await db.query(lastNameUpdate, [lastName, req.decodedMessage.id]);
+
+    } catch (err) {
+      return res.status(500).send({
+        status: 500,
+        message: 'Something went wrong',
+      });
+    }
+    return res.status(200).send({
+      status: 200,
+      data: result.rows[0],
+    });
+  }
 }
 
 export default UserController;

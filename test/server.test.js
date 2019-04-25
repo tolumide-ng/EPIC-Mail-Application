@@ -1465,3 +1465,46 @@ describe('/api/v2/auth/users/picture', () => {
       });
   });
 });
+
+describe('PROFILE UPDATE', () => {
+  it('should update user details on valid format of data', (done) => {
+    chai.request(app)
+      .put('/api/v2/auth/users/profile')
+      .send({ firstName: 'Kelvin', lastName: 'Esegbona' })
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.status).to.equal(200);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data.first_name).to.equal('Kelvin');
+        expect(res.body.data.last_name).to.equal('Esegbona');
+        done();
+      });
+  });
+
+  it('should respond with an error on invalid format of data', (done) => {
+    chai.request(app)
+      .put('/api/v2/auth/users/profile')
+      .send({ firstname: 98, lastName: 'AB' })
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(400);
+        expect(res.body.status).to.equal(400);
+        done();
+      });
+  });
+
+  it('should not respond with an error if lastname is not given', (done) => {
+    chai.request(app)
+      .put('/api/v2/auth/users/profile')
+      .send({ firstName: 'Kevo' })
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.status).to.equal(200);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data.first_name).to.equal('Kevo');
+        done();
+      });
+  });
+});
