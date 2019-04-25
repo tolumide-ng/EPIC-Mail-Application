@@ -104,6 +104,32 @@ class ValidateUser {
       },
     });
   }
+
+  static profileInfo(request, response, next) {
+    const { firstName, lastName } = request.body;
+
+    const data = {
+      firstName, lastName,
+    };
+
+    const rules = {
+      firstName: 'required_without:lastName|string|min:3',
+      lastName: 'required_without:firstName|string|min:3',
+    };
+
+    const validation = new Validator(data, rules);
+
+    if (validation.passes()) {
+      return next();
+    }
+
+    return response.status(400).json({
+      status: 400,
+      data: {
+        errors: validation.errors.all(),
+      },
+    });
+  }
 }
 
 export default ValidateUser;

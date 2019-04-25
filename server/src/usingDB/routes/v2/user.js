@@ -9,5 +9,6 @@ user.post('/signup', ValidateUser.userInput, UserController.createUser);
 user.post('/login', ValidateUser.userInputLogin, UserController.login);
 user.patch('/users/upload', ValidateUser.imageInput, checkToken, UserController.imageUpload);
 user.get('/users/profile', checkToken, UserController.getAProfileImage);
+user.put('/users/profile', checkToken, ValidateUser.profileInfo, UserController.updateProfile);
 
 export default user;
