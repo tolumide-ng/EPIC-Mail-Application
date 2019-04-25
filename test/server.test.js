@@ -131,6 +131,24 @@ describe('version 2 /api/v2/auth/signup', () => {
         done();
       });
   });
+
+  it('user can signup with any character type for email', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/signup')
+      .send({
+        email: 'TesTeR@epicMAIL.com',
+        firstName: 'mosinmiloluwa',
+        lastName: 'owoso',
+        password: '123456',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
+        expect(res.body.data).to.have.property('message').eql('Authentication successful!. Welcome mosinmiloluwa');
+        done();
+      });
+  });
 });
 
 describe('/api/v1/auth/login', () => {
@@ -163,6 +181,21 @@ describe('/api/v1/auth/login', () => {
       });
   });
   it('should login a user', (done) => {
+    chai.request(app)
+      .post('/api/v1/auth/login')
+      .send({
+        email: 't@epic.com',
+        password: '123456',
+      })
+      .end((err, res) => {
+        v1token = res.body.data.token;
+        expect(res).to.have.status(200);
+        expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
+
+  it('user can login ', (done) => {
     chai.request(app)
       .post('/api/v1/auth/login')
       .send({
@@ -220,11 +253,11 @@ describe('version 2 /api/v2/auth/login', () => {
         done();
       });
   });
-  it('version 2 should login a user', (done) => {
+  it('user can login with any character type for email', (done) => {
     chai.request(app)
       .post('/api/v2/auth/login')
       .send({
-        email: 't@epic.com',
+        email: 'TesTeR@epicMAIL.com',
         password: '123456',
       })
       .end((err, res) => {
