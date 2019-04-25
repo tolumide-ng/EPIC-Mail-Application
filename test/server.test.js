@@ -253,6 +253,20 @@ describe('version 2 /api/v2/auth/login', () => {
         done();
       });
   });
+  it('version 2 should login a user', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/login')
+      .send({
+        email: 't@epic.com',
+        password: '123456',
+      })
+      .end((err, res) => {
+        v3token = res.body.data.token;
+        expect(res).to.have.status(200);
+        expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
   it('user can login with any character type for email', (done) => {
     chai.request(app)
       .post('/api/v2/auth/login')
@@ -261,7 +275,6 @@ describe('version 2 /api/v2/auth/login', () => {
         password: '123456',
       })
       .end((err, res) => {
-        v3token = res.body.data.token;
         expect(res).to.have.status(200);
         expect(res.body.data).to.have.property('token');
         done();
@@ -425,7 +438,7 @@ describe('version 2 /api/v2/unread', () => {
   it('version 2 should display all unread messages with token', (done) => {
     chai.request(app)
       .get('/api/v2/messages/unread')
-      .set({ Authorization: v3token })
+      .set({ Authorization: v3token, Accept: 'application/json' })
       .end((err, res) => {
         expect(res).to.have.status(200);
         done();
