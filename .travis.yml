@@ -1,7 +1,8 @@
+dist: trusty
 language: node_js
 node_js:
-  - "stable"
+  - node
 after_success:
   - npm run coverage
 services:
-  - postgresql  
+  - postgresql
