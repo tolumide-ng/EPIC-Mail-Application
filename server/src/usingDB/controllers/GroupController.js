@@ -63,7 +63,7 @@ class GroupController {
       const { rows: output } = await db.query(checkUser, [req.body.userEmails]);
       group = output1[0];
       userGroup = output[0];
-      
+
       if (!group) {
         return res.status(404).send({ message: 'Please input the correct group' });
       }
