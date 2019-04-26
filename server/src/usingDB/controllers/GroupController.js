@@ -63,7 +63,7 @@ class GroupController {
       const { rows: output } = await db.query(checkUser, [req.body.userEmails]);
       group = output1[0];
       userGroup = output[0];
-      
+
       if (!group) {
         return res.status(404).send({ message: 'Please input the correct group' });
       }
@@ -318,6 +318,59 @@ class GroupController {
     catch (e) {
       return res.status(500).send({ message: 'something is wrong with your request', e });
     }
+  }
+
+  static async getAllGroupMembers(req, res) {
+    const { id } = req.params;
+    const members = `SELECT DISTINCT user_groupings.user_ids as user_id, user_groupings.group_id as group_id,
+    users.email as email
+    FROM user_groupings 
+    INNER JOIN users ON user_groupings.user_ids = users.id
+    WHERE group_id=$1`;
+    try {
+      const { rows } = await db.query(members, [id]);
+      // console.log('===>', rows);
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (e) {
+      // console.log('e', e);
+      return res.status(500).send('something went wrong with your request');
+    }
+  }
+
+  static async leaveGroup(req, res) {
+    const { group_id, user_id } = req.params;
+    const auth_id = req.decodedMessage.id;
+    let status;
+    let message;
+    if (parseInt(user_id, 0) === parseInt(auth_id, 0)) {
+      const exist = 'SELECT DISTINCT * FROM user_groupings WHERE user_ids=$1 AND group_id =$2';
+      try {
+        const { rows } = await db.query(exist, [user_id, group_id]);
+        if (rows.length) {
+          const delete_group = 'DELETE FROM user_groupings WHERE user_ids=$1 AND group_id =$2';
+          await db.query(delete_group, [user_id, group_id]);
+          return res.status(202).send({
+            message: 'you have successfully left this group',
+          });
+        }
+        return res.status(404).send({
+          message: 'group not found or user does not belong to this group',
+        });
+      } catch (e) {
+        return res.status(500).send({
+          message: 'internal server error',
+        });
+      }
+    } else {
+      status = 403;
+      message = 'Access Denied';
+    }
+    return res.status(status).send({
+      message,
+    });
   }
 
   static async getMemberGroups(req, res) {
