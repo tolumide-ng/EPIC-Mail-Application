@@ -15,6 +15,7 @@ class UserController {
     let userData = [];
     const findOneEmail = 'SELECT * FROM users WHERE email=$1';
     const { email } = req.body;
+    const { recoveryEmail } = req.body;
     const lastName = req.body.lastName.replace(/\s/g, '');
     const password = req.body.password.trim();
     const firstName = req.body.firstName.trim();
@@ -32,14 +33,15 @@ class UserController {
     // call req.body, destructure to get password and then save encrypt into password
     userData = { ...req.body, password: hashedPassword };
     const text = `
-          INSERT INTO users(email,first_name,last_name,password)
-          VALUES($1,$2,$3,$4)
+          INSERT INTO users(email,first_name,last_name,password,recoveryEmail)
+          VALUES($1,$2,$3,$4,$5)
           returning *`;
     const values = [
       req.body.email.toLowerCase(),
       firstName,
       lastName,
       userData.password,
+      recoveryEmail.toLowerCase(),
     ];
     try {
       const { rows } = await db.query(text, values);

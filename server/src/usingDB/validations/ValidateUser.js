@@ -13,12 +13,13 @@ class ValidateUser {
    */
   static userInput(request, response, next) {
     // eslint-disable-next-line object-curly-newline
-    const { firstName, lastName, email, password } = request.body;
+    const { firstName, lastName, email, password, recoveryEmail } = request.body;
 
     const data = {
       firstName,
       lastName,
       email,
+      recoveryEmail,
       password,
     };
 
@@ -26,6 +27,7 @@ class ValidateUser {
       firstName: 'required|string|min:3',
       lastName: 'required|string|min:3',
       email: 'required|email',
+      recoveryEmail: 'required|email',
       password: 'required|min:6',
     };
 

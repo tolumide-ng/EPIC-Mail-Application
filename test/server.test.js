@@ -72,6 +72,7 @@ describe('version 2 /api/v2/auth/signup', () => {
       .post('/api/v2/auth/signup')
       .send({
         email: '',
+        recoveryEmail: '',
         firstName: '',
         lastName: '',
         password: '',
@@ -87,6 +88,7 @@ describe('version 2 /api/v2/auth/signup', () => {
       .post('/api/v2/auth/signup')
       .send({
         email: 't',
+        recoveryEmail: 'epic',
         firstName: 'mosinmiloluwa',
         lastName: 'owoso',
         password: 'password',
@@ -102,6 +104,7 @@ describe('version 2 /api/v2/auth/signup', () => {
       .post('/api/v2/auth/signup')
       .send({
         email: 'b@epic.com',
+        recoveryEmail: 'babaewisco@gmail.com',
         firstName: 'mosinmiloluwa',
         lastName: 'owoso',
         password: '123456',
@@ -119,6 +122,7 @@ describe('version 2 /api/v2/auth/signup', () => {
       .post('/api/v2/auth/signup')
       .send({
         email: 't@epic.com',
+        recoveryEmail: 'babaewisco@gmail.com',
         firstName: 'mosinmiloluwa',
         lastName: 'owoso',
         password: '123456',
