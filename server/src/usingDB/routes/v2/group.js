@@ -15,6 +15,7 @@ group.delete('/:group/user/:user', checkToken, GroupController.deleteUserInGroup
 group.post('/:id/messages', checkToken, ValidateMessage.messageInput, GroupController.sendGroupMessage);
 group.get('/', checkToken, GroupController.getAllGroups);
 group.get('/:id/users', checkToken, GroupController.getAllUserGroups);
+group.get('/:id/members', checkToken, GroupController.getAllGroupMembers);
 group.get('/users', checkToken, GroupController.getMemberGroups);
 group.get('/:id/messages', checkToken, GroupController.getAllGroupMessages);
 group.get('/:id/messages/:messageId', checkToken, GroupController.getAGroupMessages);

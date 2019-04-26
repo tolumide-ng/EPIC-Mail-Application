@@ -320,6 +320,32 @@ class GroupController {
     }
   }
 
+  static async getAllGroupMembers(req, res) {
+    // const members = `SELECT user_groupings.group_id as group_id, user_groupings.user_ids as user_id,
+    //   groupmembers.memberid as memberid, contacts.email as email
+    //   FROM groupmembers
+    //   INNER JOIN contacts ON groupmembers.memberid = contacts.id
+    //   WHERE groupmembers.groupid=$1 AND contacts.contact_owner_id = $2`;
+
+    const { id } = req.params;
+    const members = `SELECT DISTINCT user_groupings.user_ids as user_id, user_groupings.group_id as group_id,
+    users.email as email
+    FROM user_groupings 
+    INNER JOIN users ON user_groupings.user_ids = users.id
+    WHERE group_id=$1`;
+    try {
+      const { rows } = await db.query(members, [id]);
+      // console.log('===>', rows);
+      return res.status(200).send({
+        status: 200,
+        data: rows,
+      });
+    } catch (e) {
+      // console.log('e', e);
+      return res.status(500).send('something went wrong with your request');
+    }
+  }
+
   static async getMemberGroups(req, res) {
     const group = `SELECT distinct g.id, g.group_name, g.group_email, u.email FROM groups g 
                    INNER JOIN user_groupings ug ON g.id = ug.group_id
