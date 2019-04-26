@@ -321,12 +321,6 @@ class GroupController {
   }
 
   static async getAllGroupMembers(req, res) {
-    // const members = `SELECT user_groupings.group_id as group_id, user_groupings.user_ids as user_id,
-    //   groupmembers.memberid as memberid, contacts.email as email
-    //   FROM groupmembers
-    //   INNER JOIN contacts ON groupmembers.memberid = contacts.id
-    //   WHERE groupmembers.groupid=$1 AND contacts.contact_owner_id = $2`;
-
     const { id } = req.params;
     const members = `SELECT DISTINCT user_groupings.user_ids as user_id, user_groupings.group_id as group_id,
     users.email as email
@@ -344,6 +338,39 @@ class GroupController {
       // console.log('e', e);
       return res.status(500).send('something went wrong with your request');
     }
+  }
+
+  static async leaveGroup(req, res) {
+    const { group_id, user_id } = req.params;
+    const auth_id = req.decodedMessage.id;
+    let status;
+    let message;
+    if (parseInt(user_id, 0) === parseInt(auth_id, 0)) {
+      const exist = 'SELECT DISTINCT * FROM user_groupings WHERE user_ids=$1 AND group_id =$2';
+      try {
+        const { rows } = await db.query(exist, [user_id, group_id]);
+        if (rows.length) {
+          const delete_group = 'DELETE FROM user_groupings WHERE user_ids=$1 AND group_id =$2';
+          await db.query(delete_group, [user_id, group_id]);
+          return res.status(200).send({
+            message: 'you have successfully left this group',
+          });
+        }
+        return res.status(400).send({
+          message: 'group not found or user does not belong to this group',
+        });
+      } catch (e) {
+        return res.status(500).send({
+          message: 'internal server error',
+        });
+      }
+    } else {
+      status = 403;
+      message = 'Access Denied';
+    }
+    return res.status(status).send({
+      message,
+    });
   }
 
   static async getMemberGroups(req, res) {
