@@ -63,7 +63,7 @@ class UserController {
   static async login(req, res) {
     let userData = [];
     const findOneEmail = 'SELECT * FROM users WHERE email=$1';
-    const { rows } = await db.query(findOneEmail, [req.body.email]);
+    const { rows } = await db.query(findOneEmail, [req.body.email.toLowerCase()]);
     userData = rows[0];
     if (!userData) {
       return res.status(404).send({
