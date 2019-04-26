@@ -106,6 +106,33 @@ class ValidateUser {
       },
     });
   }
+
+  static profileInfo(request, response, next) {
+    const { firstName, lastName, recoveryEmail } = request.body;
+
+    const data = {
+      firstName, lastName, recoveryEmail,
+    };
+
+    const rules = {
+      firstName: 'required_without_all:lastName,recoveryEmail|string|min:3',
+      lastName: 'required_without_all:firstName,recoveryEmail|string|min:3',
+      recoveryEmail: 'required_without_all:firstName,lastName|email',
+    };
+
+    const validation = new Validator(data, rules);
+
+    if (validation.passes()) {
+      return next();
+    }
+
+    return response.status(400).json({
+      status: 400,
+      data: {
+        errors: validation.errors.all(),
+      },
+    });
+  }
 }
 
 export default ValidateUser;
