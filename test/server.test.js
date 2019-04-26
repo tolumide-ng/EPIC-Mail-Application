@@ -423,6 +423,127 @@ describe('/api/v2/messages', () => {
         done();
       });
   });
+
+  it('subject is required for timed messages', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        message: 'test message',
+        email: 't@epic.com',
+        type: 'sent',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('email is required for timed messages and valid', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'timed test',
+        message: 'test message',
+        email: 'tsds@epiccom',
+        type: 'sent',
+        time: 200000,
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('message is required for timed messages and valid', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'test message',
+        email: 'tsds@epiccom',
+        type: 'sent',
+        time: 200000,
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('recipient must exists for timed messages', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'timed test',
+        message: 'test message',
+        email: 'tsds@epic.com',
+        type: 'sent',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('time is required for timed messages', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'test mail',
+        message: 'test message',
+        email: 't@epic.com',
+        type: 'sent',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('time must not be lesser than 5 minutes', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'test mail',
+        message: 'test message',
+        email: 't@epic.com',
+        type: 'sent',
+        time: 4000,
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
+
+  it('it should create a timed message', (done) => {
+    chai.request(app)
+      .post('/api/v2/messages/timed')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        subject: 'test mail',
+        message: 'test message',
+        email: 't@epic.com',
+        type: 'sent',
+        time: 18000,
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res).to.be.an('object');
+        done();
+      });
+  });
 });
 
 describe('version 2 /api/v2/unread', () => {
@@ -1483,7 +1604,7 @@ describe('/api/v2/auth/users/upload', () => {
   it('should not update profile image without token', (done) => {
     chai.request(app)
       .post('/api/v2/auth/users/upload')
-      .send({image: 'http://cloudinary.com'})
+      .send({ image: 'http://cloudinary.com' })
       .end((err, res) => {
         if (!res) {
           expect(res).to.have.status(400).eql('Auth token is not supplied');
@@ -1495,7 +1616,7 @@ describe('/api/v2/auth/users/upload', () => {
     chai.request(app)
       .get('/api/v2/auth/users/upload')
       .set({ Authorization: v2token, Accept: 'application/json' })
-      .send({image: ''})
+      .send({ image: '' })
       .end((err, res) => {
         if (!res) {
           expect(res).to.have.status(400);
@@ -1508,7 +1629,7 @@ describe('/api/v2/auth/users/upload', () => {
     chai.request(app)
       .get('/api/v2/auth/users/upload')
       .set({ Authorization: v2token, Accept: 'application/json' })
-      .send({image: 'http://cloudinary.com'})
+      .send({ image: 'http://cloudinary.com' })
       .end((err, res) => {
         if (!res) {
           expect(res).to.have.status(200);
