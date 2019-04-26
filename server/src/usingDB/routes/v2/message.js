@@ -6,6 +6,7 @@ import ValidateUser from '../../validations/ValidateMessage';
 const message = express.Router();
 
 message.post('/', checkToken, ValidateUser.messageInput, MessageController.sendMessage);
+message.post('/timed', checkToken, ValidateUser.messageInput, ValidateUser.timeMessageInput, MessageController.composeTimedMessage);
 message.get('/unread', checkToken, MessageController.getUnreadMessages);
 message.get('/', checkToken, MessageController.getAllMessagesPerUser);
 message.get('/sent', checkToken, MessageController.getMessagesSentByAUser);

@@ -40,6 +40,38 @@ class ValidateUser {
       },
     });
   }
+
+  static timeMessageInput(request, response, next) {
+    // eslint-disable-next-line object-curly-newline
+    const { email, subject, message, time } = request.body;
+
+    const data = {
+      email,
+      subject,
+      message,
+      time,
+    };
+
+    const rules = {
+      email: 'required|email',
+      subject: 'required',
+      message: 'required',
+      time: 'required',
+    };
+
+    const validation = new Validator(data, rules);
+
+    if (validation.passes()) {
+      return next();
+    }
+
+    return response.status(400).json({
+      status: 400,
+      data: {
+        errors: validation.errors.all(),
+      },
+    });
+  }
 }
 
 export default ValidateUser;

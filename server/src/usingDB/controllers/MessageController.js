@@ -63,6 +63,99 @@ class MessageController {
     }
   }
 
+  static async composeTimedMessage(req, res) {
+    /**
+     *  @param {*} req
+     *  @param {*} res
+    */
+
+    // get recipient email
+    const { email } = req.body;
+    // get lapse time
+    const { time } = req.body;
+    // query statement for verifying user's existence
+    const { rows } = await db.query('SELECT * FROM users WHERE email=$1', [email]);
+    const user = rows[0];
+    if (!user) {
+      // if recipient doesn't exist return an error
+      return res.status(404).send({
+        status: 404,
+        message: 'the email does not exist',
+      });
+    }
+    if (user.id === req.decodedMessage.id) {
+      // if recipient is self/sender return an error
+      return res.status(403).send({
+        status: 403,
+        message: 'You cannot send messages to yourself',
+      });
+    }
+
+    if (time < 18000) {
+      // if the lapse time is lesser than 5 mins return an error
+      return res.status(400).send({
+        status: 400,
+        message: 'You cannot send a timed message with a time lesser than 5 minutes',
+      });
+    }
+
+    // retract the message
+    const retract = async (id) => {
+      const getMessage = 'SELECT * FROM messages WHERE id=$1';
+      const { rows } = await db.query(getMessage, [id]);
+      const message = rows[0];
+      if (message.status === 'read') {
+        const deleteMessage = `UPDATE messages SET is_deleted = ${'true'},sender_is_deleted = ${'true'} WHERE sender=$1 AND id=$2`;
+        const { rows } = db.query(deleteMessage, [req.decodedMessage.id, id]);
+      }
+      if (message.status === 'unread') {
+        const deleteMessage = 'DELETE FROM messages WHERE sender=$1 AND id=$2';
+        const { rows } = db.query(deleteMessage, [req.decodedMessage.id, id]);
+      }
+    };
+
+    try {
+      // compose message
+      // insert new message into db
+      const text = `
+       INSERT INTO messages(created_on,email,subject,message,status,message_type,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
+       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+       returning *`;
+      const values = [
+        new Date(),
+        req.body.email,
+        req.body.subject,
+        req.body.message,
+        'unread',
+        req.body.type,
+        req.decodedMessage.id,
+        user.id,
+        null,
+        'false',
+        'false',
+        'false',
+      ];
+      const { rows: output } = await db.query(text, values);
+
+      /**
+       * get this message id
+       * then do a setTimeout with time
+       * then retract message with this id after time t
+       * */
+      setTimeout(retract, time, output[0].id);
+      return res.status(201).send({
+        status: 201,
+        data: output[0],
+      });
+    } catch (error) {
+      // send response to clientside
+      return res.status(500).json({
+        status: 500,
+        error: 'server internal error',
+      });
+    }
+  }
+
   static async getAllMessagesPerUser(req, res) {
     let output = [];
     const messages = `select distinct m.id, s.email, m.subject, m.message, s.first_name, s.last_name 
