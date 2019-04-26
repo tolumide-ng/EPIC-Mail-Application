@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "npm run create-table-test",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --require babel-polyfill --exit && nyc report --timeout=20000",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --require babel-polyfill --exit && nyc report --timeout=60000",
     "build": "npm run clean && babel ./server  -d  ./build -s",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
@@ -51,6 +51,7 @@
     "@babel/polyfill": "^7.2.5",
     "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.4",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.14.0",
     "cors": "^2.8.5",
