@@ -141,11 +141,11 @@ class UserController {
   static async updateProfile(req, res) {
     let result;
     try {
-      const { firstName, lastName } = req.body;
-      const updateQuery = userDetail => `UPDATE users SET ${userDetail} = $1 WHERE id = $2 RETURNING first_name, last_name`
+      const { firstName, lastName, recoveryEmail } = req.body;
+      const updateQuery = userDetail => `UPDATE users SET ${userDetail} = $1 WHERE id = $2 RETURNING first_name, last_name, recoveryemail`
       if (firstName) result = await db.query(updateQuery('first_name'), [firstName, req.decodedMessage.id]);
       if (lastName) result = await db.query(updateQuery('last_name'), [lastName, req.decodedMessage.id]);
-     // if (recoveryEmail) result = await db.query(updateQuery('recoveryemail'), [recoveryEmail.toLowerCase(), req.decodedMessage.id]);
+      if (recoveryEmail) result = await db.query(updateQuery('recoveryemail'), [recoveryEmail.toLowerCase(), req.decodedMessage.id]);
 
     } catch (err) {
       return res.status(500).send({

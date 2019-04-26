@@ -1710,4 +1710,18 @@ describe('PROFILE UPDATE', () => {
         done();
       });
   });
+
+  it('should not respond with an error when updating only recovery email', (done) => {
+    chai.request(app)
+      .put('/api/v2/auth/users/profile')
+      .send({ recoveryEmail: 'kevo@gmail.com' })
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res.statusCode).to.equal(200);
+        expect(res.body.status).to.equal(200);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data.recoveryemail).to.equal('kevo@gmail.com');
+        done();
+      });
+  });
 });
