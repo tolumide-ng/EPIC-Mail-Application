@@ -805,6 +805,37 @@ describe('/api/v2/groups/users should create a user group', () => {
         done();
       });
   });
+
+  it('a user should be able to leave a group', (done) => {
+    chai.request(app)
+      .delete('/api/v2/groups/1/user/2/leave-group')
+      .set({ Authorization: v3token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(202);
+        done();
+      });
+  });
+
+  it('it should return 404 if group has been deleted or does not exist', (done) => {
+    chai.request(app)
+      .delete('/api/v2/groups/1/user/2/leave-group')
+      .set({ Authorization: v3token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('it should return 400 status if unauthoized user tries to access route', (done) => {
+    chai.request(app)
+      .delete('/api/v2/groups/1/user/1/leave-group')
+      .set({ Authorization: v3token, Accept: 'application/json' })
+      .end((err, res) => {
+        expect(res).to.have.status(403);
+        done();
+      });
+  });
+
   it('version 2 should not create a user group with an invalid ID', (done) => {
     chai.request(app)
       .post('/api/v2/groups/1/users')

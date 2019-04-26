@@ -352,11 +352,11 @@ class GroupController {
         if (rows.length) {
           const delete_group = 'DELETE FROM user_groupings WHERE user_ids=$1 AND group_id =$2';
           await db.query(delete_group, [user_id, group_id]);
-          return res.status(200).send({
+          return res.status(202).send({
             message: 'you have successfully left this group',
           });
         }
-        return res.status(400).send({
+        return res.status(404).send({
           message: 'group not found or user does not belong to this group',
         });
       } catch (e) {
