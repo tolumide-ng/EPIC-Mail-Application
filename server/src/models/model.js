@@ -1,16 +1,16 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 /* eslint-disable radix */
 class Epicmail {
-    /**
+  /**
      * class constructor
      * @param {object} data
      */
-    constructor() {
-      this.user = [];
-      this.message = [];
-    }
+  constructor() {
+    this.user = [];
+    this.message = [];
+  }
 
-      /**
+  /**
    *
    * @returns {object} reflection object
    */
@@ -82,7 +82,7 @@ class Epicmail {
   }
 
   hashPassword(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
   }
 
   comparePassword(hashPassword, password) {

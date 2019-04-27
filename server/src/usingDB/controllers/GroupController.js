@@ -78,7 +78,28 @@ class GroupController {
       const { rows } = await db.query(checkGroup, [req.params.id, req.decodedMessage.id]);
       result1 = rows[0];
       const text = `INSERT INTO user_groupings (group_id, user_ids) VALUES (${group.id}, ${userId})`;
+      const notifyUserQuery = `
+            INSERT INTO messages(created_on,email,subject,message,status,message_type,sender,reciever,group_reciever,is_deleted,sender_is_deleted,group_status)
+            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+            returning *`;
+      const subject = `Welcome to ${group.group_name}`;
+      const message = `Hi ${userGroup.first_name} ${userGroup.last_name}, you have been added to the ${group.group_name} group`;
+      const notifyUserValues = [
+        new Date(),
+        userGroup.email,
+        subject,
+        message,
+        'unread',
+        'sent',
+        req.decodedMessage.id,
+        userId,
+        null,
+        'false',
+        'false',
+        'false',
+      ];
       try {
+        await db.query(notifyUserQuery, notifyUserValues);
         const { rows } = await db.query(text);
         return res.status(201).send({
           status: 201,

@@ -1033,6 +1033,18 @@ describe('/api/v2/groups/users should create a user group', () => {
         done();
       });
   });
+  it('version 2 should add user to a group and send notification', (done) => {
+    chai.request(app)
+      .post('/api/v2/groups/1/users')
+      .set({ Authorization: v2token, Accept: 'application/json' })
+      .send({
+        userEmails:'t@epic.com',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        done();
+      });
+  });
 });
 
 describe('/api/v2/groups/users should delete a user from the group', () => {
