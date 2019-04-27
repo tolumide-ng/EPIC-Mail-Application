@@ -515,7 +515,7 @@ class MessageController {
         deleteMessageFunction(deleteMessages, 'reciever', undefined);
       }
       if (type.toLowerCase() === 'draft') {
-        deleteMessageFunction(deleteMessages, undefined, 'draft');
+        deleteMessageFunction(deleteMessages, 'sender', 'draft');
       }
     } catch (error) {
       return res.status(500).json({ error });
