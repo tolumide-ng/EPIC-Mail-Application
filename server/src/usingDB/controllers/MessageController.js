@@ -489,7 +489,7 @@ class MessageController {
                 return res.status(200).json({ status: 200, data: 'All specified messages have been deleted' });
               }
               if (errorContainer.length === theMessages.length) {
-                return res.status(400).json({ status: 404, error: 'You do not have any message with any of the listed ids' });
+                return res.status(404).json({ status: 404, error: 'You do not have any message with any of the listed ids' });
               }
               return res.status(200).json({ status: 200, data: `Valid Messages have been deleted but you do not have messages with id = ${errorContainer}` });
             }
@@ -500,7 +500,7 @@ class MessageController {
           if (item === theMessages[theMessages.length - 1]) {
             if (errorContainer.length > 0) {
               if (errorContainer.length === theMessages.length) {
-                return res.status(400).json({ status: 404, error: 'You do not have any message with any of the listed ids' });
+                return res.status(404).json({ status: 404, error: 'You do not have any message with any of the listed ids' });
               }
               return res.status(200).json({ status: 200, data: `Valid Messages have been deleted but you do not have messages with id = ${errorContainer}` });
             }
