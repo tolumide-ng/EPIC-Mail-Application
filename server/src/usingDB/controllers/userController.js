@@ -5,6 +5,9 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable prefer-destructuring */
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import db from '../db';
 import UserModel from '../../models/model';
 import { uploader, cloudinaryConfig } from '../../../config/cloudinaryConfig';
@@ -33,7 +36,7 @@ class UserController {
     // call req.body, destructure to get password and then save encrypt into password
     userData = { ...req.body, password: hashedPassword };
     const text = `
-          INSERT INTO users(email,first_name,last_name,password,recoveryEmail)
+          INSERT INTO users(email,first_name,last_name,password,recoveryemail)
           VALUES($1,$2,$3,$4,$5)
           returning *`;
     const values = [
@@ -158,6 +161,120 @@ class UserController {
       status: 200,
       data: result.rows[0],
     });
+  }
+  
+  /* reset link get api/v2/auth/reset */
+  static async validateResetToken(req, res) {
+    if (!req.query.token) {
+      res.render('error', { error: 'You are not authorized to view this page' });
+      return res.status(401).send({
+        status: 401,
+        error: 'You are not authorized to view this page',
+      });
+    }
+    const { token } = req.query;
+    const userPresent = await UserController.findUser('resettoken', token);
+    if (!userPresent) {
+      res.render('error', { error: 'Password reset link is invalid' });
+      return res.status(400).send({
+        status: 400,
+        error: 'Password reset link is invalid',
+      });
+    }
+    const { resetexpire } = userPresent;
+    const expire = new Date(resetexpire);
+    const now = Date();
+    if (resetexpire < now) {
+      res.render('error', { error: 'Password reset link has expired' });
+      return res.status(400).send({
+        status: 400,
+        error: 'Password reset link has expired',
+      });
+    }
+    res.render('reset', { token });
+  }
+
+  /* reset link patch api/v2/auth/reset */
+  static async resetPassword(req, res) {
+    const userPresent = await UserController.findUser('resettoken', req.body.token);
+    if (!userPresent) {
+      return res.status(404).json({
+        status: 404,
+        error: 'password has already been reset',
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(req.body.password, salt);
+    await db.query(`UPDATE users SET resettoken = $1, resetexpire = $2, password = $3
+    WHERE id = $4`, ['', '', password, userPresent.id]);
+    return res.status(200).json({
+      status: 200,
+      data: [{ message: 'Password has been suucessfully reset' }],
+    });
+  }
+
+  /* reset link post api/v2/auth/reset */
+  static async sendResetLink(req, res) {
+    const userPresent = await UserController.findUser('email', req.body.email);
+    if (!userPresent) {
+      return res.status(404).send({
+        status: 404,
+        error: 'user cannot be found',
+      });
+    }
+    const resettoken = crypto.randomBytes(20).toString('hex');
+    const date = new Date();
+    date.setHours(date.getHours() + 2);
+    const resetexpire = date.toString();
+    /* console.log(resetexpire); */
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+    /* const host = 'http://localhost:5000/api/v2/auth/reset'; */
+    const host = 'https://epicmail-application.herokuapp.com/api/v2/auth/reset';
+    const text = `You are receiving this because you ( or someone else ) have requested the reset of the password for your EPIC-mail account. \n\n Please click on the following link, or paste this link into a browser to complete the process within one hour of receiving it \n\n ${host}?token=${resettoken} \n\n If you did not request this, please ignore this email and your password will remain unchanged`;
+    const mailOptions = {
+      from: 'epicmail',
+      to: userPresent.recoveryemail,
+      subject: 'Click to reset EPIC-mail password',
+      text,
+    };
+
+    transporter.sendMail(mailOptions, async (er, resp) => {
+      if (er) {
+        return res.status(501).json({
+          status: 501,
+          error: er,
+        });
+      }
+      try {
+        await db.query(`UPDATE users SET resettoken = $1, resetexpire = $2
+          WHERE id = $3`, [resettoken, resetexpire, userPresent.id]);
+        return res.status(200).json({
+          status: 200,
+          data: [{
+            message: 'Check your email for password reset link',
+            email: userPresent.recoveryemail,
+          }],
+        });
+      } catch (err) {
+        /* console.log(err); */
+        return res.status(500).send({
+          status: 500,
+          error: 'Internal Server Error',
+        });
+      }
+    });
+  }
+
+  /* Helper function to cater for repitive find user action */
+  static async findUser(column, value) {
+    const { rows } = await db.query(`SELECT * FROM users WHERE ${column}=$1`, [value]);
+    return rows[0];
   }
 }
 

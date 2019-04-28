@@ -24,6 +24,8 @@ const createTables = () => {
     CREATE TABLE users(
         id SERIAL PRIMARY KEY,
         email varchar(128) NOT NULL,
+        resettoken varchar(128),
+        resetexpire varchar(128),
         recoveryemail varchar(128) NOT NULL,
         first_name varchar(128) NOT NULL,
         last_name varchar(128) NOT NULL,

@@ -1,0 +1,138 @@
+html
+  head
+    title='reset.html'
+  body
+    div.con
+      div.headers
+        h1='EPIC MAIL'
+        h4='Password Reset'
+      div.inputCon(token=token)
+        div
+          label(for="password")='Password'
+          input(type="text", name="password")#password
+        div
+          label(for="password-confirmation")='Confirm Password'
+          input(type="text", name="password_confirmation")#password-confirmation
+      button(type="button").submit='reset'
+      div
+        h3.resp
+        div.loader.gone
+
+  style(type="text/css").
+    body{
+      padding: 0;
+      margin: 0;
+      width:100vw;
+      height:100vh;
+      font-family: sans-serif; 
+      position: relative;
+      background-image: url('/08.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    button{
+      font-weight: 600;
+      text-align: center;
+      border: 1px solid transparent;
+      padding: .5rem 1.4rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      color: rgba(255, 255, 255, .8);
+      background: rgba(60, 160, 200, .8);
+      transition: .5s all ease-out;
+      margin: 0 0 1rem;
+    }
+    button:hover{
+      background: rgba(40, 130, 170, 1);
+    }
+    .headers {
+      margin: 0 auto 3rem;
+      width:100%;
+    }
+    .gone{ display: none; }
+    .headers h1, .headers h4{
+      color: rgba(60, 160, 200, .8);
+      margin: 0 0 .5rem;
+    }
+    .inputCon, .resp{
+      color: rgba(0, 0, 0, .5);
+      font-size: .9rem;
+    }
+    .inputCon, input, .headers{
+      text-align: center;
+    }
+    input{
+      display: block;
+      padding: .7em 1em;
+      font-weight: 600;
+      color:rgba(0, 0, 0, 0.8);
+      background-color: rgba(255, 255, 255, .9);
+      box-sizing:border-box;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+    }
+    .inputCon input{
+      margin: .5rem auto 1.9rem;
+    }
+    .loader{
+      background-image: url('/loader.gif');
+      background-size: cover;
+      background-repeat: no-repeat;
+      width:6rem;
+      height:4rem;
+      margin:0 auto;
+    }
+    body > div{
+      padding: 4rem;
+      text-align: center;
+      position: absolute;
+      left:0;
+      right:0;
+      top:0;
+      bottom:0;
+      margin: auto;
+      height: 60%;
+      width: 40%;
+      border-radius: 1rem;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+    }
+  script.
+    document.querySelector('.submit').addEventListener('click', ()=> {
+      const password = document.querySelector('#password').value;
+      const password_confirmation = document.querySelector('#password-confirmation').value;
+      const token = document.querySelector('.inputCon').getAttribute('token');
+      const body = {
+        password,
+        password_confirmation,
+        token
+      }
+      console.log(body);
+      document.querySelector('.loader').classList.remove('gone');
+      document.querySelector('.resp').classList.add('gone');
+      /* const host = 'http://localhost:5000/api/v2/auth/reset'; */
+      /* const host = 'https://tolumide-ng.github.io/EPIC-Mail-Application/UI'; */
+      const host = 'https://epicmail-application.herokuapp.com/api/v2/auth/reset'; 
+      fetch(host, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      .then(resp => resp.json())
+      .then((res) => {
+        document.querySelector('.loader').classList.add('gone');
+        document.querySelector('.resp').classList.remove('gone');
+        console.log(res);
+        if(res.data) {
+          const { message } = res.data[0];
+          document.querySelector('.resp').textContent = message;
+          return;
+        }
+        document.querySelector('.resp').textContent = res.error;
+      }).catch((err) => {
+        console.log(err);
+      });
+
+    })  
+
