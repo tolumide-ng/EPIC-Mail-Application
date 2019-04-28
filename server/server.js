@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import env from 'dotenv';
+import path from 'path';
 import Epicmail from './src/controllers/controller';
 import router from './src/usingDB/routes';
 // for API documentation
@@ -23,8 +24,11 @@ const app = express();
 app.use(bodyParser.urlencoded({ // Middleware
   extended: true,
 }));
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.static('UI/img'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(router);

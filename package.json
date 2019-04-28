@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "npm run create-table-test",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --require @babel/polyfill --exit && nyc report --timeout=60000",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --timeout=60000 --require babel-polyfill --exit && nyc report",
     "build": "npm run clean && babel ./server  -d  ./build -s",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
@@ -60,7 +60,9 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.0",
     "multer": "^1.4.1",
+    "nodemailer": "^6.1.1",
     "pg": "^7.10.0",
+    "pug": "^2.0.3",
     "swagger-ui-express": "^4.0.2",
     "validatorjs": "^3.15.1"
   }
