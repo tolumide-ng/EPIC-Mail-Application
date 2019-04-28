@@ -50,7 +50,8 @@ const createTables = () => {
         group_reciever INTEGER REFERENCES groups(id),
         is_deleted VARCHAR(10) NOT NULL,
         sender_is_deleted VARCHAR(10) NOT NULL,
-        group_status VARCHAR(10) NOT NULL
+        group_status VARCHAR(10) NOT NULL,
+        is_spam BOOLEAN NOT NULL DEFAULT FALSE
     );
 
     CREATE TABLE user_groupings(

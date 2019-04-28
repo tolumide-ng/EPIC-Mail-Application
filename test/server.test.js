@@ -1737,3 +1737,52 @@ describe('PROFILE UPDATE', () => {
       });
   });
 });
+
+describe('SPAM MESSAGE', () => {
+  it('should login user' ,(done) => {
+    chai.request(app)
+    .post('/api/v2/auth/login')
+    .send({
+      email: 't@epic.com',
+      password: '123456'
+    })
+    .end((err, res) => {
+      let v3token = res.body.data.token
+      done()
+    })
+  })
+
+  it('should return status 200 and data of the message set as spam', (done) => {
+    chai.request(app)
+    .patch('/api/v2/messages/1/spam')
+    .set({ 'x-access-token':v3token, 'Accept':'application/json' })
+    .end((err, res) => {
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      expect(res.body.data).to.have.property('is_spam').eql(true)
+      done()
+    })
+  })
+
+  it('should return status 403 if user is not the reciever', (done) => {
+    chai.request(app)
+    .patch('/api/v2/messages/1/spam')
+    .set({ 'x-access-token':v2token, 'Accept':'application/json' })
+    .end((err, res) => {
+      expect(res).to.have.status(403)
+      expect(res.body).to.have.property('message').eql('Access Denied. This message was sent to a different user')
+      done()
+    })
+  })
+
+  it('should return status 403 if user is not the reciever', (done) => {
+    chai.request(app)
+    .patch('/api/v2/messages/50/spam')
+    .set({ 'x-access-token':v2token, 'Accept':'application/json' })
+    .end((err, res) => {
+      expect(res).to.have.status(404)
+      expect(res.body).to.have.property('message').eql('Message does not exist')
+      done()
+    })
+  })
+})
