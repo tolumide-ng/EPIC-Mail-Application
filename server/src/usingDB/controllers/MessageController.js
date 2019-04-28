@@ -575,5 +575,43 @@ class MessageController {
         .send({ message: 'something is wrong with your request' });
     }
   }
+
+  static async spamAMessage(req, res){
+    const msg_id = req.params.id
+    const user_id = req.decodedMessage.id
+    const spamMessage = `UPDATE messages 
+                          SET is_spam=$1 
+                          WHERE id=$2 AND is_deleted=$3
+                          RETURNING *`
+    const values = [true, msg_id, false]
+    try{
+      const {rows} = await db.query(spamMessage, values)
+      if(rows.length > 0){
+        if(rows[0].reciever !== user_id){
+          return res.status(403).send({
+            status: 403,
+            message: 'Access Denied. This message was sent to a different user'
+          })
+        }else{
+          return res.status(200).send({
+            status: 200,
+            data: rows[0]
+          })
+        }
+      }else{
+        return res.status(404).send({
+          status: 404,
+          message: 'Message does not exist'
+        })
+      }
+    }catch(err){
+      return res.status(500).send({
+        status: 500,
+        message: 'Something went wrong, cannot process your request. Please try again'
+      })
+    }
+
+  }
+
 }
 export default MessageController;

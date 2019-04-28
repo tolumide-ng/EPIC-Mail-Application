@@ -20,5 +20,6 @@ message.delete('/multiple/', checkToken, MessageController.deleteMultipleMessage
 message.delete('/:id', checkToken, MessageController.deleteAMessage);
 message.delete('/:id/retract', checkToken, MessageController.retractEmail);
 message.delete('/draft/:id', checkToken, MessageController.deleteADraftMessage);
+message.patch('/:id/spam', checkToken, MessageController.spamAMessage);
 
 export default message;

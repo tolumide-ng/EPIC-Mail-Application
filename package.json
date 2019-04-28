@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "npm run create-table-test",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --require babel-polyfill --exit && nyc report --timeout=60000",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --require @babel/polyfill --exit && nyc report --timeout=60000",
     "build": "npm run clean && babel ./server  -d  ./build -s",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
@@ -44,12 +44,12 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "mocha": "6.1.4",
+    "nodemon": "^1.18.9",
     "nyc": "^13.3.0",
     "rimraf": "^2.6.3"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
-    "babel-polyfill": "^6.26.0",
     "bcrypt": "^3.0.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
