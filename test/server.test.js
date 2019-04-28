@@ -8,12 +8,13 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server/server';
+import userController from '../server/src/usingDB/controllers/userController';
 
 // eslint-disable-next-line prefer-destructuring
 const expect = chai.expect;
 // const should = chai.should();
 chai.use(chaiHttp);
-let v1token; let v2token; let v3token;
+let v1token; let v2token; let v3token; let token;
 describe('/api/v1/auth/signup', () => {
   it('should not accept null values', (done) => {
     chai.request(app)
@@ -1810,3 +1811,75 @@ describe('GET ALL SPAM MESSAGE', () => {
     })
   })
 })
+describe('*INTERNET CONNECTION NEEDED* Send Reset link', () => {
+  it('should not send reset link for invalid email', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/reset')
+      .send({
+        email: 'ta@epic.com',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.property('status');
+        expect(res.body.status).to.be.equal(404);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.be.a('string');
+        expect(res.body.error).to.include('user cannot be found');
+        done();
+      });
+  });
+  it('should send reset link for valid email', (done) => {
+    chai.request(app)
+      .post('/api/v2/auth/reset')
+      .send({
+        email: 't@epic.com',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.have.property('status');
+        expect(res.body.status).to.be.equal(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.have.any.keys('message', 'email');
+        done();
+      });
+  });
+});
+
+describe('*INTERNET CONNECTION NEEDED* Reset password', () => {
+  it('should reset password for valid token', async () => {
+    const user = await userController.findUser('email', 't@epic.com');
+    token = user.resettoken;
+    const res = await chai.request(app)
+      .patch('/api/v2/auth/reset')
+      .send({
+        password: '123456',
+        password_confirmation: '123456',
+        token,
+      });
+    expect(res).to.have.status(200);
+    expect(res.body).to.have.property('status');
+    expect(res.body.status).to.be.equal(200);
+    expect(res.body).to.have.property('data');
+    expect(res.body.data).to.be.an('array');
+    expect(res.body.data[0]).to.have.any.keys('message');
+  });
+  it('should not reset password if it has already been reset', (done) => {
+    chai.request(app)
+      .patch('/api/v2/auth/reset')
+      .send({
+        password: 'qwerty',
+        password_confirmation: 'qwerty',
+        token,
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.property('status');
+        expect(res.body.status).to.be.equal(404);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.be.a('string');
+        expect(res.body.error).to.include('password has already been reset');
+        done();
+      });
+  });
+});

@@ -81,6 +81,42 @@ class ValidateUser {
     });
   }
 
+  /* reset link patch api/v2/auth/reset */
+  static userInputResetPassword(request, response, next) {
+    // eslint-disable-next-line camelcase
+    const { password_confirmation, password, token } = request.body;
+
+    const data = { password_confirmation, password, token };
+
+    const rules = {
+      password: 'required|confirmed',
+      token: 'required|string',
+    };
+
+    const validation = new Validator(data, rules);
+
+    if (validation.passes()) {
+      return next();
+    }
+
+    return response.status(400).json({
+      status: 400,
+      error: Object.values(validation.errors.all())[0],
+    });
+  }
+
+  /* reset link post api/v2/auth/reset */
+  static userInputSendReset(request, response, next) {
+    const validation = new Validator(request.body, { email: 'required|email' });
+
+    if (validation.passes()) return next();
+
+    return response.status(400).json({
+      status: 400,
+      error: validation.errors.all(),
+    });
+  }
+
   static imageInput(request, response, next) {
     // eslint-disable-next-line object-curly-newline
     const { image } = request.body;

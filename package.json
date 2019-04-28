@@ -8,7 +8,7 @@
   },
   "scripts": {
     "pretest": "npm run create-table-test",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --timeout=60000 --require babel-polyfill --exit && nyc report",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha --require @babel/register --timeout=60000 --require @babel/polyfill --exit && nyc report",
     "build": "npm run clean && babel ./server  -d  ./build -s",
     "heroku-postbuild": "npm run build",
     "start": "node ./build/server.js",
