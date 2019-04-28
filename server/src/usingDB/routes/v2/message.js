@@ -11,6 +11,7 @@ message.get('/unread', checkToken, MessageController.getUnreadMessages);
 message.get('/', checkToken, MessageController.getAllMessagesPerUser);
 message.get('/sent', checkToken, MessageController.getMessagesSentByAUser);
 message.get('/draft', checkToken, MessageController.getDraftMessages);
+message.get('/spam', checkToken, MessageController.getAllSpamMessage);
 message.get('/specific/:id', checkToken, MessageController.fetchMessageById);
 message.get('/:id/sent', checkToken, MessageController.getASentMessage);
 message.get('/:id/draft', checkToken, MessageController.getADraftMessage);
