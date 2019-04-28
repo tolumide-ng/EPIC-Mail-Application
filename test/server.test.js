@@ -1775,13 +1775,37 @@ describe('SPAM MESSAGE', () => {
     })
   })
 
-  it('should return status 403 if user is not the reciever', (done) => {
+  it('should return status 404 if message does not exist', (done) => {
     chai.request(app)
     .patch('/api/v2/messages/50/spam')
     .set({ 'x-access-token':v2token, 'Accept':'application/json' })
     .end((err, res) => {
       expect(res).to.have.status(404)
       expect(res.body).to.have.property('message').eql('Message does not exist')
+      done()
+    })
+  })
+})
+
+describe('GET ALL SPAM MESSAGE', () => {
+  it('should return status 200 and data of all spam messages', (done) => {
+    chai.request(app)
+    .get('/api/v2/messages/spam')
+    .set({ 'x-access-token':v3token, 'Accept':'application/json' })
+    .end((err, res) => {
+      expect(res).to.have.status(200)
+      expect(res.body).to.be.an('object')
+      done()
+    })
+  })
+
+  it('should return status 404 if no spam message was found for the logged in user', (done) => {
+    chai.request(app)
+    .get('/api/v2/messages/spam')
+    .set({ 'x-access-token':v2token, 'Accept':'application/json' })
+    .end((err, res) => {
+      expect(res).to.have.status(404)
+      expect(res.body).to.have.property('message').eql('You currently do not have any spam message')
       done()
     })
   })

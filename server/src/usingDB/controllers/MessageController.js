@@ -613,5 +613,32 @@ class MessageController {
 
   }
 
+  static async getAllSpamMessage(req, res){
+    const user_id = req.decodedMessage.id
+    const getSpamMessages = `SELECT * FROM messages 
+                          WHERE reciever=$1 AND is_spam=$2 AND is_deleted=$3`
+    const values = [user_id, true, false]
+    try{
+      const {rows} = await db.query(getSpamMessages, values)
+      if(rows.length > 0){
+          return res.status(200).send({
+            status: 200,
+            data: rows
+          })
+      }else{
+        return res.status(404).send({
+          status: 404,
+          message: 'You currently do not have any spam message'
+        })
+      }
+    }catch(err){
+      return res.status(500).send({
+        status: 500,
+        message: 'Something went wrong, cannot process your request. Please try again'
+      })
+    }
+
+  }
+
 }
 export default MessageController;
