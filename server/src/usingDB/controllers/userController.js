@@ -166,30 +166,18 @@ class UserController {
   /* reset link get api/v2/auth/reset */
   static async validateResetToken(req, res) {
     if (!req.query.token) {
-      res.render('error', { error: 'You are not authorized to view this page' });
-      return res.status(401).send({
-        status: 401,
-        error: 'You are not authorized to view this page',
-      });
+      return res.render('error', { error: 'You are not authorized to view this page' });
     }
     const { token } = req.query;
     const userPresent = await UserController.findUser('resettoken', token);
     if (!userPresent) {
-      res.render('error', { error: 'Password reset link is invalid' });
-      return res.status(400).send({
-        status: 400,
-        error: 'Password reset link is invalid',
-      });
+      return res.render('error', { error: 'Password reset link is invalid' });
     }
     const { resetexpire } = userPresent;
     const expire = new Date(resetexpire);
     const now = Date();
     if (resetexpire < now) {
-      res.render('error', { error: 'Password reset link has expired' });
-      return res.status(400).send({
-        status: 400,
-        error: 'Password reset link has expired',
-      });
+      return res.render('error', { error: 'Password reset link has expired' });
     }
     res.render('reset', { token });
   }
