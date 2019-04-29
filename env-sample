@@ -1,0 +1,5 @@
+DATABASE_TEST=replace with database url using the name of the database you created
+NODE_ENV=test
+SECRET=replace with secret key for json web token
+EMAIL_ADDRESS=replace with an email address that will send reset password link
+EMAIL_PASSWORD=replace with password of email address

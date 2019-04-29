@@ -33,8 +33,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(router);
 
+app.get('/', (req, res) => res.status(200).send({ message: 'Welcome to EPIC MAIL' }));
 app.all('*', (req, res) => res.status(404).send({ message: 'you have entered an incorrect route' }));
-app.get('/', (req, res) => res.status(200).send({ message: 'Welcome to my first working endpoint' }));
 app.get('/api/v1/users/:id', checkToken, Epicmail.getOneUser);
 
 
