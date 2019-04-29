@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ // Middleware
   extended: true,
 }));
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname.slice(0, -6), 'views'));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static('UI/img'));
@@ -37,7 +37,7 @@ app.get('/', (req, res) => res.status(200).send({ message: 'Welcome to EPIC MAIL
 app.all('*', (req, res) => res.status(404).send({ message: 'you have entered an incorrect route' }));
 app.get('/api/v1/users/:id', checkToken, Epicmail.getOneUser);
 
-
+console.log(__dirname.slice(0, -6));
 /* when the function is called, it should listen on a port */
 /* To automatically pick port on the server instead of usin a single port */
 const port = process.env.PORT || 5000;
