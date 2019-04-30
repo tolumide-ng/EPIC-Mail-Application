@@ -542,7 +542,7 @@ describe('/api/v2/messages', () => {
         message: 'test message',
         email: 't@epic.com',
         type: 'sent',
-        time: 18000,
+        time: 300000,
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
