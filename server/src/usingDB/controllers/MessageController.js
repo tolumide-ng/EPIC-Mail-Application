@@ -91,7 +91,7 @@ class MessageController {
       });
     }
 
-    if (time < 18000) {
+    if (time < 300000) {
       // if the lapse time is lesser than 5 mins return an error
       return res.status(400).send({
         status: 400,
